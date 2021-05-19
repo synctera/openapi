@@ -1,0 +1,26 @@
+summary: RDC Deposit by Id
+description: >
+  The RDC deposit represents one deposit made using remote deposit capture associated with an account
+
+get:
+  summary: Get RDC Deposit
+  operationId: getRdcDeposit
+  description: Retrieves one deposit made using remote deposit capture associated with an account
+  tags:
+    - RDC Deposits
+  parameters:
+    - $ref: '../../accounts/parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/deposit_id'
+  responses:
+    '200':
+      description: Successful retrieval of an RDC deposit
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/deposit'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'

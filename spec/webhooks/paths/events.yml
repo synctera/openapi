@@ -1,0 +1,41 @@
+get:
+  summary: List webhook events
+  operationId: listEvents
+  description: List webhook events. This response will not associate with the event response history.
+  tags:
+    - Webhooks
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/webhook_id'
+    - name: start_date
+      in: query
+      description: Start date of the search range
+      schema:
+        type: string
+        format: date
+    - name: end_date
+      in: query
+      description: End date of the search range
+      schema:
+        type: string
+        format: date
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  responses:
+    '200':
+      description: List of webhook events
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  event_list:
+                    type: array
+                    description: Array of events
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/event'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

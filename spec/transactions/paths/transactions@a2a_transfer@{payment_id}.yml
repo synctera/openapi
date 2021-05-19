@@ -1,0 +1,56 @@
+summary: Transfer amount from account to account under the same customer
+description: Transfer amount from account to account under the same customer
+get:
+  summary: Get account to account transfer
+  description: Get account to account transfer
+  operationId: getA2ATransfer
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/payment_id'
+  tags:
+    - Transactions
+  responses:
+    '200':
+      description: Account to account transfer
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/a2a_transfer'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+post:
+  summary: Reverse existing account to account transfer
+  description: Reverse account to account transfer
+  operationId: reverseA2ATransfer
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/payment_id'
+  tags:
+    - Transactions
+  responses:
+    '201':
+      description: Reversed account to account transfer
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/a2a_transfer'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '471':
+      $ref: '../../common/responses.yml#/components/responses/cannot_reverse'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+

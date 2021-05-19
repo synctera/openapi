@@ -1,0 +1,81 @@
+summary: Account Address
+get:
+  summary: Get address for an account
+  operationId: getAccountAddress
+  description: Get account address by ID
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            has_details:
+              type: boolean
+              description: Include the address information (e.g. street number) if set to True. Address reference only if set to false. Default is false
+  responses:
+    '200':
+      description: Account address
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/account_address'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+
+put:
+  summary: Update address for an account
+  operationId: updateAccountAddress
+  description: Update account address
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  requestBody:
+    description: Account address to be updated
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/account_address'
+  responses:
+    '200':
+        description: Updated account address
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas.yml#/components/schemas/account_address'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+
+delete:
+  summary: Delete address for an account
+  operationId: DeleteAccountAddress
+  description: Delete account address
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  responses:
+    '200':
+      $ref: '../../common/responses.yml#/components/responses/delete_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'

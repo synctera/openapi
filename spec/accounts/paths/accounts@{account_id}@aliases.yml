@@ -1,0 +1,59 @@
+summary: Account Alias
+post:
+  summary: Create alias for an account
+  operationId: createAccountAlias
+  description: Create account alias
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+  requestBody:
+    description: Account alias to create
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/alias'
+  responses:
+    '201':
+      description: Created account alias
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/alias'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '409':
+      $ref: '../../common/responses.yml#/components/responses/already_exists'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+get:
+  summary: List aliases of an account
+  operationId: listAccountAlias
+  description: List account alias
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  responses:
+    '200':
+      description: List of account aliases
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  customers:
+                    type: array
+                    description: Array of account alias
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/alias'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+

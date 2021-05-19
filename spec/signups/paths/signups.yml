@@ -1,0 +1,29 @@
+summary: Signups
+description: >
+  An endpoint for creating the necessary tenant objects when signing up a new sandbox user. 
+  This API should be considered temporary and will likely be replaced.
+
+post:
+  summary: Signup a new sandbox user
+  operationId: createSignup
+  description: >
+    Create a bank, partner and party for a new sandbox user
+  tags:
+    - Signup
+  requestBody:
+    description: Signup input data
+    content: 
+      'application/json':
+        schema:
+          $ref: '../schemas.yml#/components/schemas/signup_input'
+  responses:
+    '201':
+      description: Successful signup
+      content:
+        application/json:
+          schema: 
+            $ref: '../schemas.yml#/components/schemas/signup_ids'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'

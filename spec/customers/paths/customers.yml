@@ -1,0 +1,70 @@
+summary: Customer
+description: >
+  The Customer object represents your customer's identity.  You can then
+  verify the identity of this customer and associate them with other people
+  and accounts
+post:
+  summary: Create a Customer
+  operationId: createCustomer
+  description: >
+    The customer object represents your customer's identity. You
+    can then verify the identity of this customer and associate them with other
+    people and accounts
+  tags:
+    - Customers
+  requestBody:
+    description: Customer to create
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/customer'
+  responses:
+    '201':
+      description: Created customer
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/customer'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '409':
+      $ref: '../../common/responses.yml#/components/responses/already_exists'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+get:
+  summary: List Customers
+  operationId: listCustomers
+  description: Retrieves paginated list of Customers associated with the authorized requester
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  tags:
+    - Customers
+  responses:
+    '200':
+      description: List of customers
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  customers:
+                    type: array
+                    description: Array of Customers
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/customer'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+

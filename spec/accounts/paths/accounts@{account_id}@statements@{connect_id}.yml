@@ -1,0 +1,72 @@
+summary: Account Statement
+get:
+  summary: Get statement for an account
+  operationId: getAccountStatement
+  description: Get account statement by ID
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  responses:
+    '200':
+      description: Account statement
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/statement'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+
+put:
+  summary: Update statement for an account
+  operationId: updateAccountStatement
+  description: Update account statement
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  requestBody:
+    description: Account statement to update
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/statement'
+  responses:
+    '200':
+      description: Updated account statement
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/statement'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+
+delete:
+  summary: Delete statement for an account
+  operationId: DeleteAccountStatement
+  description: Delete account statement
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  responses:
+    '200':
+      $ref: '../../common/responses.yml#/components/responses/delete_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'

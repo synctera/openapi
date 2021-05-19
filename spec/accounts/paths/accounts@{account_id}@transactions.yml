@@ -1,0 +1,48 @@
+summary: Get account transactions
+get:
+  summary: Get account transactions
+  operationId: getAccountTransactions
+  description: Get account transactions
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  requestBody:
+    description: Account transactions search condition
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            start_date:
+              type: string
+              format: date
+              description: Start date of the search range. Default is the date two weeks ago 
+            end_date:
+              type: string
+              format: date
+              description: End date of the search range. Default is the current date
+  responses:
+    '200':
+      description: Account transactions
+      content:
+        application/json:
+          schema:
+            allOf:
+            - type: object
+              properties:
+                transactions:
+                  type: array
+                  description: Array of transactions
+                  items:
+                    $ref: '../../transactions/schemas.yml#/components/schemas/transaction'
+            - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'

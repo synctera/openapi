@@ -1,0 +1,61 @@
+summary: Disclosures
+put:
+  summary: Update a Disclosure
+  operationId: updateDisclosure
+  description: >
+    Update a disclosure for a customer
+  tags:
+    - Disclosures
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+    - $ref: '../parameters.yml#/components/parameters/disclosure_id'
+  requestBody:
+    description: Disclosure to update
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/disclosure'
+  responses:
+    '200':
+      description: Updated disclosure
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/disclosure'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+delete:
+  summary: Delete a Disclosure
+  operationId: deleteDisclosure
+  description: >
+    Delete a disclosure for a customer
+  tags:
+    - Disclosures
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+    - $ref: '../parameters.yml#/components/parameters/disclosure_id'
+  responses:
+    '200':
+      $ref: '../../common/responses.yml#/components/responses/delete_response'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+#TODO no get?

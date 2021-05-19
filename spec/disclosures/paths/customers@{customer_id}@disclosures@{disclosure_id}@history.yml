@@ -1,0 +1,35 @@
+summary: Disclosures History
+description: >
+  Disclosures History
+get:
+  summary: List Disclosures History
+  operationId: listDisclosuresHistory
+  description: Retrieves paginated list of disclosures history associated with the authorized requester
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+    - $ref: '../parameters.yml#/components/parameters/disclosure_id'
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  tags:
+    - Disclosures
+  responses:
+    '200':
+      description: List of disclosures
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  disclosures:
+                    type: array
+                    description: Array of disclosures
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/disclosure'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

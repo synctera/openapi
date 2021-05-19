@@ -1,0 +1,32 @@
+components:
+  parameters:
+
+    deposit_id:
+      name: deposit_id
+      description: ID of a deposit for a remote deposit capture
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid
+
+    image_id:
+      name: image_id
+      description: ID of an image uploaded for a remote deposit capture
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid
+
+    scan_id:
+      name: scan_id
+      description: ID of an OCR scan of a check image uploaded for a remote deposit capture
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid

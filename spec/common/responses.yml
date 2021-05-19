@@ -1,0 +1,140 @@
+components:
+  responses:
+
+    # Common non-error responses
+
+    delete_response:
+      description: Resource has been deleted
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/delete_response'
+
+    # Common error responses
+
+    #TODO some of these are not common
+    account_closed:
+      description: Account has been closed
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    insufficient_funds:
+      description: Insufficient funds
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    account_locked:
+      description: Account has been locked
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    customer_locked:
+      description: Customer has been locked
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    counterparty_account_locked:
+      description: Counterparty account has been locked
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    counterparty_account_closed:
+      description: Counterparty account has been closed
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    currency_not_supported:
+      description: Currency not supported
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    recurrence_not_supported:
+      description: Recurrence not supported
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    execution_date_in_the_past:
+      description: Execution date in the past
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    execution_date_in_the_future:
+      description: Execution date in the future
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    cannot_reverse:
+      description: Transaction cannot be reversed
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    already_exists:
+      description: Resource already exists error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    bad_request:
+      description: BadRequest
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    forbidden:
+      description: Forbidden error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    internal_server_error:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    not_found: 
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'
+
+    unprocessible_entity:
+      description: Unprocessible entity request response
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/components/schemas/error'

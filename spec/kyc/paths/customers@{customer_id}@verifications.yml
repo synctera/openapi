@@ -1,0 +1,70 @@
+summary: List Verification Results
+description: |
+  List verification results
+get:
+  summary: List Verification Results
+  operationId: listVerifications
+  description: List verification results
+  tags:
+    - KYC Verification
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  responses:
+    "200":
+      description: List of customer verification results
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  verifications:
+                    type: array
+                    description: Array of Verification results
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/customer_verification_result'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+post:
+  summary: Create a Customer Verification Result
+  operationId: createCustomerVerificationResult
+  description: >
+    Create a verification result for a customer
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+  tags:
+    - KYC Verification
+  requestBody:
+    description: Customer verification result to create
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/customer_verification_result'
+  responses:
+    '201':
+      description: Created customer verification result
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/customer_verification_result'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

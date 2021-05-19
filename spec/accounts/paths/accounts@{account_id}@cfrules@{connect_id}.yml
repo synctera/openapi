@@ -1,0 +1,72 @@
+summary: Account CF Rules
+get:
+  summary: Get CF rules for an account
+  operationId: getAccountCFRules
+  description: Get account CF rules by ID
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  responses:
+    '200':
+      description: Account cash flow rules
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/cf_rules'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+
+put:
+  summary: Update CF rules for an account
+  operationId: updateAccountCFRules
+  description: Update account CF rules
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  requestBody:
+    description: Account cash flow rules to update
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/cf_rules'
+  responses:
+    '200':
+      description: Updated account cash flow rules
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/cf_rules'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+
+delete:
+  summary: Delete CF rules for an account
+  operationId: DeleteAccountCFRules
+  description: Delete account CF rules
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  responses:
+    '200':
+      $ref: '../../common/responses.yml#/components/responses/delete_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'

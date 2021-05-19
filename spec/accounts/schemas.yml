@@ -1,0 +1,522 @@
+components:
+  schemas:
+
+    access:
+      title: Account Access
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique ID of the specific access rule
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        party_relationship_id:
+          type: integer
+          description: Unique ID of the specific party relationship
+        logical_operator:
+          type: string
+          description: AND & OR operator
+        activity_flow_type_grp:
+          type: string
+          description: Process group ID
+        transaction_type_grp:
+          type: string
+          description: Transaction type group
+        activity_type:
+          type: string
+          description: Activity type
+        interval_id:
+          type: string
+          description: Interval ID
+        lower_limit:
+          type: number
+          description: Lower amount limit
+        upper_limit:
+          type: number
+          description: Upper amount limit
+
+    account:
+      # title: Account
+      description: Account
+      oneOf:
+        - $ref: '#/components/schemas/lead_mode_account'
+        - $ref: '#/components/schemas/shadow_mode_account'
+
+    account_address:
+      title: Account Address
+      type: object
+      properties:
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        document_type_id:
+          type: integer
+          description: Document
+        duplicate:
+          type: boolean
+          description: Indicator of duplicate of the address
+        customer_id:
+          type: string
+          format: uuid
+          description: Customer ID
+        address_id:
+          type: integer
+          description: Address unique ID
+        address:
+          readOnly: true
+          allOf:
+            - $ref: '../common/schemas.yml#/components/schemas/address'
+
+    accounting:
+      title: Account Accounting
+      type: object
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+          description: Customer ID
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        profit_center:
+          type: string
+          description: Profit center
+        asset_account:
+          type: string
+          description: General ledger account for asset assignment
+        liability_account:
+          type: string
+          description: General ledger account for liability assignment
+        account_default_status:
+          type: string
+          description: Is account in default status
+        internal_account_symbol:
+          type: string
+          description: Represents an internal account in the respective bank
+        activity_flow_type_id:
+          type: string
+          description: Process type ID
+        do_not_revalute_flag:
+          type: boolean
+          description: Do not revalute FX positions
+        use_acur_flag:
+          type: boolean
+          description: Use Account Currency to calculate
+        zero_balancing:
+          type: boolean
+          description: Flag that indicates, that account is a match & kill enforced account
+        return_balancing:
+          type: boolean
+          description: Flag that indicates, that the account will only allow recipient postings that reference an ordering party in the reference field
+
+    alias:
+      title: Account Alias
+      type: object
+      properties:
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        id:
+          type: string
+          format: uuid
+          description: Alias ID
+        alias_type:
+          type: string
+          description: Alias type
+        alias_name:
+          type: string
+          description: Alias name
+        alias_source:
+          type: string
+          description: Alias
+        alias_info:
+          type: string
+          format: byte
+          description: Additional information for the alias
+
+    balance:
+      title: Account balance
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Account ID
+          readOnly: true
+        posting_date:
+          type: string
+          format: date-time
+          description: Balance at the posting date
+          readOnly: true
+        balance_type:
+          $ref: '#/components/schemas/balance_type'
+        currency:
+          type: string
+          description: Currency of the balance. ISO 4217 alphabetic currency code
+          readOnly: true
+          example: faker.finance.currencyCode
+        amount:
+          minimum: 0
+          description: amount in ISO 4217 minor currency units
+          type: integer
+          example: faker.random.number(1000)
+          readOnly: true
+        dc_sign:
+          $ref: '../common/schemas.yml#/components/schemas/dc_sign_type'
+
+    balance_type:
+      type: string
+      description: The type of the balance. GET operation default is for all types
+      enum:
+        - AVAILABLE_BALANCE
+        - ACH
+        - MARQETA
+        - MASTERCARD
+        - PULSE
+
+    cf_rules:
+      title: Account Cash Flow Rules
+      type: object
+      properties:
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        cash_flow_flag:
+          type: boolean
+          description: Cash flow based product
+        account_cf_rules:
+          type: integer
+          description: Cash flow rules set
+
+
+    communication:
+      title: Account Communication
+      type: object
+      properties:
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        document_type_id:
+          type: integer
+          description: Document ID
+        duplicate:
+          type: boolean
+          description: Indicator of duplicate of the communication
+        customer_id:
+          type: string
+          format: uuid
+          description: Customer ID
+        com_id:
+          type: integer
+          description: Communication unique ID
+
+    lead_mode_account:
+      title: Account Lead Mode
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Account ID
+          readOnly: true
+        account_number:
+          type: string
+          description: Account number
+          readOnly: true
+        currency:
+          type: string
+          description: Account currency or account settlement currency. ISO 4217 alphabetic currency code. Default USD
+          example: faker.finance.currencyCode
+        status:
+          $ref: '#/components/schemas/status'
+        exchange_rate_type:
+          type: string
+          description: Exchange rate type
+          example: M, INTERBANK, CUST
+        iban:
+          type: string
+          description: International bank account number
+        swift_code:
+          type: string
+          description: SWIFT code
+        is_account_pool:
+          type: boolean
+          description: Account is investment (variable balance) account or a multi-balance account pool. Default false
+        account_template_code:
+          type: string
+          description: Account template code
+        account_template_version:
+          type: number
+          description: Account template version
+        relationships:
+          type: array
+          description: List of the relationship for this account to the parties
+          items:
+            $ref: '#/components/schemas/relationship'
+        aliases:
+          type: array
+          description: A list of the aliases for account. Account alias is the account number of different balance types to link to the same account ID
+          writeOnly: true
+          items:
+            $ref: '#/components/schemas/alias'
+        balances:
+          type: array
+          readOnly: true
+          description: A list of balances for account based on different type
+          items:
+            $ref: '#/components/schemas/balance'
+        recent_transactions:
+          type: array
+          readOnly: true
+          description: The most recent 10 transactions of the account
+          items:
+            $ref: '../transactions/schemas.yml#/components/schemas/transaction'
+      required:
+        - template_code
+        - template_version
+        - relationships
+
+    pricing:
+      title: Account Pricing
+      type: object
+      properties:
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        pricing_id:
+          type: integer
+          description: Unique pricing ID
+        use_acur_flag:
+          type: boolean
+          description: Use account currency to calculate
+        inheirited_from:
+          type: string
+          description: Inherited from party, account, transaction, interAccount, relationship, party group
+
+    relationship:
+      title: Account Relationship
+      type: object
+      properties:
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        relationship_type:
+          type: string
+          description: Relationship type
+          enum:
+            - ACCOUNT_HOLDER
+            - EMPLOYEE
+            - BRANCH
+            - ATM
+            - OFFICER
+            - PRIMARY_ACCOUNT_HOLDER
+            - JOINT_ACCOUNT_HOLDER
+            - AUTHORIZED-SIGNER
+        customer_id:
+          type: string
+          format: uuid
+          description: Customer that the current account is associated with
+
+    settlement:
+      title: Account Settlement
+      type: object
+      properties:
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        settlement_id:
+          type: integer
+          description: Settlement ID
+        active_flag:
+          type: boolean
+          description: Active flag
+        immediate_charge_flag:
+          type: boolean
+          description: Charge will be settled immediately
+        recurrence_id:
+          type: integer
+          description: Recurrence Identifier
+        start_date:
+          type: string
+          format: date-time
+          description: Start date (timestamp)
+        inherited_from:
+          type: string
+          description: Inherited from Party, Account, Transaction, InterAccount, Relationship, Party Group
+        pricing_id:
+          type: integer
+          description: Unique Pricing ID
+        post_results_flag:
+          type: string
+          description: Flag to post results
+        save_results_flag:
+          type: string
+          description: Flag to save results
+        transaction_type_credit:
+          type: integer
+          description: Transaction Type for credits
+        transaction_type_debit:
+          type: integer
+          description: Transaction Type for debit
+        external_settlement_flag:
+          type: boolean
+          description: Transfer of settlement results to external account
+        customer_id:
+          type: string
+          format: uuid
+          description: Customer ID
+        external_account_id:
+          type: string
+          description: External Account ID
+
+    shadow_mode_account:
+      title: Shadow mode account
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Account ID
+          readOnly: true
+        account_number:
+          type: string
+          description: Account number
+        currency:
+          type: string
+          description: Account currency or account settlement currency. ISO 4217 alphabetic currency code. Default USD
+          example: faker.finance.currencyCode
+        status:
+          $ref: '#/components/schemas/status'
+        # exchange_rate_type:
+        #   type: string
+        #   description: Exchange rate type
+        #   example: M, INTERBANK, CUST
+        # iban:
+        #   type: string
+        #   description: International bank account number
+        # swift_code:
+        #   type: string
+        #   description: SWIFT code
+        is_account_pool:
+          type: boolean
+          description: Account is investment (variable balance) account or a multi-balance account pool. Default false
+        relationships:
+          type: array
+          description: List of the relationship for this account to the parties
+          items:
+            $ref: '#/components/schemas/relationship'
+        aliases:
+          type: array
+          description: A list of aliases for account. Account alias is the account number of different balance types to link to the same account ID
+          writeOnly: true
+          items:
+            $ref: '#/components/schemas/alias'
+        balances:
+          type: array
+          readOnly: true
+          description: A list of balances for account based on different type
+          items:
+            $ref: '#/components/schemas/balance'
+        recent_transactions:
+          type: array
+          readOnly: true
+          description: The most recent 10 transactions of the account
+          items:
+            $ref: '../transactions/schemas.yml#/components/schemas/transaction'
+      required:
+        - account_number
+        - status
+        
+    statement:
+      title: account statement
+      type: object
+      properties:
+        connect_id:
+          type: string
+          format: uuid
+          description: Connection ID of the account
+        statement_id:
+          type: integer
+          description: Statement ID
+        account_legal_statement:
+          type: boolean
+          description: Indicator of legeally binding statement
+        account_statement_type:
+          type: string
+          description: Correspondence Type (Statement, Reg-E Disclosure, etc.)
+        recurrence_id:
+          type: integer
+          description: Recurrence Identifier
+        next_execution_date:
+          type: string
+          format: date-time
+          description: Next execution date (Timestamp)
+        retry_date:
+          type: string
+          format: date-time
+          description: Retry date (Timestamp)
+
+    status:
+      title: Account Status
+      type: string
+      enum:
+        - APPLICATION_SUBMITTED
+        - FAILED_KYC
+        - ACCOUNT_NOT_DESIRED
+        - ACTIVE_OR_DISBURSED
+        - CLOSED
+        - SUSPENDED
+        - CHARGED_OFF
+        - ACCOUNT_NEVER_ACTIVE
+        - ACTIVATED_NOT_DISBURSED
+        - AWAITING_FIXING
+        - IN_CLOSING
+      description: >
+        The status of the account. Mandatory for shadow mode, optional for lead mode.
+
+    subscription:
+      title: Account Subscription
+      allOf:
+        - $ref: '#/components/schemas/communication'
+        - type: object
+          properties:
+            connect_id:
+              type: string
+              format: uuid
+              description: Connection ID of the account
+            activity_flow_type_id:
+              type: string
+              description: Process type ID
+            notification_type:
+              type: string
+              description: Notification type
+            comparison_operator:
+              type: string
+              description: Comparison operator
+            amount_acct:
+              type: number
+              description: Amount in Account currency
+    
+    list_account_request:
+      type: object
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+          description: Return accounts belonging to this customer ID
+        has_details:
+          type: boolean
+          default: false
+          description: Should the account include information for relationships, aliases, balances and recent transactions
+      required:
+        - customer_id

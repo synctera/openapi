@@ -1,0 +1,62 @@
+summary: RDC Deposits
+description: >
+  The RDC deposits collection represents all the deposits made using remote deposit capture associated with an account
+
+post:
+  summary: Create an RDC Deposit
+  operationId: createRdcDeposit
+  description: >
+    Create a new deposit using remote deposit capture to an account
+  tags:
+    - RDC Deposits
+  parameters:
+    - $ref: '../../accounts/parameters.yml#/components/parameters/account_id'
+  requestBody:
+    description: Attributes of the RDC deposit to create
+    content: 
+      'application/json':
+        schema:
+          $ref: '../schemas.yml#/components/schemas/deposit'
+  responses:
+    '201':
+      description: Successful creation of a deposit using remote deposit capture
+      content:
+        application/json:
+          schema: 
+            $ref: '../schemas.yml#/components/schemas/deposit'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+
+get:
+  summary: List RDC Deposits
+  operationId: listRdcDeposits
+  description: Retrieves a paginated list of the deposits made using remote deposit capture associated with an account
+  tags:
+    - RDC Deposits
+  parameters:
+    - $ref: '../../accounts/parameters.yml#/components/parameters/account_id'
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  responses:
+    '200':
+      description: List of deposits made with remote deposit capture
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  deposits:
+                    description: Array of RDC deposits
+                    type: array
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/deposit'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'

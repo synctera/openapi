@@ -1,0 +1,26 @@
+summary: RDC Image by Id
+description: >
+  The RDC image represents one image uploaded for remote deposit capture associated with an account
+
+get:
+  summary: Get RDC Image
+  operationId: getRdcImage
+  description: Retrieves one image for remote deposit capture associated with an account
+  tags:
+    - RDC Deposits
+  parameters:
+    - $ref: '../../accounts/parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/image_id'
+  responses:
+    '200':
+      description: Successful retrieval of an RDC image
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/image'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'

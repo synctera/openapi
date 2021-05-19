@@ -1,0 +1,36 @@
+summary: Get account balance
+get:
+  summary: Get account balance
+  operationId: getAccountBalance
+  description: Get account balance
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+  requestBody:
+    description: Account balance search conditions
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            posting_date:
+              type: string
+              format: date-time
+              description: Posting date of the balance. Default is today's date
+            balance_type:
+              $ref: '../schemas.yml#/components/schemas/balance_type'
+  responses:
+    '200':
+      description: Account balance
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/balance'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'

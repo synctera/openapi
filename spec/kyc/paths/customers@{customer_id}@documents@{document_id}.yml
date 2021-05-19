@@ -1,0 +1,94 @@
+summary: Document by ID
+get:
+  summary: Get Document
+  description: Get Document based on ID
+  operationId: getDocument
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+    - $ref: '../parameters.yml#/components/parameters/document_id'
+  tags:
+    - KYC Verification
+  responses:
+    '200':
+      description: Document
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/document'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+put:
+  summary: Update Document
+  operationId: updateDocument
+  tags:
+    - KYC Verification
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+    - $ref: '../parameters.yml#/components/parameters/document_id'
+  requestBody:
+    description: Document to update
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/document'
+  responses:
+    '200':
+      description: Updated document
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/document'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+patch:
+  summary: Patch Document
+  operationId: patchDocument
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+    - $ref: '../parameters.yml#/components/parameters/document_id'
+  tags:
+    - KYC Verification
+  requestBody:
+    #TODO is there any difference vs put? The request is the same
+    description: Document to patch
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/document'
+  responses:
+    '200':
+      description: Patched document
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/document'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
