@@ -1,0 +1,247 @@
+components:
+  schemas:
+
+    a2a_transfer:
+      type: object
+      properties:
+        source_account:
+          type: string
+          format: uuid
+          description: Account ID that is instructing the transfer
+        target_account:
+          type: string
+          format: uuid
+          description: Account ID that is receiving the transfer  
+        amount:
+          minimum: 0
+          description: amount in ISO 4217 minor currency units
+          type: integer
+          example: faker.random.number(1000)
+        currency:
+          type: string
+          description: Account currency or account settlement currency. ISO 4217 alphabetic currency code.
+          example: faker.finance.currencyCode
+        dc_sign:
+          $ref: '../common/schemas.yml#/components/schemas/dc_sign_type'
+        reference_info:
+          type: string
+          maxLength: 80
+          description: User specified information of this transfer
+        execution_date:
+          type: string
+          format: date
+          description: Execution date of the transfer. Default is the current date
+        recurring_data:
+          $ref: '#/components/schemas/recurrence_data'
+        transfer_reversal:
+          readOnly: true
+          type: object
+          description: If transfer reversal happens, both original and reversal transfers will be set for the cross reference
+          properties:
+            is_reversal:
+              type: boolean
+              description: True if transfer reversal, false otherwise the original transfer
+            id:
+              type: string
+              format: uuid
+              description: Payment ID of the corresponding reversal/original transfer
+        is_overwrite_checks:
+          type: boolean
+          description: Flag to indicate the overwrite checks
+          readOnly: true
+        payment_id:
+          type: string
+          format: uuid
+          description: Payment ID
+          readOnly: true
+      required:
+        - source_account
+        - target_account
+        - amount
+        - currency
+        - dc_sign
+
+    ach_outgoing:
+      title: Outgoing ACH
+      type: object
+      description: Represents an outgoing ACH
+      properties:
+        id:
+          description: Outgoing ACH
+          type: string
+          format: uuid
+          readOnly: true
+          example: faker.random.uuid
+        account_id:
+          description: ID of the source account
+          type: string
+          format: uuid
+          readOnly: true
+          example: faker.random.uuid
+        amount:
+          description: Amount to transfer in ISO 4217 minor currency units
+          type: integer
+          minimum: 0
+          example: faker.random.number(1000)
+        currency:
+          description: ISO 4217 alphabetic currency code of the transfer amount
+          type: string
+          example: faker.finance.currencyCode
+        transaction_direction:
+          description: The type of transaction (DEBIT/CREDIT) for originating account
+          type: string
+          enum: [DEBIT, CREDIT]
+          example: DEBIT
+        reference_info:
+          description: Reference information for the payment
+          type: string
+          maxLength: 80
+          example: faker.lorem.sentence
+        target_account_no:
+          description: The account number of the destination account
+          type: string
+          maxLength: 17
+          pattern: '^\d{1,17}$'
+          example: faker.helpers.replaceSymbols(################)
+        target_account_routing:
+          description: The routing number of the destination account
+          type: string
+          minLength: 9
+          maxLength: 9
+          pattern: '^\d{9}$'
+          example: faker.helpers.replaceSymbols(#########)
+        target_bank_country:
+          description: The ISO-3166-1 Alpha-2 country code in which the target account is registered (default US)
+          type: string
+          default: US
+          example: faker.address.countryCode
+        recipient_name:
+          description: The name of the recipient
+          type: string
+          example: faker.name.findName
+        execution_date:
+          description: The date the transfer executes (default today)
+          type: string
+          format: date
+          example: faker.date.soon
+        recurring_data:
+          $ref: '#/components/schemas/recurrence_data'
+        no_fraud_check:
+          description: Do not perform a fraud check
+          type: boolean
+          example: false
+        overwrite_checks:
+          description: Overwrite non mandatory posting checks. Mandatory checks will still be processed
+          type: boolean
+          example: false
+      required:
+        - account_id
+        - amount
+        - currency
+        - target_account_no
+        - target_account_routing
+        - target_bank_country
+        - recipient_name
+
+    recurrence_data:
+      title: Recurrence Data
+      type: object
+      description: Represents recurrence data
+      properties:
+        id:
+          description: Recurrence ID
+          type: string
+          format: uuid
+          example: faker.random.uuid
+        recurrence_frequency:
+          description: the frequency at which to recur
+          type: integer
+          example: faker.random.number(10)
+
+    transaction:
+      title: Transaction
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Transaction ID
+        account_id:
+          type: string
+          format: uuid
+          description: Account ID
+        currency:
+          type: string
+          description: Currency of the transaction. ISO 4217 alphabetic currency code
+          example: faker.finance.currencyCode
+        amount:
+          type: integer
+          minimum: 0
+          description: Transaction amount in ISO 4217 minor currency units
+          example: faker.random.number(1000)
+        dc_sign:
+          $ref: '../common/schemas.yml#/components/schemas/dc_sign_type'
+        effective_date:
+          type: string
+          format: date-time
+          description: The effective date of the transaction (value_date) 
+        profit_center:
+          type: string
+          description: Profit center of the transaction
+        authorization_ref:
+          type: string
+          description: Reference for the authorization
+        ext_reference:
+          type: string
+          description: External reference from Synctera for the transaction
+        status:
+          type: string
+          description: The status of the transaction
+        transaction_type:
+          type: string
+          description: Transaction type
+          enum:
+            - ACCOUNT_CLOSING_ACH
+            - ATM_DEPOSIT_CARD
+            - ATM_FEE_CARD
+            - ATM_WITHDRAWAL_CARD
+            - BALANCE_INQUIRY_CARD
+            - CARD_LOAD_CARD
+            - CASH_ADVANCE_CARD
+            - CHARGEBACK_CARD
+            - CREDIT_CHECKING_ACH
+            - CREDIT_SAVING_ACH
+            - CREDIT_TRANSFER_ACH
+            - CREDIT_TRANSFER_CARD
+            - CUR_CONVERSION_FEE_CARD
+            - DEBIT_CHECKING_ACH
+            - DEBIT_SAVING_ACH
+            - DEBIT_TRANSFER_ACH
+            - DISPUTE_CHARGEBACK_CARD
+            - DISPUTE_PROVISIONAL_CREDIT_CARD
+            - INTERCHANGE_CARD
+            - MERCHANT_CREDIT_CARD
+            - MICRO_DEPOSIT_ACH
+            - MONEY_TRANSFER_CARD
+            - OTHER_CARD
+            - PAYPAL_CREDIT_ACH
+            - PIN_INTERCHANGE_CARD
+            - PIN_PURCHASE_CARD
+            - PIN_RETURN_CARD
+            - POS_VERIFICATION_CARD
+            - PRE_AUTH_COMPLETION_CARD
+            - PRE_AUTH_CREDIT _CHECKING_ACH
+            - PRE_AUTH_CREDIT _SAVING_ACH
+            - PRE_AUTH_DEBIT _CHECKING_ACH
+            - PRE_AUTH_DEBIT _SAVING_ACH
+            - PRE_AUTH_FORCE_CARD
+            - PURCHASE_CARD
+            - RDC_CHECK_ACH
+            - REFUND_CARD
+            - RETURN_CARD
+            - RETURN_CREDIT_CHECKING_ACH
+            - RETURN_CREDIT_SAVING_ACH
+            - RETURN_DEBIT_CHECKING_ACH
+            - RETURN_DEBIT_SAVING_ACH
+            - REVERSAL_ACH
+            - REVERSAL_CARD

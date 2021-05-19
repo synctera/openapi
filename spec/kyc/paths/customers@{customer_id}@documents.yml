@@ -1,0 +1,71 @@
+summary: Document
+get:
+  summary: List Documents
+  description: Get paginated list of Documents associated with user
+  operationId: listDocuments
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  tags:
+    - KYC Verification
+  responses:
+    '200':
+      description: List of documents
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  documents:
+                    type: array
+                    description: Array of documents
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/document'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+post:
+  summary: Create a Document
+  operationId: createDocument
+  description: >
+    Upload a Customer's document.  This document can be used to verify
+    identity
+  tags:
+    - KYC Verification
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/customer_id'
+  requestBody:
+    description: Document to create
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/document'
+  responses:
+    '201':
+      description: Created document
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/document'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

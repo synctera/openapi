@@ -1,0 +1,827 @@
+openapi: 3.0.3
+info:
+  description: |
+    <h2>Let's build something great.</h2><p>Welcome to the official reference documentation for Synctera APIs. Our APIs are the best way to automate your company's banking needs and are designed to be easy to understand and implement.</p><p>We're continuously growing this library and what you see here is just the start, but if you need something specific or have a question, <a class='text-blue-600' href='https://synctera.com/contact' target='_blank' rel='noreferrer'>contact us</a>.</p>
+  title: Synctera API
+  version: 0.5.0
+servers:
+- description: Production
+  url: https://api.synctera.com/v0
+- description: Sandbox (no real world financial impact)
+  url: https://api-sandbox.synctera.com/v0
+security:
+- bearerAuth: []
+tags:
+- description: Request to create and manage deposits using remote deposit capture
+  name: RDC Deposits
+paths:
+  /accounts/{account_id}/rdc/deposit:
+    description: |
+      The RDC deposits collection represents all the deposits made using remote deposit capture associated with an account
+    get:
+      description: Retrieves a paginated list of the deposits made using remote deposit
+        capture associated with an account
+      operationId: listRdcDeposits
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 100
+          description: Maximum of objects to return per page
+          example: 100
+          minimum: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: page_token
+        required: false
+        schema:
+          description: Optional pagination token to be provided to retrieve subsequent
+            pages, returned from previous get
+          example: faker.random.alphaNumeric(10)
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - properties:
+                    deposits:
+                      description: Array of RDC deposits
+                      items:
+                        $ref: '#/components/schemas/deposit'
+                      type: array
+                  type: object
+                - $ref: '#/components/schemas/paginated_response'
+          description: List of deposits made with remote deposit capture
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+      summary: List RDC Deposits
+      tags:
+      - RDC Deposits
+    post:
+      description: |
+        Create a new deposit using remote deposit capture to an account
+      operationId: createRdcDeposit
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deposit'
+        description: Attributes of the RDC deposit to create
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deposit'
+          description: Successful creation of a deposit using remote deposit capture
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Resource not found
+      summary: Create an RDC Deposit
+      tags:
+      - RDC Deposits
+    summary: RDC Deposits
+  /accounts/{account_id}/rdc/deposit/{deposit_id}:
+    description: |
+      The RDC deposit represents one deposit made using remote deposit capture associated with an account
+    get:
+      description: Retrieves one deposit made using remote deposit capture associated
+        with an account
+      operationId: getRdcDeposit
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: ID of a deposit for a remote deposit capture
+        explode: false
+        in: path
+        name: deposit_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deposit'
+          description: Successful retrieval of an RDC deposit
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Resource not found
+      summary: Get RDC Deposit
+      tags:
+      - RDC Deposits
+    summary: RDC Deposit by Id
+  /accounts/{account_id}/rdc/images:
+    description: |
+      The RDC image collection represents all the images uploaded for remote deposit capture associated with an account
+    get:
+      description: Retrieves a paginated list of the ids of the images for remote
+        deposit capture associated with an account
+      operationId: listRdcImageIds
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 100
+          description: Maximum of objects to return per page
+          example: 100
+          minimum: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: page_token
+        required: false
+        schema:
+          description: Optional pagination token to be provided to retrieve subsequent
+            pages, returned from previous get
+          example: faker.random.alphaNumeric(10)
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - properties:
+                    images:
+                      description: Array of RDC images
+                      items:
+                        $ref: '#/components/schemas/image'
+                      type: array
+                  type: object
+                - $ref: '#/components/schemas/paginated_response'
+          description: List of check images made for remote deposit capture
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+      summary: List RDC Image Ids
+      tags:
+      - RDC Deposits
+    post:
+      description: |
+        Create a new image for a remote deposit capture to an account
+      operationId: createRdcImage
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/image'
+        description: RDC image to create
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
+          description: Successful creation of an image for remote deposit capture
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+      summary: Create an RDC Image
+      tags:
+      - RDC Deposits
+    summary: RDC Image
+  /accounts/{account_id}/rdc/images/{image_id}:
+    description: |
+      The RDC image represents one image uploaded for remote deposit capture associated with an account
+    get:
+      description: Retrieves one image for remote deposit capture associated with
+        an account
+      operationId: getRdcImage
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: ID of an image uploaded for a remote deposit capture
+        explode: false
+        in: path
+        name: image_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
+          description: Successful retrieval of an RDC image
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Resource not found
+      summary: Get RDC Image
+      tags:
+      - RDC Deposits
+    summary: RDC Image by Id
+  /accounts/{account_id}/rdc/scans:
+    description: |
+      The RDC scan collection represents all the scans of uploaded images made for remote deposit capture associated with an account
+    get:
+      description: Retrieves a paginated list of the the scans of uploaded images
+        made for remote deposit capture associated with an account
+      operationId: listRdcScans
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 100
+          description: Maximum of objects to return per page
+          example: 100
+          minimum: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: page_token
+        required: false
+        schema:
+          description: Optional pagination token to be provided to retrieve subsequent
+            pages, returned from previous get
+          example: faker.random.alphaNumeric(10)
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - properties:
+                    scans:
+                      description: Array of RDC scans
+                      items:
+                        $ref: '#/components/schemas/scan'
+                      type: array
+                  type: object
+                - $ref: '#/components/schemas/paginated_response'
+          description: List of OCR scans of check images made for remote deposit capture
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+      summary: List RDC Scans
+      tags:
+      - RDC Deposits
+    post:
+      description: |
+        Create a new scan of a check image made for a remote deposit capture to an account
+      operationId: createRdcScan
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/scan'
+        description: RDC scan to create
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scan'
+          description: Successful creation of a scan of a check image made for remote
+            deposit capture
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Resource not found
+      summary: Create an RDC Scan
+      tags:
+      - RDC Deposits
+    summary: RDC Scan
+  /accounts/{account_id}/rdc/scans/{scan_id}:
+    description: |
+      The RDC scan represents the OCR scan of the check images uploaded for remote deposit capture associated with an account
+    get:
+      description: Retrieves one OCR scan of a check image for remote deposit capture
+        associated with an account
+      operationId: getRdcScan
+      parameters:
+      - description: Account ID
+        explode: false
+        in: path
+        name: account_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: ID of an OCR scan of a check image uploaded for a remote deposit
+          capture
+        explode: false
+        in: path
+        name: scan_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scan'
+          description: Successful retrieval of an RDC scan
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: BadRequest
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Resource not found
+      summary: Get RDC Scan
+      tags:
+      - RDC Deposits
+    summary: RDC Scan by Id
+components:
+  parameters:
+    account_id:
+      description: Account ID
+      explode: false
+      in: path
+      name: account_id
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+    limit:
+      explode: true
+      in: query
+      name: limit
+      required: false
+      schema:
+        default: 100
+        description: Maximum of objects to return per page
+        example: 100
+        minimum: 1
+        type: integer
+      style: form
+    page_token:
+      explode: true
+      in: query
+      name: page_token
+      required: false
+      schema:
+        description: Optional pagination token to be provided to retrieve subsequent
+          pages, returned from previous get
+        example: faker.random.alphaNumeric(10)
+        type: string
+      style: form
+    deposit_id:
+      description: ID of a deposit for a remote deposit capture
+      explode: false
+      in: path
+      name: deposit_id
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+    image_id:
+      description: ID of an image uploaded for a remote deposit capture
+      explode: false
+      in: path
+      name: image_id
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+    scan_id:
+      description: ID of an OCR scan of a check image uploaded for a remote deposit
+        capture
+      explode: false
+      in: path
+      name: scan_id
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+  responses:
+    bad_request:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      description: BadRequest
+    unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      description: Unauthorized
+    not_found:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      description: Resource not found
+  schemas:
+    deposit:
+      description: Deposit using remote deposit capture
+      example:
+        account_number: faker.random.alphaNumeric(14)
+        deposit_amount: 6
+        date_submitted: 2019-01-02T03:04:05.678Z
+        check_currency: USD
+        back_image_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        deposit_currency: USD
+        front_image_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        check_amount: 0
+        scan_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        routing_number: "123456789"
+        date_processed: 2019-01-02T03:04:05.678Z
+      properties:
+        id:
+          description: RDC Deposit ID
+          format: uuid
+          readOnly: true
+          type: string
+        account_number:
+          description: Account number
+          example: faker.random.alphaNumeric(14)
+          readOnly: true
+          type: string
+        routing_number:
+          description: Bank routing number
+          example: "123456789"
+          readOnly: true
+          type: string
+        check_amount:
+          description: Amount on check in ISO 4217 minor currency units
+          readOnly: true
+          type: integer
+        check_currency:
+          description: ISO 4217 currency code for the check amount
+          example: USD
+          readOnly: true
+          type: string
+        deposit_amount:
+          description: Amount deposited in ISO 4217 minor currency units
+          readOnly: true
+          type: integer
+        deposit_currency:
+          description: ISO 4217 currency code for the deposit amount
+          example: USD
+          readOnly: true
+          type: string
+        date_processed:
+          description: Date the deposit was processed, in RFC 3339 format
+          example: 2019-01-02T03:04:05.678Z
+          readOnly: true
+          type: string
+        date_submitted:
+          description: Date the deposit was submitted, in RFC 3339 format
+          example: 2019-01-02T03:04:05.678Z
+          readOnly: true
+          type: string
+        front_image_id:
+          description: ID of the image of the front of the check
+          format: uuid
+          readOnly: true
+          type: string
+        back_image_id:
+          description: ID of the image of the back of the check
+          format: uuid
+          readOnly: true
+          type: string
+        scan_id:
+          description: ID of the OCR scan of the check image
+          format: uuid
+          type: string
+      required:
+      - account_number
+      - back_image_id
+      - check_amount
+      - check_currency
+      - date_processed
+      - date_submitted
+      - deposit_amount
+      - deposit_currency
+      - front_image_id
+      - id
+      - routing_number
+      - scan_id
+      title: RDC Deposit
+      type: object
+    paginated_response:
+      properties:
+        next_page_token:
+          description: If returned, use the next_page_token to query for the next
+            page of results.
+          example: faker.random.alphaNumeric(10)
+          type: string
+      title: Paginated List response
+      type: object
+    error:
+      properties:
+        error_details:
+          description: Detailed description of error
+          example: faker.lorem.sentence
+          type: string
+      title: Error
+      type: object
+    rdc_media_type:
+      description: 'Type of image: PNG, JPG. Note that PDF and GIF are valid values,
+        but not currently supported.'
+      enum:
+      - PDF
+      - PNG
+      - JPG
+      - GIF
+      example: PNG
+      title: RDC MediaType
+      type: string
+    image:
+      description: Image uploaded for a remote deposit capture
+      example:
+        media_type: PNG
+        byte_data: byte_data
+        date_uploaded: 2019-01-02T03:04:05.678Z
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          description: RDC image id
+          format: uuid
+          readOnly: true
+          type: string
+        media_type:
+          $ref: '#/components/schemas/rdc_media_type'
+        byte_data:
+          description: Base64url encoded image
+          format: byte
+          type: string
+        date_uploaded:
+          description: Date the image was uploaded, in RFC 3339 format
+          example: 2019-01-02T03:04:05.678Z
+          readOnly: true
+          type: string
+      required:
+      - byte_data
+      - data_uploaded
+      - id
+      - media_type
+      title: RDC Image
+      type: object
+    scan:
+      description: Scanning image to be used for remote deposit capture
+      example:
+        account_number: faker.random.alphaNumeric(14)
+        check_currency: USD
+        back_image_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        date_scanned: 2019-01-02T03:04:05.678Z
+        front_image_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        check_amount: 0
+        routing_number: "123456789"
+      properties:
+        id:
+          description: RDC Scan ID
+          format: uuid
+          readOnly: true
+          type: string
+        account_number:
+          description: Account number
+          example: faker.random.alphaNumeric(14)
+          readOnly: true
+          type: string
+        routing_number:
+          description: Bank routing number
+          example: "123456789"
+          readOnly: true
+          type: string
+        check_amount:
+          description: Amount on check in ISO 4217 minor currency units
+          readOnly: true
+          type: integer
+        check_currency:
+          description: ISO 4217 currency code for the check amount
+          example: USD
+          readOnly: true
+          type: string
+        date_scanned:
+          description: Date the check image was scanned, in RFC 3339 format
+          example: 2019-01-02T03:04:05.678Z
+          readOnly: true
+          type: string
+        front_image_id:
+          description: ID of the image of the front of the check
+          format: uuid
+          type: string
+        back_image_id:
+          description: ID of the image of the back of the check
+          format: uuid
+          type: string
+      required:
+      - account_number
+      - back_image_id
+      - check_amount
+      - check_currency
+      - date_scanned
+      - front_image_id
+      - id
+      - routing_number
+      title: RDC Scan
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: api_key
+      scheme: bearer
+      type: http

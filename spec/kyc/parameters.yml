@@ -1,0 +1,22 @@
+components:
+  parameters:
+
+    document_id:
+      name: document_id
+      description: Document ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid
+
+    verification_id:
+      name: verification_id
+      description: Verification ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid

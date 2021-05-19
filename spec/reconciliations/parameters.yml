@@ -1,0 +1,12 @@
+components:
+  parameters:
+
+    reconciliation_id:
+      name: reconciliation_id
+      description: Reconciliation id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid

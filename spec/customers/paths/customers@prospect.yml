@@ -1,0 +1,40 @@
+summary: Prospect
+post:
+  summary: Create a Prospect
+  operationId: createProspect
+  description: >
+    Creates a prospect and returns an unique identifier. Use this ID to
+    track disclosures displayed during the KYC flow.  The prospect can be
+    upgraded to a `customer` by updated `customer` resource with collected
+    information.
+  tags:
+    - Customers
+  responses:
+    '201':
+      description: Prospect/Customer id
+      content:
+        application/json:
+          schema:
+            title: ProspectResponse
+            type: object
+            properties:
+              id:
+                type: string
+                description: Customer id to use for segment disclosure tracking and customer creation
+                format: uuid
+                example: faker.random.uuid
+      links: # Specifies use the returned id when creating a Customer
+      #TODO this is the only place we use a link. We should be consistent
+        createCustomer:
+          operationId: createCustomer
+          parameters:
+            id: '$response.body#/id'
+          description: >
+            The `id` value returned in the response can be used as the
+            `id` parameter when creating or getting a customer
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '403':
+      $ref: '../../common/responses.yml#/components/responses/forbidden'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

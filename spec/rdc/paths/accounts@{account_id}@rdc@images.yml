@@ -1,0 +1,60 @@
+summary: RDC Image
+description: >
+  The RDC image collection represents all the images uploaded for remote deposit capture associated with an account
+
+post:
+  summary: Create an RDC Image
+  operationId: createRdcImage
+  description: >
+    Create a new image for a remote deposit capture to an account
+  tags:
+    - RDC Deposits
+  parameters:
+    - $ref: '../../accounts/parameters.yml#/components/parameters/account_id'
+  requestBody:
+    description: RDC image to create
+    content: 
+      'application/json':
+        schema:
+          $ref: '../schemas.yml#/components/schemas/image'
+  responses:
+    '201':
+      description: Successful creation of an image for remote deposit capture
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/image'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+
+get:
+  summary: List RDC Image Ids
+  operationId: listRdcImageIds
+  description: Retrieves a paginated list of the ids of the images for remote deposit capture associated with an account
+  tags:
+    - RDC Deposits
+  parameters:
+    - $ref: '../../accounts/parameters.yml#/components/parameters/account_id'
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+  responses:
+    '200':
+      description: List of check images made for remote deposit capture
+      content:
+        application/json:
+          schema: 
+            allOf:
+              - type: object
+                properties:
+                  images:
+                    description: Array of RDC images
+                    type: array
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/image'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'

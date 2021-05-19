@@ -1,0 +1,72 @@
+summary: Account Accounting
+get:
+  summary: Get accounting for an account
+  operationId: getAccountAccounting
+  description: Get account accounting by ID
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  responses:
+    '200':
+        description: Account accounting
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas.yml#/components/schemas/accounting'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+
+put:
+  summary: Update accounting for an account
+  operationId: updateAccountAccounting
+  description: Update account accounting
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  requestBody:
+      description: Account accounting to be updated
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/accounting'
+  responses:
+    '200':
+        description: Created account accounting
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas.yml#/components/schemas/accounting'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'
+
+delete:
+  summary: Delete accounting for an account
+  operationId: DeleteAccountAccounting
+  description: Delete account accounting
+  tags:
+    - Accounts
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/account_id'
+    - $ref: '../parameters.yml#/components/parameters/connect_id'
+  responses:
+    '200':
+      $ref: '../../common/responses.yml#/components/responses/delete_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '461':
+      $ref: '../../common/responses.yml#/components/responses/account_closed'

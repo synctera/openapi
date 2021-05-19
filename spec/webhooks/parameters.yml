@@ -1,0 +1,12 @@
+components:
+  parameters:
+
+    webhook_id:
+      name: webhook_id
+      in: path
+      required: true
+      description: Webhook ID
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid

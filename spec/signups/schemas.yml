@@ -1,0 +1,54 @@
+components:
+  schemas:
+
+    signup_input:
+      title: Signup input values
+      description: Signup input values
+      type: object
+      properties:
+        bank_name:
+          description: Bank Name
+          type: string
+          readOnly: true
+        bank_short_code:
+          description: Bank Short Code
+          type: string
+          readOnly: true
+        partner_name:
+          description: Partner Name
+          type: string
+          readOnly: true
+        user_id:
+          description: Bank's party's user_id
+          type: string
+          readOnly: true
+      required:
+        - bank_name
+        - bank_short_code
+        - partner_name
+        - user_id
+
+    signup_ids:
+      title: Signup output names
+      description: Signup output names
+      type: object
+      properties:
+        bank_id:
+          description: Bank ID
+          type: integer
+        partner_id:
+          description: Partner ID
+          type: integer
+        party_user_id:
+          description: Bank's party's party_user_id
+          type: integer
+        party_uuid:
+          description: Party UUIID
+          type: string
+          format: uuid
+      required:
+        - bank_id
+        - partner_id
+        - party_user_id
+        - party_uuid
+        

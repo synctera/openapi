@@ -1,0 +1,155 @@
+components:
+  schemas:
+
+    event:
+      title: Webhook event
+      type: object
+      description: Webhook event object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique event ID of the webhook request. Use event endpoints to get more event summary data
+        webhook_id:
+          type: string
+          format: uuid
+          description: Webhook the current event belongs to
+        type:
+          $ref: '#/components/schemas/event_type'
+        event_time:
+          type: string
+          format: date-time
+          description: Timestamp of the current event raised
+        metadata:
+          type: string
+          maxLength: 1024
+          description: Metadata that stored in the webhook subscription
+        event_resource:
+          type: object
+          description: >
+            Json string of object associated with the event. For example, if your event is ACCOUNT.STATUS_CHANGE, You can refer to Acccount
+            to parse the account event to obtain the ID, status etc. 
+        status:
+          type: string
+          description: Current event status. Failing event will keep retry until it is purged.
+          enum:
+            - RUNNING
+            - SUCCESS
+            - RETRYING
+        response_history:
+          type: array
+          description: Response history of the webhook request
+          items:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code from the request
+              response_body:
+                type: string
+                description: Response body from the request
+              sent_time:
+                type: string
+                format: date-time
+                description: Timestamp that the request is sent
+              response_time:
+                type: string
+                format: date-time
+                description: Timestamp that the response is received
+
+    event_type:
+      title: All the webhook event types
+      type: string
+      enum:
+        - ACCOUNT.*
+        - ACCOUNT.STATUS_CHANGED
+        - TRANSACTION.*
+        - TRANSACTION.POSTED
+        - TRANSACTION.FAILED
+        - KYC.*
+        - KYC.CUSTOMER_MANUAL_REVIEW
+        - KYC.PASS
+        - KYC.FAILED_MANUAL_REVIEW
+        - KYC.FOUND_ON_WATCHLIST
+        - KYC.ADDITIONAL_DOC_REQUIRED
+        - LEDGER.*
+        - LEDGER.BALANCE_CHANGED.ACH_REVERSALS
+        - LEDGER.BALANCE_CHANGED.INTEREST
+        - LEDGER.BALANCE_CHANGED.WIRES
+        - LEDGER.BALANCE_CHANGED.CHECK_DEPOSIT
+        - CARD.*
+        - CARD.FULFILLMENT_UPDATE
+        - CARD.TERMINATION
+        - CARD.STATUS_CHANGE
+        - RECONCILIATION.*
+        - RECONCILIATION.PROCESSED
+      description: The type of the webhook event. Items ends with .* means all events that match the prefix (major type. e.g. ACCOUNT, KYC etc). One webhook allows one major type only.
+
+    webhook:
+      title: Webhook
+      type: object
+      description: Webhook object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique ID of the webhook
+        url:
+          type: string
+          format: uri
+          maxLength: 1000
+          description: URL that the webhook will send request to
+        description:
+          type: string
+          description: A description of what the webhook is used for
+        enabled_events:
+          type: array
+          description: A list of the events that will trigger the webhook
+          items:
+            $ref: '#/components/schemas/event_type'
+        metadata:
+          type: string
+          maxLength: 1024
+          description: Additional information stored to the webhook
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp that this webhook was created or the last time any field was changed
+        is_enabled:
+          type: boolean
+          description: Set the webhook to be enabled or disabled
+        # summary:
+        #   type: object
+        #   description: Statistical data of the webhook
+        #   properties:
+        #     status:
+        #       type: string
+        #       description: The current status of the webhook
+        #       enum:
+        #         - SUCCESS
+        #         - FAILURE
+        #     num_triggered:
+        #       type: integer
+        #       format: int64
+        #       description: Total number of the webhook triggered
+        #     num_succeed:
+        #       type: integer
+        #       format: int64
+        #       description: Total number of the webhook got 200 OK status code. If it has retries but eventually OK, we only count as succeed
+        #     num_non_200_code:
+        #       type: integer
+        #       format: int64
+        #       description: Total number of the webhook receives non-200 status code
+        #     max_request_time:
+        #       type: integer
+        #       description: Maximum time the request taken to complete for the last 100 events. Unit in millisecond
+        #     average_request_time:
+        #       type: integer
+        #       description: Average time the request taken to complete for the last 100 events. Unit in millisecond
+      required:
+        - url
+        - enabled_events
+        - is_enabled
+

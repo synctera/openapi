@@ -1,0 +1,21 @@
+components:
+  parameters:
+    account_id:
+      name: account_id
+      description: Account ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid
+
+    connect_id:
+      name: connect_id
+      description: Connect ID of the account associate with the account entity
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid

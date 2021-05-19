@@ -1,0 +1,57 @@
+post:
+  summary: Create a webhook
+  operationId: createWebhook
+  description: Create a webhook
+  tags:
+    - Webhooks
+  requestBody:
+    description: Webhook to create
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/webhook'
+  responses:
+    '201':
+      description: Created webhook
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/webhook'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+get:
+  summary: List webhooks
+  operationId: listWebhooks
+  description: List all webhooks
+  tags:
+    - Webhooks
+  parameters:
+    - $ref: '../../common/parameters.yml#/components/parameters/limit'
+    - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+    - in: query
+      name: is_enabled_only
+      schema:
+        type: boolean
+  responses:
+    '200':
+      description: List of webhooks
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  documents:
+                    type: array
+                    description: Array of webhooks
+                    items:
+                      $ref: '../schemas.yml#/components/schemas/webhook'
+              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

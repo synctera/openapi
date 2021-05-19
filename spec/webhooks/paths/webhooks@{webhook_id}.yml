@@ -1,0 +1,68 @@
+put :
+  summary: Update a webhook
+  operationId: updateWebhook
+  description: Update a webhook
+  tags:
+    - Webhooks
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/webhook_id'
+  requestBody:
+    description: Webhook to update
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/webhook'
+  responses:
+    '200':
+      description: Created webhook
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/webhook'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+get:
+  summary: Get a webhook
+  operationId: getWebhook
+  description: Get a webhook
+  tags:
+    - Webhooks
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/webhook_id'
+  responses:
+    '200':
+      description: Webhook
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/webhook'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+delete:
+  summary: Delete a webhook
+  operationId: deleteWebhook
+  description: Delete a webhook
+  tags:
+    - Webhooks
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/webhook_id'
+  responses:
+    '200':
+      $ref: '../../common/responses.yml#/components/responses/delete_response'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

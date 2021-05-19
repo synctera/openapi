@@ -1,0 +1,36 @@
+post:
+  summary: Resend an event
+  operationId: resendEvent
+  description: Resend a webhook event
+  tags:
+    - Webhooks
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/webhook_id'
+    - name: event_id
+      in: path
+      required: true
+      description: Webhook event ID
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid
+    - name: delay
+      in: query
+      description: Delay the event triggering in seconds
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 3600
+  responses:
+    '200':
+      description: Resent webhook event
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/event'
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '404':
+      $ref: '../../common/responses.yml#/components/responses/not_found'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
