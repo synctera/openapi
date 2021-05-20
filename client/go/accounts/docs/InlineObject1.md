@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PostingDate** | Pointer to **time.Time** | Posting date of the balance. Default is today&#39;s date | [optional] 
-**BalanceType** | Pointer to [**BalanceType**](BalanceType.md) |  | [optional] 
+**StartDate** | Pointer to **string** | Start date of the search range. Default is the date two weeks ago | [optional] 
+**EndDate** | Pointer to **string** | End date of the search range. Default is the current date | [optional] 
 
 ## Methods
 
@@ -26,55 +26,55 @@ NewInlineObject1WithDefaults instantiates a new InlineObject1 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetPostingDate
+### GetStartDate
 
-`func (o *InlineObject1) GetPostingDate() time.Time`
+`func (o *InlineObject1) GetStartDate() string`
 
-GetPostingDate returns the PostingDate field if non-nil, zero value otherwise.
+GetStartDate returns the StartDate field if non-nil, zero value otherwise.
 
-### GetPostingDateOk
+### GetStartDateOk
 
-`func (o *InlineObject1) GetPostingDateOk() (*time.Time, bool)`
+`func (o *InlineObject1) GetStartDateOk() (*string, bool)`
 
-GetPostingDateOk returns a tuple with the PostingDate field if it's non-nil, zero value otherwise
+GetStartDateOk returns a tuple with the StartDate field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPostingDate
+### SetStartDate
 
-`func (o *InlineObject1) SetPostingDate(v time.Time)`
+`func (o *InlineObject1) SetStartDate(v string)`
 
-SetPostingDate sets PostingDate field to given value.
+SetStartDate sets StartDate field to given value.
 
-### HasPostingDate
+### HasStartDate
 
-`func (o *InlineObject1) HasPostingDate() bool`
+`func (o *InlineObject1) HasStartDate() bool`
 
-HasPostingDate returns a boolean if a field has been set.
+HasStartDate returns a boolean if a field has been set.
 
-### GetBalanceType
+### GetEndDate
 
-`func (o *InlineObject1) GetBalanceType() BalanceType`
+`func (o *InlineObject1) GetEndDate() string`
 
-GetBalanceType returns the BalanceType field if non-nil, zero value otherwise.
+GetEndDate returns the EndDate field if non-nil, zero value otherwise.
 
-### GetBalanceTypeOk
+### GetEndDateOk
 
-`func (o *InlineObject1) GetBalanceTypeOk() (*BalanceType, bool)`
+`func (o *InlineObject1) GetEndDateOk() (*string, bool)`
 
-GetBalanceTypeOk returns a tuple with the BalanceType field if it's non-nil, zero value otherwise
+GetEndDateOk returns a tuple with the EndDate field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetBalanceType
+### SetEndDate
 
-`func (o *InlineObject1) SetBalanceType(v BalanceType)`
+`func (o *InlineObject1) SetEndDate(v string)`
 
-SetBalanceType sets BalanceType field to given value.
+SetEndDate sets EndDate field to given value.
 
-### HasBalanceType
+### HasEndDate
 
-`func (o *InlineObject1) HasBalanceType() bool`
+`func (o *InlineObject1) HasEndDate() bool`
 
-HasBalanceType returns a boolean if a field has been set.
+HasEndDate returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

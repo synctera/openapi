@@ -16,10 +16,8 @@ import (
 
 // InlineObject2 struct for InlineObject2
 type InlineObject2 struct {
-	// Start date of the search range. Default is the date two weeks ago
-	StartDate *string `json:"start_date,omitempty"`
-	// End date of the search range. Default is the current date
-	EndDate *string `json:"end_date,omitempty"`
+	// Include the address information (e.g. street number) if set to True. Address reference only if set to false. Default is false
+	HasDetails *bool `json:"has_details,omitempty"`
 }
 
 // NewInlineObject2 instantiates a new InlineObject2 object
@@ -39,77 +37,42 @@ func NewInlineObject2WithDefaults() *InlineObject2 {
 	return &this
 }
 
-// GetStartDate returns the StartDate field value if set, zero value otherwise.
-func (o *InlineObject2) GetStartDate() string {
-	if o == nil || o.StartDate == nil {
-		var ret string
+// GetHasDetails returns the HasDetails field value if set, zero value otherwise.
+func (o *InlineObject2) GetHasDetails() bool {
+	if o == nil || o.HasDetails == nil {
+		var ret bool
 		return ret
 	}
-	return *o.StartDate
+	return *o.HasDetails
 }
 
-// GetStartDateOk returns a tuple with the StartDate field value if set, nil otherwise
+// GetHasDetailsOk returns a tuple with the HasDetails field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *InlineObject2) GetStartDateOk() (*string, bool) {
-	if o == nil || o.StartDate == nil {
+func (o *InlineObject2) GetHasDetailsOk() (*bool, bool) {
+	if o == nil || o.HasDetails == nil {
 		return nil, false
 	}
-	return o.StartDate, true
+	return o.HasDetails, true
 }
 
-// HasStartDate returns a boolean if a field has been set.
-func (o *InlineObject2) HasStartDate() bool {
-	if o != nil && o.StartDate != nil {
+// HasHasDetails returns a boolean if a field has been set.
+func (o *InlineObject2) HasHasDetails() bool {
+	if o != nil && o.HasDetails != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetStartDate gets a reference to the given string and assigns it to the StartDate field.
-func (o *InlineObject2) SetStartDate(v string) {
-	o.StartDate = &v
-}
-
-// GetEndDate returns the EndDate field value if set, zero value otherwise.
-func (o *InlineObject2) GetEndDate() string {
-	if o == nil || o.EndDate == nil {
-		var ret string
-		return ret
-	}
-	return *o.EndDate
-}
-
-// GetEndDateOk returns a tuple with the EndDate field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *InlineObject2) GetEndDateOk() (*string, bool) {
-	if o == nil || o.EndDate == nil {
-		return nil, false
-	}
-	return o.EndDate, true
-}
-
-// HasEndDate returns a boolean if a field has been set.
-func (o *InlineObject2) HasEndDate() bool {
-	if o != nil && o.EndDate != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetEndDate gets a reference to the given string and assigns it to the EndDate field.
-func (o *InlineObject2) SetEndDate(v string) {
-	o.EndDate = &v
+// SetHasDetails gets a reference to the given bool and assigns it to the HasDetails field.
+func (o *InlineObject2) SetHasDetails(v bool) {
+	o.HasDetails = &v
 }
 
 func (o InlineObject2) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.StartDate != nil {
-		toSerialize["start_date"] = o.StartDate
-	}
-	if o.EndDate != nil {
-		toSerialize["end_date"] = o.EndDate
+	if o.HasDetails != nil {
+		toSerialize["has_details"] = o.HasDetails
 	}
 	return json.Marshal(toSerialize)
 }

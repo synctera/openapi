@@ -17,8 +17,6 @@ import (
 // CustomerVerification struct for CustomerVerification
 type CustomerVerification struct {
 	VerificationType []VerificationType `json:"verification_type"`
-	// Customer's full tax ID eg SSN formatted with hyphens 123-45-6789
-	Ssn string `json:"ssn"`
 	// IP address
 	UserIpAddress *string `json:"user_ip_address,omitempty"`
 }
@@ -27,10 +25,9 @@ type CustomerVerification struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCustomerVerification(verificationType []VerificationType, ssn string) *CustomerVerification {
+func NewCustomerVerification(verificationType []VerificationType) *CustomerVerification {
 	this := CustomerVerification{}
 	this.VerificationType = verificationType
-	this.Ssn = ssn
 	return &this
 }
 
@@ -64,30 +61,6 @@ func (o *CustomerVerification) GetVerificationTypeOk() (*[]VerificationType, boo
 // SetVerificationType sets field value
 func (o *CustomerVerification) SetVerificationType(v []VerificationType) {
 	o.VerificationType = v
-}
-
-// GetSsn returns the Ssn field value
-func (o *CustomerVerification) GetSsn() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Ssn
-}
-
-// GetSsnOk returns a tuple with the Ssn field value
-// and a boolean to check if the value has been set.
-func (o *CustomerVerification) GetSsnOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Ssn, true
-}
-
-// SetSsn sets field value
-func (o *CustomerVerification) SetSsn(v string) {
-	o.Ssn = v
 }
 
 // GetUserIpAddress returns the UserIpAddress field value if set, zero value otherwise.
@@ -126,9 +99,6 @@ func (o CustomerVerification) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["verification_type"] = o.VerificationType
-	}
-	if true {
-		toSerialize["ssn"] = o.Ssn
 	}
 	if o.UserIpAddress != nil {
 		toSerialize["user_ip_address"] = o.UserIpAddress

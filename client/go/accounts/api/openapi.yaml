@@ -42,20 +42,11 @@ paths:
           type: string
         style: form
       requestBody:
-        $ref: '#/components/requestBodies/inline_object'
         content:
           application/json:
             schema:
-              properties:
-                customer_id:
-                  description: Return accounts belonging to this customer ID
-                  format: uuid
-                  type: string
-                has_details:
-                  description: Should the account include information for relationships,
-                    aliases, balances and recent transactions
-                  type: boolean
-              type: object
+              $ref: '#/components/schemas/list_account_request'
+        description: account list conditions
         required: true
       responses:
         "200":
@@ -279,7 +270,7 @@ paths:
           type: string
         style: simple
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_1'
+        $ref: '#/components/requestBodies/inline_object'
         content:
           application/json:
             schema:
@@ -358,7 +349,7 @@ paths:
           type: string
         style: form
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_2'
+        $ref: '#/components/requestBodies/inline_object_1'
         content:
           application/json:
             schema:
@@ -537,7 +528,7 @@ paths:
           type: string
         style: simple
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_3'
+        $ref: '#/components/requestBodies/inline_object_2'
         content:
           application/json:
             schema:
@@ -692,17 +683,11 @@ components:
           schema:
             $ref: '#/components/schemas/inline_object'
       required: true
-    inline_object_3:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/inline_object_3'
     inline_object_2:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/inline_object_2'
-      required: true
   responses:
     bad_request:
       content:
@@ -753,6 +738,20 @@ components:
             $ref: '#/components/schemas/error'
       description: Resource already exists error
   schemas:
+    list_account_request:
+      properties:
+        customer_id:
+          description: Return accounts belonging to this customer ID
+          format: uuid
+          type: string
+        has_details:
+          default: false
+          description: Should the account include information for relationships, aliases,
+            balances and recent transactions
+          type: boolean
+      required:
+      - customer_id
+      type: object
     status:
       description: |
         The status of the account. Mandatory for shadow mode, optional for lead mode.
@@ -1194,17 +1193,6 @@ components:
       type: object
     inline_object:
       properties:
-        customer_id:
-          description: Return accounts belonging to this customer ID
-          format: uuid
-          type: string
-        has_details:
-          description: Should the account include information for relationships, aliases,
-            balances and recent transactions
-          type: boolean
-      type: object
-    inline_object_1:
-      properties:
         posting_date:
           description: Posting date of the balance. Default is today's date
           format: date-time
@@ -1212,7 +1200,7 @@ components:
         balance_type:
           $ref: '#/components/schemas/balance_type'
       type: object
-    inline_object_2:
+    inline_object_1:
       properties:
         start_date:
           description: Start date of the search range. Default is the date two weeks
@@ -1224,7 +1212,7 @@ components:
           format: date
           type: string
       type: object
-    inline_object_3:
+    inline_object_2:
       properties:
         has_details:
           description: Include the address information (e.g. street number) if set

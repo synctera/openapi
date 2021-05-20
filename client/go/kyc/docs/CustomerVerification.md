@@ -5,14 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **VerificationType** | [**[]VerificationType**](VerificationType.md) |  | 
-**Ssn** | **string** | Customer&#39;s full tax ID eg SSN formatted with hyphens 123-45-6789 | 
 **UserIpAddress** | Pointer to **string** | IP address | [optional] 
 
 ## Methods
 
 ### NewCustomerVerification
 
-`func NewCustomerVerification(verificationType []VerificationType, ssn string, ) *CustomerVerification`
+`func NewCustomerVerification(verificationType []VerificationType, ) *CustomerVerification`
 
 NewCustomerVerification instantiates a new CustomerVerification object
 This constructor will assign default values to properties that have it defined,
@@ -45,26 +44,6 @@ and a boolean to check if the value has been set.
 `func (o *CustomerVerification) SetVerificationType(v []VerificationType)`
 
 SetVerificationType sets VerificationType field to given value.
-
-
-### GetSsn
-
-`func (o *CustomerVerification) GetSsn() string`
-
-GetSsn returns the Ssn field if non-nil, zero value otherwise.
-
-### GetSsnOk
-
-`func (o *CustomerVerification) GetSsnOk() (*string, bool)`
-
-GetSsnOk returns a tuple with the Ssn field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSsn
-
-`func (o *CustomerVerification) SetSsn(v string)`
-
-SetSsn sets Ssn field to given value.
 
 
 ### GetUserIpAddress

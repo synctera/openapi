@@ -18,8 +18,8 @@ docs/DeleteResponse.md
 docs/InlineObject.md
 docs/InlineObject1.md
 docs/InlineObject2.md
-docs/InlineObject3.md
 docs/LeadModeAccount.md
+docs/ListAccountRequest.md
 docs/ModelError.md
 docs/PaginatedResponse.md
 docs/Relationship.md
@@ -41,8 +41,8 @@ model_error.go
 model_inline_object.go
 model_inline_object_1.go
 model_inline_object_2.go
-model_inline_object_3.go
 model_lead_mode_account.go
+model_list_account_request.go
 model_paginated_response.go
 model_relationship.go
 model_shadow_mode_account.go

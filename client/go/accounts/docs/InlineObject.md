@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**CustomerId** | Pointer to **string** | Return accounts belonging to this customer ID | [optional] 
-**HasDetails** | Pointer to **bool** | Should the account include information for relationships, aliases, balances and recent transactions | [optional] 
+**PostingDate** | Pointer to **time.Time** | Posting date of the balance. Default is today&#39;s date | [optional] 
+**BalanceType** | Pointer to [**BalanceType**](BalanceType.md) |  | [optional] 
 
 ## Methods
 
@@ -26,55 +26,55 @@ NewInlineObjectWithDefaults instantiates a new InlineObject object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetCustomerId
+### GetPostingDate
 
-`func (o *InlineObject) GetCustomerId() string`
+`func (o *InlineObject) GetPostingDate() time.Time`
 
-GetCustomerId returns the CustomerId field if non-nil, zero value otherwise.
+GetPostingDate returns the PostingDate field if non-nil, zero value otherwise.
 
-### GetCustomerIdOk
+### GetPostingDateOk
 
-`func (o *InlineObject) GetCustomerIdOk() (*string, bool)`
+`func (o *InlineObject) GetPostingDateOk() (*time.Time, bool)`
 
-GetCustomerIdOk returns a tuple with the CustomerId field if it's non-nil, zero value otherwise
+GetPostingDateOk returns a tuple with the PostingDate field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetCustomerId
+### SetPostingDate
 
-`func (o *InlineObject) SetCustomerId(v string)`
+`func (o *InlineObject) SetPostingDate(v time.Time)`
 
-SetCustomerId sets CustomerId field to given value.
+SetPostingDate sets PostingDate field to given value.
 
-### HasCustomerId
+### HasPostingDate
 
-`func (o *InlineObject) HasCustomerId() bool`
+`func (o *InlineObject) HasPostingDate() bool`
 
-HasCustomerId returns a boolean if a field has been set.
+HasPostingDate returns a boolean if a field has been set.
 
-### GetHasDetails
+### GetBalanceType
 
-`func (o *InlineObject) GetHasDetails() bool`
+`func (o *InlineObject) GetBalanceType() BalanceType`
 
-GetHasDetails returns the HasDetails field if non-nil, zero value otherwise.
+GetBalanceType returns the BalanceType field if non-nil, zero value otherwise.
 
-### GetHasDetailsOk
+### GetBalanceTypeOk
 
-`func (o *InlineObject) GetHasDetailsOk() (*bool, bool)`
+`func (o *InlineObject) GetBalanceTypeOk() (*BalanceType, bool)`
 
-GetHasDetailsOk returns a tuple with the HasDetails field if it's non-nil, zero value otherwise
+GetBalanceTypeOk returns a tuple with the BalanceType field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetHasDetails
+### SetBalanceType
 
-`func (o *InlineObject) SetHasDetails(v bool)`
+`func (o *InlineObject) SetBalanceType(v BalanceType)`
 
-SetHasDetails sets HasDetails field to given value.
+SetBalanceType sets BalanceType field to given value.
 
-### HasHasDetails
+### HasBalanceType
 
-`func (o *InlineObject) HasHasDetails() bool`
+`func (o *InlineObject) HasBalanceType() bool`
 
-HasHasDetails returns a boolean if a field has been set.
+HasBalanceType returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

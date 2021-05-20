@@ -623,7 +623,7 @@ import (
 
 func main() {
     customerId := TODO // string | Customer ID
-    customerVerification := *openapiclient.NewCustomerVerification([]openapiclient.VerificationType{openapiclient.verification_type("fraud")}, "faker.helpers.replaceSymbols(###-##-####)") // CustomerVerification | Customer verification
+    customerVerification := *openapiclient.NewCustomerVerification([]openapiclient.VerificationType{openapiclient.verification_type("fraud")}) // CustomerVerification | Customer verification
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)

@@ -12,14 +12,14 @@ package accounts
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // InlineObject1 struct for InlineObject1
 type InlineObject1 struct {
-	// Posting date of the balance. Default is today's date
-	PostingDate *time.Time `json:"posting_date,omitempty"`
-	BalanceType *BalanceType `json:"balance_type,omitempty"`
+	// Start date of the search range. Default is the date two weeks ago
+	StartDate *string `json:"start_date,omitempty"`
+	// End date of the search range. Default is the current date
+	EndDate *string `json:"end_date,omitempty"`
 }
 
 // NewInlineObject1 instantiates a new InlineObject1 object
@@ -39,77 +39,77 @@ func NewInlineObject1WithDefaults() *InlineObject1 {
 	return &this
 }
 
-// GetPostingDate returns the PostingDate field value if set, zero value otherwise.
-func (o *InlineObject1) GetPostingDate() time.Time {
-	if o == nil || o.PostingDate == nil {
-		var ret time.Time
+// GetStartDate returns the StartDate field value if set, zero value otherwise.
+func (o *InlineObject1) GetStartDate() string {
+	if o == nil || o.StartDate == nil {
+		var ret string
 		return ret
 	}
-	return *o.PostingDate
+	return *o.StartDate
 }
 
-// GetPostingDateOk returns a tuple with the PostingDate field value if set, nil otherwise
+// GetStartDateOk returns a tuple with the StartDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *InlineObject1) GetPostingDateOk() (*time.Time, bool) {
-	if o == nil || o.PostingDate == nil {
+func (o *InlineObject1) GetStartDateOk() (*string, bool) {
+	if o == nil || o.StartDate == nil {
 		return nil, false
 	}
-	return o.PostingDate, true
+	return o.StartDate, true
 }
 
-// HasPostingDate returns a boolean if a field has been set.
-func (o *InlineObject1) HasPostingDate() bool {
-	if o != nil && o.PostingDate != nil {
+// HasStartDate returns a boolean if a field has been set.
+func (o *InlineObject1) HasStartDate() bool {
+	if o != nil && o.StartDate != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetPostingDate gets a reference to the given time.Time and assigns it to the PostingDate field.
-func (o *InlineObject1) SetPostingDate(v time.Time) {
-	o.PostingDate = &v
+// SetStartDate gets a reference to the given string and assigns it to the StartDate field.
+func (o *InlineObject1) SetStartDate(v string) {
+	o.StartDate = &v
 }
 
-// GetBalanceType returns the BalanceType field value if set, zero value otherwise.
-func (o *InlineObject1) GetBalanceType() BalanceType {
-	if o == nil || o.BalanceType == nil {
-		var ret BalanceType
+// GetEndDate returns the EndDate field value if set, zero value otherwise.
+func (o *InlineObject1) GetEndDate() string {
+	if o == nil || o.EndDate == nil {
+		var ret string
 		return ret
 	}
-	return *o.BalanceType
+	return *o.EndDate
 }
 
-// GetBalanceTypeOk returns a tuple with the BalanceType field value if set, nil otherwise
+// GetEndDateOk returns a tuple with the EndDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *InlineObject1) GetBalanceTypeOk() (*BalanceType, bool) {
-	if o == nil || o.BalanceType == nil {
+func (o *InlineObject1) GetEndDateOk() (*string, bool) {
+	if o == nil || o.EndDate == nil {
 		return nil, false
 	}
-	return o.BalanceType, true
+	return o.EndDate, true
 }
 
-// HasBalanceType returns a boolean if a field has been set.
-func (o *InlineObject1) HasBalanceType() bool {
-	if o != nil && o.BalanceType != nil {
+// HasEndDate returns a boolean if a field has been set.
+func (o *InlineObject1) HasEndDate() bool {
+	if o != nil && o.EndDate != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetBalanceType gets a reference to the given BalanceType and assigns it to the BalanceType field.
-func (o *InlineObject1) SetBalanceType(v BalanceType) {
-	o.BalanceType = &v
+// SetEndDate gets a reference to the given string and assigns it to the EndDate field.
+func (o *InlineObject1) SetEndDate(v string) {
+	o.EndDate = &v
 }
 
 func (o InlineObject1) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.PostingDate != nil {
-		toSerialize["posting_date"] = o.PostingDate
+	if o.StartDate != nil {
+		toSerialize["start_date"] = o.StartDate
 	}
-	if o.BalanceType != nil {
-		toSerialize["balance_type"] = o.BalanceType
+	if o.EndDate != nil {
+		toSerialize["end_date"] = o.EndDate
 	}
 	return json.Marshal(toSerialize)
 }

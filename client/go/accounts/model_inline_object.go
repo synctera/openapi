@@ -12,14 +12,14 @@ package accounts
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // InlineObject struct for InlineObject
 type InlineObject struct {
-	// Return accounts belonging to this customer ID
-	CustomerId *string `json:"customer_id,omitempty"`
-	// Should the account include information for relationships, aliases, balances and recent transactions
-	HasDetails *bool `json:"has_details,omitempty"`
+	// Posting date of the balance. Default is today's date
+	PostingDate *time.Time `json:"posting_date,omitempty"`
+	BalanceType *BalanceType `json:"balance_type,omitempty"`
 }
 
 // NewInlineObject instantiates a new InlineObject object
@@ -39,77 +39,77 @@ func NewInlineObjectWithDefaults() *InlineObject {
 	return &this
 }
 
-// GetCustomerId returns the CustomerId field value if set, zero value otherwise.
-func (o *InlineObject) GetCustomerId() string {
-	if o == nil || o.CustomerId == nil {
-		var ret string
+// GetPostingDate returns the PostingDate field value if set, zero value otherwise.
+func (o *InlineObject) GetPostingDate() time.Time {
+	if o == nil || o.PostingDate == nil {
+		var ret time.Time
 		return ret
 	}
-	return *o.CustomerId
+	return *o.PostingDate
 }
 
-// GetCustomerIdOk returns a tuple with the CustomerId field value if set, nil otherwise
+// GetPostingDateOk returns a tuple with the PostingDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *InlineObject) GetCustomerIdOk() (*string, bool) {
-	if o == nil || o.CustomerId == nil {
+func (o *InlineObject) GetPostingDateOk() (*time.Time, bool) {
+	if o == nil || o.PostingDate == nil {
 		return nil, false
 	}
-	return o.CustomerId, true
+	return o.PostingDate, true
 }
 
-// HasCustomerId returns a boolean if a field has been set.
-func (o *InlineObject) HasCustomerId() bool {
-	if o != nil && o.CustomerId != nil {
+// HasPostingDate returns a boolean if a field has been set.
+func (o *InlineObject) HasPostingDate() bool {
+	if o != nil && o.PostingDate != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetCustomerId gets a reference to the given string and assigns it to the CustomerId field.
-func (o *InlineObject) SetCustomerId(v string) {
-	o.CustomerId = &v
+// SetPostingDate gets a reference to the given time.Time and assigns it to the PostingDate field.
+func (o *InlineObject) SetPostingDate(v time.Time) {
+	o.PostingDate = &v
 }
 
-// GetHasDetails returns the HasDetails field value if set, zero value otherwise.
-func (o *InlineObject) GetHasDetails() bool {
-	if o == nil || o.HasDetails == nil {
-		var ret bool
+// GetBalanceType returns the BalanceType field value if set, zero value otherwise.
+func (o *InlineObject) GetBalanceType() BalanceType {
+	if o == nil || o.BalanceType == nil {
+		var ret BalanceType
 		return ret
 	}
-	return *o.HasDetails
+	return *o.BalanceType
 }
 
-// GetHasDetailsOk returns a tuple with the HasDetails field value if set, nil otherwise
+// GetBalanceTypeOk returns a tuple with the BalanceType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *InlineObject) GetHasDetailsOk() (*bool, bool) {
-	if o == nil || o.HasDetails == nil {
+func (o *InlineObject) GetBalanceTypeOk() (*BalanceType, bool) {
+	if o == nil || o.BalanceType == nil {
 		return nil, false
 	}
-	return o.HasDetails, true
+	return o.BalanceType, true
 }
 
-// HasHasDetails returns a boolean if a field has been set.
-func (o *InlineObject) HasHasDetails() bool {
-	if o != nil && o.HasDetails != nil {
+// HasBalanceType returns a boolean if a field has been set.
+func (o *InlineObject) HasBalanceType() bool {
+	if o != nil && o.BalanceType != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetHasDetails gets a reference to the given bool and assigns it to the HasDetails field.
-func (o *InlineObject) SetHasDetails(v bool) {
-	o.HasDetails = &v
+// SetBalanceType gets a reference to the given BalanceType and assigns it to the BalanceType field.
+func (o *InlineObject) SetBalanceType(v BalanceType) {
+	o.BalanceType = &v
 }
 
 func (o InlineObject) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.CustomerId != nil {
-		toSerialize["customer_id"] = o.CustomerId
+	if o.PostingDate != nil {
+		toSerialize["posting_date"] = o.PostingDate
 	}
-	if o.HasDetails != nil {
-		toSerialize["has_details"] = o.HasDetails
+	if o.BalanceType != nil {
+		toSerialize["balance_type"] = o.BalanceType
 	}
 	return json.Marshal(toSerialize)
 }

@@ -746,18 +746,11 @@ components:
         - KYC
         - KYC
         user_ip_address: faker.internet.ip
-        ssn: faker.helpers.replaceSymbols(###-##-####)
       properties:
         verification_type:
           items:
             $ref: '#/components/schemas/verification_type'
           type: array
-        ssn:
-          description: Customer's full tax ID eg SSN formatted with hyphens 123-45-6789
-          example: faker.helpers.replaceSymbols(###-##-####)
-          pattern: ^\d{3}-\d{2}-\d{4}$
-          type: string
-          writeOnly: true
         user_ip_address:
           description: IP address
           example: faker.internet.ip

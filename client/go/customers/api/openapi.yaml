@@ -1027,7 +1027,7 @@ components:
       description: Represents a Customer's information
       example:
         creation_time: 2000-01-23T04:56:07.000+00:00
-        alt_phone_number: faker.helpers.replaceSymbols(+##########)
+        alt_phone_number: faker.helpers.replaceSymbols(+###########)
         devices:
         - screen_width: 0
           screen_height: 6
@@ -1049,7 +1049,7 @@ components:
         last_name: faker.name.lastName
         middle_name: faker.name.middleName
         ssn: faker.helpers.replaceSymbols(###-##-####)
-        mobile_phone_number: faker.helpers.replaceSymbols(+##########)
+        mobile_phone_number: faker.helpers.replaceSymbols(+###########)
         legal_address:
           country_code: faker.address.countryCode
           city: faker.address.city
@@ -1123,12 +1123,12 @@ components:
           type: string
         mobile_phone_number:
           description: Customer's mobile phone number in E.164 format e.g. +19178675309
-          example: faker.helpers.replaceSymbols(+##########)
+          example: faker.helpers.replaceSymbols(+###########)
           pattern: ^\+?[1-9]\d{1,14}$
           type: string
         alt_phone_number:
           description: Customer's alternate phone number in E.164 format e.g. +19178675309
-          example: faker.helpers.replaceSymbols(+##########)
+          example: faker.helpers.replaceSymbols(+###########)
           pattern: ^\+?[1-9]\d{1,14}$
           type: string
         creation_time:

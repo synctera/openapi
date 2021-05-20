@@ -371,7 +371,7 @@ Name | Type | Description  | Notes
 
 ## GetAccountAddress
 
-> AccountAddress GetAccountAddress(ctx, accountId, connectId).InlineObject3(inlineObject3).Execute()
+> AccountAddress GetAccountAddress(ctx, accountId, connectId).InlineObject2(inlineObject2).Execute()
 
 Get address for an account
 
@@ -392,11 +392,11 @@ import (
 func main() {
     accountId := TODO // string | Account ID
     connectId := TODO // string | Connect ID of the account associate with the account entity
-    inlineObject3 := *openapiclient.NewInlineObject3() // InlineObject3 |  (optional)
+    inlineObject2 := *openapiclient.NewInlineObject2() // InlineObject2 |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.GetAccountAddress(context.Background(), accountId, connectId).InlineObject3(inlineObject3).Execute()
+    resp, r, err := api_client.AccountsApi.GetAccountAddress(context.Background(), accountId, connectId).InlineObject2(inlineObject2).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.GetAccountAddress``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -424,7 +424,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **inlineObject3** | [**InlineObject3**](InlineObject3.md) |  | 
+ **inlineObject2** | [**InlineObject2**](InlineObject2.md) |  | 
 
 ### Return type
 
@@ -446,7 +446,7 @@ Name | Type | Description  | Notes
 
 ## GetAccountBalance
 
-> Balance GetAccountBalance(ctx, accountId).InlineObject1(inlineObject1).Execute()
+> Balance GetAccountBalance(ctx, accountId).InlineObject(inlineObject).Execute()
 
 Get account balance
 
@@ -466,11 +466,11 @@ import (
 
 func main() {
     accountId := TODO // string | Account ID
-    inlineObject1 := *openapiclient.NewInlineObject1() // InlineObject1 | 
+    inlineObject := *openapiclient.NewInlineObject() // InlineObject | 
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.GetAccountBalance(context.Background(), accountId).InlineObject1(inlineObject1).Execute()
+    resp, r, err := api_client.AccountsApi.GetAccountBalance(context.Background(), accountId).InlineObject(inlineObject).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.GetAccountBalance``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -496,7 +496,7 @@ Other parameters are passed through a pointer to a apiGetAccountBalanceRequest s
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **inlineObject1** | [**InlineObject1**](InlineObject1.md) |  | 
+ **inlineObject** | [**InlineObject**](InlineObject.md) |  | 
 
 ### Return type
 
@@ -518,7 +518,7 @@ Name | Type | Description  | Notes
 
 ## GetAccountTransactions
 
-> map[string]interface{} GetAccountTransactions(ctx, accountId).InlineObject2(inlineObject2).Limit(limit).PageToken(pageToken).Execute()
+> map[string]interface{} GetAccountTransactions(ctx, accountId).InlineObject1(inlineObject1).Limit(limit).PageToken(pageToken).Execute()
 
 Get account transactions
 
@@ -538,13 +538,13 @@ import (
 
 func main() {
     accountId := TODO // string | Account ID
-    inlineObject2 := *openapiclient.NewInlineObject2() // InlineObject2 | 
+    inlineObject1 := *openapiclient.NewInlineObject1() // InlineObject1 | 
     limit := int32(100) // int32 |  (optional) (default to 100)
     pageToken := "faker.random.alphaNumeric(10)" // string |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.GetAccountTransactions(context.Background(), accountId).InlineObject2(inlineObject2).Limit(limit).PageToken(pageToken).Execute()
+    resp, r, err := api_client.AccountsApi.GetAccountTransactions(context.Background(), accountId).InlineObject1(inlineObject1).Limit(limit).PageToken(pageToken).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.GetAccountTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -570,7 +570,7 @@ Other parameters are passed through a pointer to a apiGetAccountTransactionsRequ
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **inlineObject2** | [**InlineObject2**](InlineObject2.md) |  | 
+ **inlineObject1** | [**InlineObject1**](InlineObject1.md) |  | 
  **limit** | **int32** |  | [default to 100]
  **pageToken** | **string** |  | 
 
@@ -594,7 +594,7 @@ Name | Type | Description  | Notes
 
 ## ListAccounts
 
-> map[string]interface{} ListAccounts(ctx).InlineObject(inlineObject).Limit(limit).PageToken(pageToken).Execute()
+> map[string]interface{} ListAccounts(ctx).ListAccountRequest(listAccountRequest).Limit(limit).PageToken(pageToken).Execute()
 
 List accounts
 
@@ -613,13 +613,13 @@ import (
 )
 
 func main() {
-    inlineObject := *openapiclient.NewInlineObject() // InlineObject | 
+    listAccountRequest := *openapiclient.NewListAccountRequest("CustomerId_example") // ListAccountRequest | account list conditions
     limit := int32(100) // int32 |  (optional) (default to 100)
     pageToken := "faker.random.alphaNumeric(10)" // string |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background()).InlineObject(inlineObject).Limit(limit).PageToken(pageToken).Execute()
+    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background()).ListAccountRequest(listAccountRequest).Limit(limit).PageToken(pageToken).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.ListAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -640,7 +640,7 @@ Other parameters are passed through a pointer to a apiListAccountsRequest struct
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inlineObject** | [**InlineObject**](InlineObject.md) |  | 
+ **listAccountRequest** | [**ListAccountRequest**](ListAccountRequest.md) | account list conditions | 
  **limit** | **int32** |  | [default to 100]
  **pageToken** | **string** |  | 
 
