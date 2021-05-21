@@ -3,16 +3,19 @@ package synctera
 import (
 	"bytes"
 	"context"
+	"github.com/google/uuid"
 	"net/http"
 	"os"
 	"os/exec"
 	"testing"
+	"time"
 )
 
 const sandbox = false
 
-func createConfiguration(t testing.TB, ctx context.Context) (*Configuration, context.Context) {
+func createClient(t testing.TB, ctx context.Context) (*APIClient, context.Context) {
 	configuration := NewConfiguration()
+	//configuration.Debug = true
 
 	if sandbox {
 		ctx = context.WithValue(ctx, ContextServerIndex, 1)
@@ -32,13 +35,12 @@ func createConfiguration(t testing.TB, ctx context.Context) (*Configuration, con
 		configuration.AddDefaultHeader("Synctera-Identity", string(jwt))
 	}
 
-	return configuration, ctx
+	return NewAPIClient(configuration), ctx
 }
 
-func TestCreateAndListCustomer(t *testing.T) {
+func TestCreateCustomer(t *testing.T) {
 	ctx := context.Background()
-	customersConfiguration, ctx := createConfiguration(t, ctx)
-	customersClient := NewAPIClient(customersConfiguration)
+	client, ctx := createClient(t, ctx)
 
 	customerAddress := Address{
 		Id:                nil,
@@ -54,7 +56,7 @@ func TestCreateAndListCustomer(t *testing.T) {
 	const firstName = "GoClient"
 	const lastName = "TestCustomer"
 	testCustomer := NewCustomer(firstName, lastName, customerAddress, customerAddress, "1900-01-01", "", "+19178675309")
-	customerResponse, httpResponse, err := customersClient.CustomersApi.CreateCustomer(ctx).Customer(*testCustomer).Execute()
+	customerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(*testCustomer).Execute()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,7 +68,7 @@ func TestCreateAndListCustomer(t *testing.T) {
 		t.Error("Wrong name for create customer")
 	}
 
-	list, httpResponse, err := customersClient.CustomersApi.ListCustomers(ctx).Execute()
+	list, httpResponse, err := client.CustomersApi.ListCustomers(ctx).Execute()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -78,18 +80,47 @@ func TestCreateAndListCustomer(t *testing.T) {
 	if newCustomer["first_name"] != firstName || newCustomer["last_name"] != lastName {
 		t.Error("Wrong name in list customers")
 	}
+}
 
-	//newCustomerID := newCustomer["id"].(string)
-	//
-	//var disclosuresConfiguration disclosures.Configuration
-	//copier.Copy(disclosuresConfiguration, customersConfiguration)
-	//disclosuresClient := disclosures.NewAPIClient(&disclosuresConfiguration)
-	//
-	//disclosure, httpResponse, err := disclosuresClient.DisclosuresApi.CreateDisclosure(ctx, newCustomerID).Execute()
-	//if err != nil {
-	//	t.Fatal(err)
-	//}
-	//t.Log(httpResponse.StatusCode)
-	//t.Log(disclosure.Id)
+func TestCreateDisclosure(t *testing.T) {
+	ctx := context.Background()
+	client, ctx := createClient(t, ctx)
+
+	const disclosureType = "REG_DD"
+	const disclosureVersion = "v1.0"
+	disclosure := NewDisclosure(disclosureType, disclosureVersion, time.Now(), "VIEWED")
+
+	customerID := uuid.New().String()
+	result, httpResponse, err := client.DisclosuresApi.CreateDisclosure(ctx, customerID).Disclosure(*disclosure).Execute()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if httpResponse.StatusCode != http.StatusCreated {
+		t.Error("Wrong status for create disclosure:", httpResponse.StatusCode)
+	}
+	if result.Type != disclosureType {
+		t.Error("Wrong disclosure type")
+	}
+	if result.Version != disclosureVersion {
+		t.Error("Wrong disclosure version")
+	}
+
+	list, httpResponse, err  := client.DisclosuresApi.ListDisclosures(ctx, customerID).Execute()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if httpResponse.StatusCode != http.StatusOK {
+		t.Error("Wrong status for create customer:", httpResponse.StatusCode)
+	}
+	if list.Disclosures == nil || len(*list.Disclosures) == 0{
+		t.Fatal("Got empty list of disclosures")
+	}
+	lastDisclosure := (*list.Disclosures)[0]
+	if lastDisclosure.Type != disclosureType {
+		t.Error("Wrong disclosure type")
+	}
+	if lastDisclosure.Version != disclosureVersion {
+		t.Error("Wrong disclosure version")
+	}
 
 }
