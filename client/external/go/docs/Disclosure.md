@@ -10,13 +10,13 @@ Name | Type | Description | Notes
 **Timestamp** | **time.Time** | Date of disclosure | 
 **CreationTime** | Pointer to **time.Time** |  | [optional] [readonly] 
 **LastUpdatedTime** | Pointer to **time.Time** |  | [optional] [readonly] 
-**EventType** | Pointer to **string** |  | [optional] 
+**EventType** | **string** |  | 
 
 ## Methods
 
 ### NewDisclosure
 
-`func NewDisclosure(type_ string, version string, timestamp time.Time, ) *Disclosure`
+`func NewDisclosure(type_ string, version string, timestamp time.Time, eventType string, ) *Disclosure`
 
 NewDisclosure instantiates a new Disclosure object
 This constructor will assign default values to properties that have it defined,
@@ -185,11 +185,6 @@ and a boolean to check if the value has been set.
 
 SetEventType sets EventType field to given value.
 
-### HasEventType
-
-`func (o *Disclosure) HasEventType() bool`
-
-HasEventType returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -43,6 +43,7 @@ components:
         - type
         - version
         - timestamp
+        - event_type
 
     disclosure_response:
       title: List of Customer Disclosures

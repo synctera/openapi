@@ -27,18 +27,19 @@ type Disclosure struct {
 	Timestamp time.Time `json:"timestamp"`
 	CreationTime *time.Time `json:"creation_time,omitempty"`
 	LastUpdatedTime *time.Time `json:"last_updated_time,omitempty"`
-	EventType *string `json:"event_type,omitempty"`
+	EventType string `json:"event_type"`
 }
 
 // NewDisclosure instantiates a new Disclosure object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDisclosure(type_ string, version string, timestamp time.Time) *Disclosure {
+func NewDisclosure(type_ string, version string, timestamp time.Time, eventType string) *Disclosure {
 	this := Disclosure{}
 	this.Type = type_
 	this.Version = version
 	this.Timestamp = timestamp
+	this.EventType = eventType
 	return &this
 }
 
@@ -218,36 +219,28 @@ func (o *Disclosure) SetLastUpdatedTime(v time.Time) {
 	o.LastUpdatedTime = &v
 }
 
-// GetEventType returns the EventType field value if set, zero value otherwise.
+// GetEventType returns the EventType field value
 func (o *Disclosure) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.EventType
+
+	return o.EventType
 }
 
-// GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
+// GetEventTypeOk returns a tuple with the EventType field value
 // and a boolean to check if the value has been set.
 func (o *Disclosure) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.EventType, true
+	return &o.EventType, true
 }
 
-// HasEventType returns a boolean if a field has been set.
-func (o *Disclosure) HasEventType() bool {
-	if o != nil && o.EventType != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetEventType gets a reference to the given string and assigns it to the EventType field.
+// SetEventType sets field value
 func (o *Disclosure) SetEventType(v string) {
-	o.EventType = &v
+	o.EventType = v
 }
 
 func (o Disclosure) MarshalJSON() ([]byte, error) {
@@ -270,7 +263,7 @@ func (o Disclosure) MarshalJSON() ([]byte, error) {
 	if o.LastUpdatedTime != nil {
 		toSerialize["last_updated_time"] = o.LastUpdatedTime
 	}
-	if o.EventType != nil {
+	if true {
 		toSerialize["event_type"] = o.EventType
 	}
 	return json.Marshal(toSerialize)

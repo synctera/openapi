@@ -1,4 +1,6 @@
-.PHONY: docs
+.PHONY: default docs
+
+default: docs external-go-client
 
 docs: doc/internal-api.html doc/external-api.html
 

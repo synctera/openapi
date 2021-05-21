@@ -4708,6 +4708,7 @@ components:
           example: VIEWED
           type: string
       required:
+      - event_type
       - timestamp
       - type
       - version

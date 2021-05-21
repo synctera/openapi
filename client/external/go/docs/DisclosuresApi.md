@@ -32,7 +32,7 @@ import (
 
 func main() {
     customerId := TODO // string | Customer ID
-    disclosure := *openapiclient.NewDisclosure("REG_DD", "1.1", time.Now()) // Disclosure | Disclosure to create
+    disclosure := *openapiclient.NewDisclosure("REG_DD", "1.1", time.Now(), "VIEWED") // Disclosure | Disclosure to create
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
