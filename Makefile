@@ -16,3 +16,9 @@ $(shell jq -r .output $(merge-internal-config)): $(shell jq -r .inputs[].inputFi
 
 spec/%/api-bundled.yml: spec/%/api.yml
 	openapi bundle $< --ext yml --output $@
+
+package-name = synctera
+external-%-client: spec/external-api-merged-bundled.yml client/%.config.json
+	openapi-generator-cli generate --strict-spec true --generator-name $* \
+		--input-spec spec/external-api-merged-bundled.yml --output client/external/$*/ \
+		--package-name $(package-name) --config client/$*.config.json
