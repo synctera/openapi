@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -75,8 +74,6 @@ docs/VerificationType.md
 docs/Webhook.md
 docs/WebhooksApi.md
 git_push.sh
-go.mod
-go.sum
 model_a2a_transfer.go
 model_a2a_transfer_transfer_reversal.go
 model_account.go
