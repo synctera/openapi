@@ -6,7 +6,6 @@ components:
         id:
           description: Address unique identifier
           type: string
-          readOnly: true
           format: uuid
           example: faker.random.uuid
         default_address_flg:

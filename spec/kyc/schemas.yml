@@ -8,12 +8,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/verification_type"
-        ssn:
-          description: Customer's full tax ID eg SSN formatted with hyphens 123-45-6789
-          type: string
-          pattern: '^\d{3}-\d{2}-\d{4}$'
-          writeOnly: true
-          example: faker.helpers.replaceSymbols(###-##-####)
         user_ip_address:
           type: string
           description: IP address
@@ -21,7 +15,6 @@ components:
           example: faker.internet.ip
       required:
         - verification_type
-        - ssn
 
     customer_verification_result:
       title: CustomerVerificationResult
