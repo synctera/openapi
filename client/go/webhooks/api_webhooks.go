@@ -24,12 +24,190 @@ var (
 	_ _context.Context
 )
 
+type WebhooksApi interface {
+
+	/*
+	 * CreateSecret Create a secret
+	 * Create a webhook secret. The secret will be used to verify all subsequent webhook request signature.
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiCreateSecretRequest
+	 */
+	CreateSecret(ctx _context.Context) ApiCreateSecretRequest
+
+	/*
+	 * CreateSecretExecute executes the request
+	 * @return InlineResponse201
+	 */
+	CreateSecretExecute(r ApiCreateSecretRequest) (InlineResponse201, *_nethttp.Response, error)
+
+	/*
+	 * CreateWebhook Create a webhook
+	 * Create a webhook
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiCreateWebhookRequest
+	 */
+	CreateWebhook(ctx _context.Context) ApiCreateWebhookRequest
+
+	/*
+	 * CreateWebhookExecute executes the request
+	 * @return Webhook
+	 */
+	CreateWebhookExecute(r ApiCreateWebhookRequest) (Webhook, *_nethttp.Response, error)
+
+	/*
+	 * DeleteWebhook Delete a webhook
+	 * Delete a webhook
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param webhookId Webhook ID
+	 * @return ApiDeleteWebhookRequest
+	 */
+	DeleteWebhook(ctx _context.Context, webhookId string) ApiDeleteWebhookRequest
+
+	/*
+	 * DeleteWebhookExecute executes the request
+	 * @return DeleteResponse
+	 */
+	DeleteWebhookExecute(r ApiDeleteWebhookRequest) (DeleteResponse, *_nethttp.Response, error)
+
+	/*
+	 * GetEvent Get webhook event
+	 * Get webhook event by ID
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param webhookId Webhook ID
+	 * @param eventId Webhook event ID
+	 * @return ApiGetEventRequest
+	 */
+	GetEvent(ctx _context.Context, webhookId string, eventId string) ApiGetEventRequest
+
+	/*
+	 * GetEventExecute executes the request
+	 * @return Event
+	 */
+	GetEventExecute(r ApiGetEventRequest) (Event, *_nethttp.Response, error)
+
+	/*
+	 * GetWebhook Get a webhook
+	 * Get a webhook
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param webhookId Webhook ID
+	 * @return ApiGetWebhookRequest
+	 */
+	GetWebhook(ctx _context.Context, webhookId string) ApiGetWebhookRequest
+
+	/*
+	 * GetWebhookExecute executes the request
+	 * @return Webhook
+	 */
+	GetWebhookExecute(r ApiGetWebhookRequest) (Webhook, *_nethttp.Response, error)
+
+	/*
+	 * ListEvents List webhook events
+	 * List webhook events. This response will not associate with the event response history.
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param webhookId Webhook ID
+	 * @return ApiListEventsRequest
+	 */
+	ListEvents(ctx _context.Context, webhookId string) ApiListEventsRequest
+
+	/*
+	 * ListEventsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListEventsExecute(r ApiListEventsRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ListWebhooks List webhooks
+	 * List all webhooks
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiListWebhooksRequest
+	 */
+	ListWebhooks(ctx _context.Context) ApiListWebhooksRequest
+
+	/*
+	 * ListWebhooksExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListWebhooksExecute(r ApiListWebhooksRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ReplaceSecret Replace an existing secret
+	 * Replace an existing webhook secret immediately or as part of rotation. This new secret will be used to verify all subsequent webhook request signature.
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiReplaceSecretRequest
+	 */
+	ReplaceSecret(ctx _context.Context) ApiReplaceSecretRequest
+
+	/*
+	 * ReplaceSecretExecute executes the request
+	 * @return InlineResponse200
+	 */
+	ReplaceSecretExecute(r ApiReplaceSecretRequest) (InlineResponse200, *_nethttp.Response, error)
+
+	/*
+	 * ResendEvent Resend an event
+	 * Resend a webhook event
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param webhookId Webhook ID
+	 * @param eventId Webhook event ID
+	 * @return ApiResendEventRequest
+	 */
+	ResendEvent(ctx _context.Context, webhookId string, eventId string) ApiResendEventRequest
+
+	/*
+	 * ResendEventExecute executes the request
+	 * @return Event
+	 */
+	ResendEventExecute(r ApiResendEventRequest) (Event, *_nethttp.Response, error)
+
+	/*
+	 * RevokeSecret Revoke the secret
+	 * Revoke the existing webhook secret. If this is called at the rolling secret time, then both old and new secrets will be revoked
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiRevokeSecretRequest
+	 */
+	RevokeSecret(ctx _context.Context) ApiRevokeSecretRequest
+
+	/*
+	 * RevokeSecretExecute executes the request
+	 */
+	RevokeSecretExecute(r ApiRevokeSecretRequest) (*_nethttp.Response, error)
+
+	/*
+	 * TriggerEvent Trigger an event
+	 * Trigger an specific event for webhook testing purpose
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiTriggerEventRequest
+	 */
+	TriggerEvent(ctx _context.Context) ApiTriggerEventRequest
+
+	/*
+	 * TriggerEventExecute executes the request
+	 * @return Event
+	 */
+	TriggerEventExecute(r ApiTriggerEventRequest) (Event, *_nethttp.Response, error)
+
+	/*
+	 * UpdateWebhook Update a webhook
+	 * Update a webhook
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param webhookId Webhook ID
+	 * @return ApiUpdateWebhookRequest
+	 */
+	UpdateWebhook(ctx _context.Context, webhookId string) ApiUpdateWebhookRequest
+
+	/*
+	 * UpdateWebhookExecute executes the request
+	 * @return Webhook
+	 */
+	UpdateWebhookExecute(r ApiUpdateWebhookRequest) (Webhook, *_nethttp.Response, error)
+}
+
 // WebhooksApiService WebhooksApi service
 type WebhooksApiService service
 
 type ApiCreateSecretRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 }
 
 
@@ -160,7 +338,7 @@ func (a *WebhooksApiService) CreateSecretExecute(r ApiCreateSecretRequest) (Inli
 
 type ApiCreateWebhookRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	webhook *Webhook
 }
 
@@ -291,7 +469,7 @@ func (a *WebhooksApiService) CreateWebhookExecute(r ApiCreateWebhookRequest) (We
 
 type ApiDeleteWebhookRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	webhookId string
 }
 
@@ -426,7 +604,7 @@ func (a *WebhooksApiService) DeleteWebhookExecute(r ApiDeleteWebhookRequest) (De
 
 type ApiGetEventRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	webhookId string
 	eventId string
 }
@@ -565,7 +743,7 @@ func (a *WebhooksApiService) GetEventExecute(r ApiGetEventRequest) (Event, *_net
 
 type ApiGetWebhookRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	webhookId string
 }
 
@@ -700,7 +878,7 @@ func (a *WebhooksApiService) GetWebhookExecute(r ApiGetWebhookRequest) (Webhook,
 
 type ApiListEventsRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	webhookId string
 	startDate *string
 	endDate *string
@@ -857,7 +1035,7 @@ func (a *WebhooksApiService) ListEventsExecute(r ApiListEventsRequest) (map[stri
 
 type ApiListWebhooksRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	limit *int32
 	pageToken *string
 	isEnabledOnly *bool
@@ -1002,7 +1180,7 @@ func (a *WebhooksApiService) ListWebhooksExecute(r ApiListWebhooksRequest) (map[
 
 type ApiReplaceSecretRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	inlineObject *InlineObject
 }
 
@@ -1143,7 +1321,7 @@ func (a *WebhooksApiService) ReplaceSecretExecute(r ApiReplaceSecretRequest) (In
 
 type ApiResendEventRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	webhookId string
 	eventId string
 	delay *int32
@@ -1290,7 +1468,7 @@ func (a *WebhooksApiService) ResendEventExecute(r ApiResendEventRequest) (Event,
 
 type ApiRevokeSecretRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 }
 
 
@@ -1410,7 +1588,7 @@ func (a *WebhooksApiService) RevokeSecretExecute(r ApiRevokeSecretRequest) (*_ne
 
 type ApiTriggerEventRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	inlineObject1 *InlineObject1
 }
 
@@ -1541,7 +1719,7 @@ func (a *WebhooksApiService) TriggerEventExecute(r ApiTriggerEventRequest) (Even
 
 type ApiUpdateWebhookRequest struct {
 	ctx _context.Context
-	ApiService *WebhooksApiService
+	ApiService WebhooksApi
 	webhookId string
 	webhook *Webhook
 }

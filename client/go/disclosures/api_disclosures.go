@@ -24,12 +24,46 @@ var (
 	_ _context.Context
 )
 
+type DisclosuresApi interface {
+
+	/*
+	 * CreateDisclosure Create a Disclosure
+	 * Disclosures to be made to customers
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiCreateDisclosureRequest
+	 */
+	CreateDisclosure(ctx _context.Context, customerId string) ApiCreateDisclosureRequest
+
+	/*
+	 * CreateDisclosureExecute executes the request
+	 * @return Disclosure
+	 */
+	CreateDisclosureExecute(r ApiCreateDisclosureRequest) (Disclosure, *_nethttp.Response, error)
+
+	/*
+	 * ListDisclosures List Disclosures
+	 * Retrieves paginated list of disclosures associated with the authorized requester
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiListDisclosuresRequest
+	 */
+	ListDisclosures(ctx _context.Context, customerId string) ApiListDisclosuresRequest
+
+	/*
+	 * ListDisclosuresExecute executes the request
+	 * @return DisclosureResponse
+	 */
+	ListDisclosuresExecute(r ApiListDisclosuresRequest) (DisclosureResponse, *_nethttp.Response, error)
+}
+
 // DisclosuresApiService DisclosuresApi service
 type DisclosuresApiService service
 
 type ApiCreateDisclosureRequest struct {
 	ctx _context.Context
-	ApiService *DisclosuresApiService
+	ApiService DisclosuresApi
 	customerId string
 	disclosure *Disclosure
 }
@@ -185,7 +219,7 @@ func (a *DisclosuresApiService) CreateDisclosureExecute(r ApiCreateDisclosureReq
 
 type ApiListDisclosuresRequest struct {
 	ctx _context.Context
-	ApiService *DisclosuresApiService
+	ApiService DisclosuresApi
 	customerId string
 	limit *int32
 	pageToken *string

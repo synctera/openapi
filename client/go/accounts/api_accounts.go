@@ -24,12 +24,181 @@ var (
 	_ _context.Context
 )
 
+type AccountsApi interface {
+
+	/*
+	 * CreateAccount Create an account
+	 * Create a shadow mode account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiCreateAccountRequest
+	 */
+	CreateAccount(ctx _context.Context) ApiCreateAccountRequest
+
+	/*
+	 * CreateAccountExecute executes the request
+	 * @return Account
+	 */
+	CreateAccountExecute(r ApiCreateAccountRequest) (Account, *_nethttp.Response, error)
+
+	/*
+	 * CreateAccountAddress Create address for an account
+	 * Create account address
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiCreateAccountAddressRequest
+	 */
+	CreateAccountAddress(ctx _context.Context, accountId string) ApiCreateAccountAddressRequest
+
+	/*
+	 * CreateAccountAddressExecute executes the request
+	 * @return AccountAddress
+	 */
+	CreateAccountAddressExecute(r ApiCreateAccountAddressRequest) (AccountAddress, *_nethttp.Response, error)
+
+	/*
+	 * DeleteAccount Delete account
+	 * Delete account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiDeleteAccountRequest
+	 */
+	DeleteAccount(ctx _context.Context, accountId string) ApiDeleteAccountRequest
+
+	/*
+	 * DeleteAccountExecute executes the request
+	 * @return DeleteResponse
+	 */
+	DeleteAccountExecute(r ApiDeleteAccountRequest) (DeleteResponse, *_nethttp.Response, error)
+
+	/*
+	 * DeleteAccountAddress Delete address for an account
+	 * Delete account address
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @param connectId Connect ID of the account associate with the account entity
+	 * @return ApiDeleteAccountAddressRequest
+	 */
+	DeleteAccountAddress(ctx _context.Context, accountId string, connectId string) ApiDeleteAccountAddressRequest
+
+	/*
+	 * DeleteAccountAddressExecute executes the request
+	 * @return DeleteResponse
+	 */
+	DeleteAccountAddressExecute(r ApiDeleteAccountAddressRequest) (DeleteResponse, *_nethttp.Response, error)
+
+	/*
+	 * GetAccount Get account
+	 * Get an account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiGetAccountRequest
+	 */
+	GetAccount(ctx _context.Context, accountId string) ApiGetAccountRequest
+
+	/*
+	 * GetAccountExecute executes the request
+	 * @return Account
+	 */
+	GetAccountExecute(r ApiGetAccountRequest) (Account, *_nethttp.Response, error)
+
+	/*
+	 * GetAccountAddress Get address for an account
+	 * Get account address by ID
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @param connectId Connect ID of the account associate with the account entity
+	 * @return ApiGetAccountAddressRequest
+	 */
+	GetAccountAddress(ctx _context.Context, accountId string, connectId string) ApiGetAccountAddressRequest
+
+	/*
+	 * GetAccountAddressExecute executes the request
+	 * @return AccountAddress
+	 */
+	GetAccountAddressExecute(r ApiGetAccountAddressRequest) (AccountAddress, *_nethttp.Response, error)
+
+	/*
+	 * GetAccountBalance Get account balance
+	 * Get account balance
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiGetAccountBalanceRequest
+	 */
+	GetAccountBalance(ctx _context.Context, accountId string) ApiGetAccountBalanceRequest
+
+	/*
+	 * GetAccountBalanceExecute executes the request
+	 * @return Balance
+	 */
+	GetAccountBalanceExecute(r ApiGetAccountBalanceRequest) (Balance, *_nethttp.Response, error)
+
+	/*
+	 * GetAccountTransactions Get account transactions
+	 * Get account transactions
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiGetAccountTransactionsRequest
+	 */
+	GetAccountTransactions(ctx _context.Context, accountId string) ApiGetAccountTransactionsRequest
+
+	/*
+	 * GetAccountTransactionsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	GetAccountTransactionsExecute(r ApiGetAccountTransactionsRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ListAccounts List accounts
+	 * Get paginated list of Accounts associated
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiListAccountsRequest
+	 */
+	ListAccounts(ctx _context.Context) ApiListAccountsRequest
+
+	/*
+	 * ListAccountsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListAccountsExecute(r ApiListAccountsRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * UpdateAccount Update account
+	 * Update account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiUpdateAccountRequest
+	 */
+	UpdateAccount(ctx _context.Context, accountId string) ApiUpdateAccountRequest
+
+	/*
+	 * UpdateAccountExecute executes the request
+	 * @return Account
+	 */
+	UpdateAccountExecute(r ApiUpdateAccountRequest) (Account, *_nethttp.Response, error)
+
+	/*
+	 * UpdateAccountAddress Update address for an account
+	 * Update account address
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @param connectId Connect ID of the account associate with the account entity
+	 * @return ApiUpdateAccountAddressRequest
+	 */
+	UpdateAccountAddress(ctx _context.Context, accountId string, connectId string) ApiUpdateAccountAddressRequest
+
+	/*
+	 * UpdateAccountAddressExecute executes the request
+	 * @return AccountAddress
+	 */
+	UpdateAccountAddressExecute(r ApiUpdateAccountAddressRequest) (AccountAddress, *_nethttp.Response, error)
+}
+
 // AccountsApiService AccountsApi service
 type AccountsApiService service
 
 type ApiCreateAccountRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	account *Account
 }
 
@@ -150,7 +319,7 @@ func (a *AccountsApiService) CreateAccountExecute(r ApiCreateAccountRequest) (Ac
 
 type ApiCreateAccountAddressRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 	accountAddress *AccountAddress
 }
@@ -295,7 +464,7 @@ func (a *AccountsApiService) CreateAccountAddressExecute(r ApiCreateAccountAddre
 
 type ApiDeleteAccountRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 }
 
@@ -430,7 +599,7 @@ func (a *AccountsApiService) DeleteAccountExecute(r ApiDeleteAccountRequest) (De
 
 type ApiDeleteAccountAddressRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 	connectId string
 }
@@ -569,7 +738,7 @@ func (a *AccountsApiService) DeleteAccountAddressExecute(r ApiDeleteAccountAddre
 
 type ApiGetAccountRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 }
 
@@ -704,7 +873,7 @@ func (a *AccountsApiService) GetAccountExecute(r ApiGetAccountRequest) (Account,
 
 type ApiGetAccountAddressRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 	connectId string
 	inlineObject2 *InlineObject2
@@ -850,7 +1019,7 @@ func (a *AccountsApiService) GetAccountAddressExecute(r ApiGetAccountAddressRequ
 
 type ApiGetAccountBalanceRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 	inlineObject *InlineObject
 }
@@ -995,7 +1164,7 @@ func (a *AccountsApiService) GetAccountBalanceExecute(r ApiGetAccountBalanceRequ
 
 type ApiGetAccountTransactionsRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 	inlineObject1 *InlineObject1
 	limit *int32
@@ -1156,7 +1325,7 @@ func (a *AccountsApiService) GetAccountTransactionsExecute(r ApiGetAccountTransa
 
 type ApiListAccountsRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	listAccountRequest *ListAccountRequest
 	limit *int32
 	pageToken *string
@@ -1333,7 +1502,7 @@ func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (map[
 
 type ApiUpdateAccountRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 	account *Account
 }
@@ -1478,7 +1647,7 @@ func (a *AccountsApiService) UpdateAccountExecute(r ApiUpdateAccountRequest) (Ac
 
 type ApiUpdateAccountAddressRequest struct {
 	ctx _context.Context
-	ApiService *AccountsApiService
+	ApiService AccountsApi
 	accountId string
 	connectId string
 	accountAddress *AccountAddress

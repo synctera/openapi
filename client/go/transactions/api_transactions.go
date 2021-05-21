@@ -24,12 +24,132 @@ var (
 	_ _context.Context
 )
 
+type TransactionsApi interface {
+
+	/*
+	 * A2aTransfer Account to account transfer
+	 * Transfer amount under the same customer
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiA2aTransferRequest
+	 */
+	A2aTransfer(ctx _context.Context) ApiA2aTransferRequest
+
+	/*
+	 * A2aTransferExecute executes the request
+	 * @return A2aTransfer
+	 */
+	A2aTransferExecute(r ApiA2aTransferRequest) (A2aTransfer, *_nethttp.Response, error)
+
+	/*
+	 * CreateOutgoingACH Create outgoing ACH
+	 * Create an outgoing ACH
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiCreateOutgoingACHRequest
+	 */
+	CreateOutgoingACH(ctx _context.Context) ApiCreateOutgoingACHRequest
+
+	/*
+	 * CreateOutgoingACHExecute executes the request
+	 * @return AchOutgoing
+	 */
+	CreateOutgoingACHExecute(r ApiCreateOutgoingACHRequest) (AchOutgoing, *_nethttp.Response, error)
+
+	/*
+	 * DeleteOutgoingACH Delete pending outgoing ACH
+	 * Delete a pending outgoing ACH
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param paymentId Payment ID
+	 * @return ApiDeleteOutgoingACHRequest
+	 */
+	DeleteOutgoingACH(ctx _context.Context, paymentId string) ApiDeleteOutgoingACHRequest
+
+	/*
+	 * DeleteOutgoingACHExecute executes the request
+	 * @return DeleteResponse
+	 */
+	DeleteOutgoingACHExecute(r ApiDeleteOutgoingACHRequest) (DeleteResponse, *_nethttp.Response, error)
+
+	/*
+	 * GetA2ATransfer Get account to account transfer
+	 * Get account to account transfer
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param paymentId Payment ID
+	 * @return ApiGetA2ATransferRequest
+	 */
+	GetA2ATransfer(ctx _context.Context, paymentId string) ApiGetA2ATransferRequest
+
+	/*
+	 * GetA2ATransferExecute executes the request
+	 * @return A2aTransfer
+	 */
+	GetA2ATransferExecute(r ApiGetA2ATransferRequest) (A2aTransfer, *_nethttp.Response, error)
+
+	/*
+	 * GetOutgoingACH Get Pending ACH List
+	 * Get a list of pending ACH
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiGetOutgoingACHRequest
+	 */
+	GetOutgoingACH(ctx _context.Context) ApiGetOutgoingACHRequest
+
+	/*
+	 * GetOutgoingACHExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	GetOutgoingACHExecute(r ApiGetOutgoingACHRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ListA2ATransfer List account to account transfer
+	 * Transfer amount under the same customer
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiListA2ATransferRequest
+	 */
+	ListA2ATransfer(ctx _context.Context, customerId string) ApiListA2ATransferRequest
+
+	/*
+	 * ListA2ATransferExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListA2ATransferExecute(r ApiListA2ATransferRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ReverseA2ATransfer Reverse existing account to account transfer
+	 * Reverse account to account transfer
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param paymentId Payment ID
+	 * @return ApiReverseA2ATransferRequest
+	 */
+	ReverseA2ATransfer(ctx _context.Context, paymentId string) ApiReverseA2ATransferRequest
+
+	/*
+	 * ReverseA2ATransferExecute executes the request
+	 * @return A2aTransfer
+	 */
+	ReverseA2ATransferExecute(r ApiReverseA2ATransferRequest) (A2aTransfer, *_nethttp.Response, error)
+
+	/*
+	 * UpdateOutgoingACH Update outgoing ACH
+	 * Update an outgoing ACH
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param paymentId Payment ID
+	 * @return ApiUpdateOutgoingACHRequest
+	 */
+	UpdateOutgoingACH(ctx _context.Context, paymentId string) ApiUpdateOutgoingACHRequest
+
+	/*
+	 * UpdateOutgoingACHExecute executes the request
+	 * @return AchOutgoing
+	 */
+	UpdateOutgoingACHExecute(r ApiUpdateOutgoingACHRequest) (AchOutgoing, *_nethttp.Response, error)
+}
+
 // TransactionsApiService TransactionsApi service
 type TransactionsApiService service
 
 type ApiA2aTransferRequest struct {
 	ctx _context.Context
-	ApiService *TransactionsApiService
+	ApiService TransactionsApi
 	a2aTransfer *A2aTransfer
 }
 
@@ -290,7 +410,7 @@ func (a *TransactionsApiService) A2aTransferExecute(r ApiA2aTransferRequest) (A2
 
 type ApiCreateOutgoingACHRequest struct {
 	ctx _context.Context
-	ApiService *TransactionsApiService
+	ApiService TransactionsApi
 	achOutgoing *AchOutgoing
 	mfaToken *string
 }
@@ -459,7 +579,7 @@ func (a *TransactionsApiService) CreateOutgoingACHExecute(r ApiCreateOutgoingACH
 
 type ApiDeleteOutgoingACHRequest struct {
 	ctx _context.Context
-	ApiService *TransactionsApiService
+	ApiService TransactionsApi
 	paymentId string
 }
 
@@ -614,7 +734,7 @@ func (a *TransactionsApiService) DeleteOutgoingACHExecute(r ApiDeleteOutgoingACH
 
 type ApiGetA2ATransferRequest struct {
 	ctx _context.Context
-	ApiService *TransactionsApiService
+	ApiService TransactionsApi
 	paymentId string
 }
 
@@ -769,7 +889,7 @@ func (a *TransactionsApiService) GetA2ATransferExecute(r ApiGetA2ATransferReques
 
 type ApiGetOutgoingACHRequest struct {
 	ctx _context.Context
-	ApiService *TransactionsApiService
+	ApiService TransactionsApi
 	aCHExecutionDate *string
 	limit *int32
 	pageToken *string
@@ -945,7 +1065,7 @@ func (a *TransactionsApiService) GetOutgoingACHExecute(r ApiGetOutgoingACHReques
 
 type ApiListA2ATransferRequest struct {
 	ctx _context.Context
-	ApiService *TransactionsApiService
+	ApiService TransactionsApi
 	customerId string
 	limit *int32
 	pageToken *string
@@ -1116,7 +1236,7 @@ func (a *TransactionsApiService) ListA2ATransferExecute(r ApiListA2ATransferRequ
 
 type ApiReverseA2ATransferRequest struct {
 	ctx _context.Context
-	ApiService *TransactionsApiService
+	ApiService TransactionsApi
 	paymentId string
 }
 
@@ -1281,7 +1401,7 @@ func (a *TransactionsApiService) ReverseA2ATransferExecute(r ApiReverseA2ATransf
 
 type ApiUpdateOutgoingACHRequest struct {
 	ctx _context.Context
-	ApiService *TransactionsApiService
+	ApiService TransactionsApi
 	paymentId string
 	achOutgoing *AchOutgoing
 	mfaToken *string

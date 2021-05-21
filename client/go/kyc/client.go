@@ -48,7 +48,7 @@ type APIClient struct {
 
 	// API Services
 
-	KYCVerificationApi *KYCVerificationApiService
+	KYCVerificationApi KYCVerificationApi
 }
 
 type service struct {

@@ -17,6 +17,8 @@ func TestCreateAndListCustomer(t *testing.T) {
 	configuration.Debug = false
 	ctx := context.Background()
 
+
+
 	if sandbox {
 		ctx = context.WithValue(ctx, customers.ContextServerIndex, 1)
 		apiKey := os.Getenv("SYNCTERA_API_KEY")

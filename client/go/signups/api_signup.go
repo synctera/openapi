@@ -23,12 +23,30 @@ var (
 	_ _context.Context
 )
 
+type SignupApi interface {
+
+	/*
+	 * CreateSignup Signup a new sandbox user
+	 * Create a bank, partner and party for a new sandbox user
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiCreateSignupRequest
+	 */
+	CreateSignup(ctx _context.Context) ApiCreateSignupRequest
+
+	/*
+	 * CreateSignupExecute executes the request
+	 * @return SignupIds
+	 */
+	CreateSignupExecute(r ApiCreateSignupRequest) (SignupIds, *_nethttp.Response, error)
+}
+
 // SignupApiService SignupApi service
 type SignupApiService service
 
 type ApiCreateSignupRequest struct {
 	ctx _context.Context
-	ApiService *SignupApiService
+	ApiService SignupApi
 	signupInput *SignupInput
 }
 

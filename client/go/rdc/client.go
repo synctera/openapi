@@ -48,7 +48,7 @@ type APIClient struct {
 
 	// API Services
 
-	RDCDepositsApi *RDCDepositsApiService
+	RDCDepositsApi RDCDepositsApi
 }
 
 type service struct {

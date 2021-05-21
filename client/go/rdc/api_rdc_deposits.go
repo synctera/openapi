@@ -24,12 +24,156 @@ var (
 	_ _context.Context
 )
 
+type RDCDepositsApi interface {
+
+	/*
+	 * CreateRdcDeposit Create an RDC Deposit
+	 * Create a new deposit using remote deposit capture to an account
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiCreateRdcDepositRequest
+	 */
+	CreateRdcDeposit(ctx _context.Context, accountId string) ApiCreateRdcDepositRequest
+
+	/*
+	 * CreateRdcDepositExecute executes the request
+	 * @return Deposit
+	 */
+	CreateRdcDepositExecute(r ApiCreateRdcDepositRequest) (Deposit, *_nethttp.Response, error)
+
+	/*
+	 * CreateRdcImage Create an RDC Image
+	 * Create a new image for a remote deposit capture to an account
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiCreateRdcImageRequest
+	 */
+	CreateRdcImage(ctx _context.Context, accountId string) ApiCreateRdcImageRequest
+
+	/*
+	 * CreateRdcImageExecute executes the request
+	 * @return Image
+	 */
+	CreateRdcImageExecute(r ApiCreateRdcImageRequest) (Image, *_nethttp.Response, error)
+
+	/*
+	 * CreateRdcScan Create an RDC Scan
+	 * Create a new scan of a check image made for a remote deposit capture to an account
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiCreateRdcScanRequest
+	 */
+	CreateRdcScan(ctx _context.Context, accountId string) ApiCreateRdcScanRequest
+
+	/*
+	 * CreateRdcScanExecute executes the request
+	 * @return Scan
+	 */
+	CreateRdcScanExecute(r ApiCreateRdcScanRequest) (Scan, *_nethttp.Response, error)
+
+	/*
+	 * GetRdcDeposit Get RDC Deposit
+	 * Retrieves one deposit made using remote deposit capture associated with an account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @param depositId ID of a deposit for a remote deposit capture
+	 * @return ApiGetRdcDepositRequest
+	 */
+	GetRdcDeposit(ctx _context.Context, accountId string, depositId string) ApiGetRdcDepositRequest
+
+	/*
+	 * GetRdcDepositExecute executes the request
+	 * @return Deposit
+	 */
+	GetRdcDepositExecute(r ApiGetRdcDepositRequest) (Deposit, *_nethttp.Response, error)
+
+	/*
+	 * GetRdcImage Get RDC Image
+	 * Retrieves one image for remote deposit capture associated with an account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @param imageId ID of an image uploaded for a remote deposit capture
+	 * @return ApiGetRdcImageRequest
+	 */
+	GetRdcImage(ctx _context.Context, accountId string, imageId string) ApiGetRdcImageRequest
+
+	/*
+	 * GetRdcImageExecute executes the request
+	 * @return Image
+	 */
+	GetRdcImageExecute(r ApiGetRdcImageRequest) (Image, *_nethttp.Response, error)
+
+	/*
+	 * GetRdcScan Get RDC Scan
+	 * Retrieves one OCR scan of a check image for remote deposit capture associated with an account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @param scanId ID of an OCR scan of a check image uploaded for a remote deposit capture
+	 * @return ApiGetRdcScanRequest
+	 */
+	GetRdcScan(ctx _context.Context, accountId string, scanId string) ApiGetRdcScanRequest
+
+	/*
+	 * GetRdcScanExecute executes the request
+	 * @return Scan
+	 */
+	GetRdcScanExecute(r ApiGetRdcScanRequest) (Scan, *_nethttp.Response, error)
+
+	/*
+	 * ListRdcDeposits List RDC Deposits
+	 * Retrieves a paginated list of the deposits made using remote deposit capture associated with an account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiListRdcDepositsRequest
+	 */
+	ListRdcDeposits(ctx _context.Context, accountId string) ApiListRdcDepositsRequest
+
+	/*
+	 * ListRdcDepositsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListRdcDepositsExecute(r ApiListRdcDepositsRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ListRdcImageIds List RDC Image Ids
+	 * Retrieves a paginated list of the ids of the images for remote deposit capture associated with an account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiListRdcImageIdsRequest
+	 */
+	ListRdcImageIds(ctx _context.Context, accountId string) ApiListRdcImageIdsRequest
+
+	/*
+	 * ListRdcImageIdsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListRdcImageIdsExecute(r ApiListRdcImageIdsRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ListRdcScans List RDC Scans
+	 * Retrieves a paginated list of the the scans of uploaded images made for remote deposit capture associated with an account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param accountId Account ID
+	 * @return ApiListRdcScansRequest
+	 */
+	ListRdcScans(ctx _context.Context, accountId string) ApiListRdcScansRequest
+
+	/*
+	 * ListRdcScansExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListRdcScansExecute(r ApiListRdcScansRequest) (map[string]interface{}, *_nethttp.Response, error)
+}
+
 // RDCDepositsApiService RDCDepositsApi service
 type RDCDepositsApiService service
 
 type ApiCreateRdcDepositRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	deposit *Deposit
 }
@@ -172,7 +316,7 @@ func (a *RDCDepositsApiService) CreateRdcDepositExecute(r ApiCreateRdcDepositReq
 
 type ApiCreateRdcImageRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	image *Image
 }
@@ -305,7 +449,7 @@ func (a *RDCDepositsApiService) CreateRdcImageExecute(r ApiCreateRdcImageRequest
 
 type ApiCreateRdcScanRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	scan *Scan
 }
@@ -448,7 +592,7 @@ func (a *RDCDepositsApiService) CreateRdcScanExecute(r ApiCreateRdcScanRequest) 
 
 type ApiGetRdcDepositRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	depositId string
 }
@@ -587,7 +731,7 @@ func (a *RDCDepositsApiService) GetRdcDepositExecute(r ApiGetRdcDepositRequest) 
 
 type ApiGetRdcImageRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	imageId string
 }
@@ -726,7 +870,7 @@ func (a *RDCDepositsApiService) GetRdcImageExecute(r ApiGetRdcImageRequest) (Ima
 
 type ApiGetRdcScanRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	scanId string
 }
@@ -865,7 +1009,7 @@ func (a *RDCDepositsApiService) GetRdcScanExecute(r ApiGetRdcScanRequest) (Scan,
 
 type ApiListRdcDepositsRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	limit *int32
 	pageToken *string
@@ -1006,7 +1150,7 @@ func (a *RDCDepositsApiService) ListRdcDepositsExecute(r ApiListRdcDepositsReque
 
 type ApiListRdcImageIdsRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	limit *int32
 	pageToken *string
@@ -1147,7 +1291,7 @@ func (a *RDCDepositsApiService) ListRdcImageIdsExecute(r ApiListRdcImageIdsReque
 
 type ApiListRdcScansRequest struct {
 	ctx _context.Context
-	ApiService *RDCDepositsApiService
+	ApiService RDCDepositsApi
 	accountId string
 	limit *int32
 	pageToken *string

@@ -48,7 +48,7 @@ type APIClient struct {
 
 	// API Services
 
-	TransactionsApi *TransactionsApiService
+	TransactionsApi TransactionsApi
 }
 
 type service struct {

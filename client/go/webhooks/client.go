@@ -48,7 +48,7 @@ type APIClient struct {
 
 	// API Services
 
-	WebhooksApi *WebhooksApiService
+	WebhooksApi WebhooksApi
 }
 
 type service struct {

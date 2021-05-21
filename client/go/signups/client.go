@@ -48,7 +48,7 @@ type APIClient struct {
 
 	// API Services
 
-	SignupApi *SignupApiService
+	SignupApi SignupApi
 }
 
 type service struct {

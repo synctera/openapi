@@ -48,7 +48,7 @@ type APIClient struct {
 
 	// API Services
 
-	ReconciliationsApi *ReconciliationsApiService
+	ReconciliationsApi ReconciliationsApi
 }
 
 type service struct {

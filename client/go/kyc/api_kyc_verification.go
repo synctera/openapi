@@ -24,12 +24,155 @@ var (
 	_ _context.Context
 )
 
+type KYCVerificationApi interface {
+
+	/*
+	 * CreateCustomerVerificationResult Create a Customer Verification Result
+	 * Create a verification result for a customer
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiCreateCustomerVerificationResultRequest
+	 */
+	CreateCustomerVerificationResult(ctx _context.Context, customerId string) ApiCreateCustomerVerificationResultRequest
+
+	/*
+	 * CreateCustomerVerificationResultExecute executes the request
+	 * @return CustomerVerificationResult
+	 */
+	CreateCustomerVerificationResultExecute(r ApiCreateCustomerVerificationResultRequest) (CustomerVerificationResult, *_nethttp.Response, error)
+
+	/*
+	 * CreateDocument Create a Document
+	 * Upload a Customer's document.  This document can be used to verify identity
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiCreateDocumentRequest
+	 */
+	CreateDocument(ctx _context.Context, customerId string) ApiCreateDocumentRequest
+
+	/*
+	 * CreateDocumentExecute executes the request
+	 * @return Document
+	 */
+	CreateDocumentExecute(r ApiCreateDocumentRequest) (Document, *_nethttp.Response, error)
+
+	/*
+	 * GetDocument Get Document
+	 * Get Document based on ID
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @param documentId Document ID
+	 * @return ApiGetDocumentRequest
+	 */
+	GetDocument(ctx _context.Context, customerId string, documentId string) ApiGetDocumentRequest
+
+	/*
+	 * GetDocumentExecute executes the request
+	 * @return Document
+	 */
+	GetDocumentExecute(r ApiGetDocumentRequest) (Document, *_nethttp.Response, error)
+
+	/*
+	 * GetVerification Get Verification Result
+	 * Get verification result
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @param verificationId Verification ID
+	 * @return ApiGetVerificationRequest
+	 */
+	GetVerification(ctx _context.Context, customerId string, verificationId string) ApiGetVerificationRequest
+
+	/*
+	 * GetVerificationExecute executes the request
+	 * @return CustomerVerificationResult
+	 */
+	GetVerificationExecute(r ApiGetVerificationRequest) (CustomerVerificationResult, *_nethttp.Response, error)
+
+	/*
+	 * ListDocuments List Documents
+	 * Get paginated list of Documents associated with user
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiListDocumentsRequest
+	 */
+	ListDocuments(ctx _context.Context, customerId string) ApiListDocumentsRequest
+
+	/*
+	 * ListDocumentsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListDocumentsExecute(r ApiListDocumentsRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ListVerifications List Verification Results
+	 * List verification results
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiListVerificationsRequest
+	 */
+	ListVerifications(ctx _context.Context, customerId string) ApiListVerificationsRequest
+
+	/*
+	 * ListVerificationsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListVerificationsExecute(r ApiListVerificationsRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * PatchDocument Patch Document
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @param documentId Document ID
+	 * @return ApiPatchDocumentRequest
+	 */
+	PatchDocument(ctx _context.Context, customerId string, documentId string) ApiPatchDocumentRequest
+
+	/*
+	 * PatchDocumentExecute executes the request
+	 * @return Document
+	 */
+	PatchDocumentExecute(r ApiPatchDocumentRequest) (Document, *_nethttp.Response, error)
+
+	/*
+	 * UpdateDocument Update Document
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @param documentId Document ID
+	 * @return ApiUpdateDocumentRequest
+	 */
+	UpdateDocument(ctx _context.Context, customerId string, documentId string) ApiUpdateDocumentRequest
+
+	/*
+	 * UpdateDocumentExecute executes the request
+	 * @return Document
+	 */
+	UpdateDocumentExecute(r ApiUpdateDocumentRequest) (Document, *_nethttp.Response, error)
+
+	/*
+	 * VerifyCustomer Verify a Customer
+	 * This will intiate identity verification and run through the specified identity checks
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiVerifyCustomerRequest
+	 */
+	VerifyCustomer(ctx _context.Context, customerId string) ApiVerifyCustomerRequest
+
+	/*
+	 * VerifyCustomerExecute executes the request
+	 * @return CustomerVerification
+	 */
+	VerifyCustomerExecute(r ApiVerifyCustomerRequest) (CustomerVerification, *_nethttp.Response, error)
+}
+
 // KYCVerificationApiService KYCVerificationApi service
 type KYCVerificationApiService service
 
 type ApiCreateCustomerVerificationResultRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	customerVerificationResult *CustomerVerificationResult
 }
@@ -185,7 +328,7 @@ func (a *KYCVerificationApiService) CreateCustomerVerificationResultExecute(r Ap
 
 type ApiCreateDocumentRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	document *Document
 }
@@ -351,7 +494,7 @@ func (a *KYCVerificationApiService) CreateDocumentExecute(r ApiCreateDocumentReq
 
 type ApiGetDocumentRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	documentId string
 }
@@ -510,7 +653,7 @@ func (a *KYCVerificationApiService) GetDocumentExecute(r ApiGetDocumentRequest) 
 
 type ApiGetVerificationRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	verificationId string
 }
@@ -669,7 +812,7 @@ func (a *KYCVerificationApiService) GetVerificationExecute(r ApiGetVerificationR
 
 type ApiListDocumentsRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	limit *int32
 	pageToken *string
@@ -840,7 +983,7 @@ func (a *KYCVerificationApiService) ListDocumentsExecute(r ApiListDocumentsReque
 
 type ApiListVerificationsRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	limit *int32
 	pageToken *string
@@ -1011,7 +1154,7 @@ func (a *KYCVerificationApiService) ListVerificationsExecute(r ApiListVerificati
 
 type ApiPatchDocumentRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	documentId string
 	document *Document
@@ -1179,7 +1322,7 @@ func (a *KYCVerificationApiService) PatchDocumentExecute(r ApiPatchDocumentReque
 
 type ApiUpdateDocumentRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	documentId string
 	document *Document
@@ -1347,7 +1490,7 @@ func (a *KYCVerificationApiService) UpdateDocumentExecute(r ApiUpdateDocumentReq
 
 type ApiVerifyCustomerRequest struct {
 	ctx _context.Context
-	ApiService *KYCVerificationApiService
+	ApiService KYCVerificationApi
 	customerId string
 	customerVerification *CustomerVerification
 }

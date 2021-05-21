@@ -24,12 +24,133 @@ var (
 	_ _context.Context
 )
 
+type CustomersApi interface {
+
+	/*
+	 * CreateCustomer Create a Customer
+	 * The customer object represents your customer's identity. You can then verify the identity of this customer and associate them with other people and accounts
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiCreateCustomerRequest
+	 */
+	CreateCustomer(ctx _context.Context) ApiCreateCustomerRequest
+
+	/*
+	 * CreateCustomerExecute executes the request
+	 * @return Customer
+	 */
+	CreateCustomerExecute(r ApiCreateCustomerRequest) (Customer, *_nethttp.Response, error)
+
+	/*
+	 * CreateProspect Create a Prospect
+	 * Creates a prospect and returns an unique identifier. Use this ID to track disclosures displayed during the KYC flow.  The prospect can be upgraded to a `customer` by updated `customer` resource with collected information.
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiCreateProspectRequest
+	 */
+	CreateProspect(ctx _context.Context) ApiCreateProspectRequest
+
+	/*
+	 * CreateProspectExecute executes the request
+	 * @return ProspectResponse
+	 */
+	CreateProspectExecute(r ApiCreateProspectRequest) (ProspectResponse, *_nethttp.Response, error)
+
+	/*
+	 * GetCustomer Get Customer
+	 * Get Customer based on ID
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiGetCustomerRequest
+	 */
+	GetCustomer(ctx _context.Context, customerId string) ApiGetCustomerRequest
+
+	/*
+	 * GetCustomerExecute executes the request
+	 * @return Customer
+	 */
+	GetCustomerExecute(r ApiGetCustomerRequest) (Customer, *_nethttp.Response, error)
+
+	/*
+	 * GetCustomerAccount Get customer account
+	 * Get a specific customer account
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @param accountId Account ID
+	 * @return ApiGetCustomerAccountRequest
+	 */
+	GetCustomerAccount(ctx _context.Context, customerId string, accountId string) ApiGetCustomerAccountRequest
+
+	/*
+	 * GetCustomerAccountExecute executes the request
+	 * @return Account
+	 */
+	GetCustomerAccountExecute(r ApiGetCustomerAccountRequest) (Account, *_nethttp.Response, error)
+
+	/*
+	 * ListCustomerAccounts List accounts
+	 * Get paginated list of Accounts associated with user
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiListCustomerAccountsRequest
+	 */
+	ListCustomerAccounts(ctx _context.Context, customerId string) ApiListCustomerAccountsRequest
+
+	/*
+	 * ListCustomerAccountsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListCustomerAccountsExecute(r ApiListCustomerAccountsRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * ListCustomers List Customers
+	 * Retrieves paginated list of Customers associated with the authorized requester
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiListCustomersRequest
+	 */
+	ListCustomers(ctx _context.Context) ApiListCustomersRequest
+
+	/*
+	 * ListCustomersExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListCustomersExecute(r ApiListCustomersRequest) (map[string]interface{}, *_nethttp.Response, error)
+
+	/*
+	 * PatchCustomer Patch Customer
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiPatchCustomerRequest
+	 */
+	PatchCustomer(ctx _context.Context, customerId string) ApiPatchCustomerRequest
+
+	/*
+	 * PatchCustomerExecute executes the request
+	 * @return Customer
+	 */
+	PatchCustomerExecute(r ApiPatchCustomerRequest) (Customer, *_nethttp.Response, error)
+
+	/*
+	 * UpdateCustomer Update Customer
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param customerId Customer ID
+	 * @return ApiUpdateCustomerRequest
+	 */
+	UpdateCustomer(ctx _context.Context, customerId string) ApiUpdateCustomerRequest
+
+	/*
+	 * UpdateCustomerExecute executes the request
+	 * @return Customer
+	 */
+	UpdateCustomerExecute(r ApiUpdateCustomerRequest) (Customer, *_nethttp.Response, error)
+}
+
 // CustomersApiService CustomersApi service
 type CustomersApiService service
 
 type ApiCreateCustomerRequest struct {
 	ctx _context.Context
-	ApiService *CustomersApiService
+	ApiService CustomersApi
 	customer *Customer
 }
 
@@ -191,7 +312,7 @@ func (a *CustomersApiService) CreateCustomerExecute(r ApiCreateCustomerRequest) 
 
 type ApiCreateProspectRequest struct {
 	ctx _context.Context
-	ApiService *CustomersApiService
+	ApiService CustomersApi
 }
 
 
@@ -323,7 +444,7 @@ func (a *CustomersApiService) CreateProspectExecute(r ApiCreateProspectRequest) 
 
 type ApiGetCustomerRequest struct {
 	ctx _context.Context
-	ApiService *CustomersApiService
+	ApiService CustomersApi
 	customerId string
 }
 
@@ -478,7 +599,7 @@ func (a *CustomersApiService) GetCustomerExecute(r ApiGetCustomerRequest) (Custo
 
 type ApiGetCustomerAccountRequest struct {
 	ctx _context.Context
-	ApiService *CustomersApiService
+	ApiService CustomersApi
 	customerId string
 	accountId string
 }
@@ -637,7 +758,7 @@ func (a *CustomersApiService) GetCustomerAccountExecute(r ApiGetCustomerAccountR
 
 type ApiListCustomerAccountsRequest struct {
 	ctx _context.Context
-	ApiService *CustomersApiService
+	ApiService CustomersApi
 	customerId string
 	limit *int32
 	pageToken *string
@@ -808,7 +929,7 @@ func (a *CustomersApiService) ListCustomerAccountsExecute(r ApiListCustomerAccou
 
 type ApiListCustomersRequest struct {
 	ctx _context.Context
-	ApiService *CustomersApiService
+	ApiService CustomersApi
 	limit *int32
 	pageToken *string
 }
@@ -955,7 +1076,7 @@ func (a *CustomersApiService) ListCustomersExecute(r ApiListCustomersRequest) (m
 
 type ApiPatchCustomerRequest struct {
 	ctx _context.Context
-	ApiService *CustomersApiService
+	ApiService CustomersApi
 	customerId string
 	customer *Customer
 }
@@ -1119,7 +1240,7 @@ func (a *CustomersApiService) PatchCustomerExecute(r ApiPatchCustomerRequest) (C
 
 type ApiUpdateCustomerRequest struct {
 	ctx _context.Context
-	ApiService *CustomersApiService
+	ApiService CustomersApi
 	customerId string
 	customer *Customer
 }

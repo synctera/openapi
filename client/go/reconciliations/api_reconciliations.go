@@ -24,12 +24,59 @@ var (
 	_ _context.Context
 )
 
+type ReconciliationsApi interface {
+
+	/*
+	 * CreateReconciliation Create a reconciliation
+	 * Create a new reconciliation job
+
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiCreateReconciliationRequest
+	 */
+	CreateReconciliation(ctx _context.Context) ApiCreateReconciliationRequest
+
+	/*
+	 * CreateReconciliationExecute executes the request
+	 * @return Reconciliation
+	 */
+	CreateReconciliationExecute(r ApiCreateReconciliationRequest) (Reconciliation, *_nethttp.Response, error)
+
+	/*
+	 * GetReconciliation Get reconciliation
+	 * Retrieves one reconciliation by id
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @param reconciliationId Reconciliation id
+	 * @return ApiGetReconciliationRequest
+	 */
+	GetReconciliation(ctx _context.Context, reconciliationId string) ApiGetReconciliationRequest
+
+	/*
+	 * GetReconciliationExecute executes the request
+	 * @return Reconciliation
+	 */
+	GetReconciliationExecute(r ApiGetReconciliationRequest) (Reconciliation, *_nethttp.Response, error)
+
+	/*
+	 * ListReconciliations List reconciliations
+	 * Retrieves paginated list of reconciliations
+	 * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 * @return ApiListReconciliationsRequest
+	 */
+	ListReconciliations(ctx _context.Context) ApiListReconciliationsRequest
+
+	/*
+	 * ListReconciliationsExecute executes the request
+	 * @return map[string]interface{}
+	 */
+	ListReconciliationsExecute(r ApiListReconciliationsRequest) (map[string]interface{}, *_nethttp.Response, error)
+}
+
 // ReconciliationsApiService ReconciliationsApi service
 type ReconciliationsApiService service
 
 type ApiCreateReconciliationRequest struct {
 	ctx _context.Context
-	ApiService *ReconciliationsApiService
+	ApiService ReconciliationsApi
 	reconciliationInput *ReconciliationInput
 }
 
@@ -178,7 +225,7 @@ func (a *ReconciliationsApiService) CreateReconciliationExecute(r ApiCreateRecon
 
 type ApiGetReconciliationRequest struct {
 	ctx _context.Context
-	ApiService *ReconciliationsApiService
+	ApiService ReconciliationsApi
 	reconciliationId string
 }
 
@@ -313,7 +360,7 @@ func (a *ReconciliationsApiService) GetReconciliationExecute(r ApiGetReconciliat
 
 type ApiListReconciliationsRequest struct {
 	ctx _context.Context
-	ApiService *ReconciliationsApiService
+	ApiService ReconciliationsApi
 	limit *int32
 	pageToken *string
 }
