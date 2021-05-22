@@ -1,31 +1,31 @@
 {
   "inputs": [
     {
-      "inputFile": "./spec/accounts/api-bundled.yml"
+      "inputFile": "./spec/accounts-api-bundled.yml"
     },
     {
-      "inputFile": "./spec/customers/api-bundled.yml"
+      "inputFile": "./spec/customers-api-bundled.yml"
     },
     {
-      "inputFile": "./spec/disclosures/api-bundled.yml"
+      "inputFile": "./spec/disclosures-api-bundled.yml"
     },
     {
-      "inputFile": "./spec/kyc/api-bundled.yml"
+      "inputFile": "./spec/kyc-api-bundled.yml"
     },
     {
-      "inputFile": "./spec/rdc/api-bundled.yml"
+      "inputFile": "./spec/rdc-api-bundled.yml"
     },
     {
-      "inputFile": "./spec/reconciliations/api-bundled.yml"
+      "inputFile": "./spec/reconciliations-api-bundled.yml"
     },
     {
-      "inputFile": "./spec/signups/api-bundled.yml"
+      "inputFile": "./spec/signups-api-bundled.yml"
     },
     {
-      "inputFile": "./spec/transactions/api-bundled.yml"
+      "inputFile": "./spec/transactions-api-bundled.yml"
     },
     {
-      "inputFile": "./spec/webhooks/api-bundled.yml"
+      "inputFile": "./spec/webhooks-api-bundled.yml"
     }
   ],
   "output": "./spec/internal-api-merged-bundled.yml"
