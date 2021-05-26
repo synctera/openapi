@@ -1,6 +1,6 @@
 .PHONY: default docs
 
-default: docs external-go-client
+default: docs synctera-go-client.tar.gz
 
 docs: doc/internal-api.html doc/external-api.html
 
@@ -30,3 +30,6 @@ internal-%-client: spec/internal-api-merged-bundled.yml client/%.config.json
 	openapi-generator-cli generate --strict-spec true --generator-name $* \
 		--input-spec spec/internal-api-merged-bundled.yml --output client/internal/$*/ \
 		--package-name $(package-name) --config client/$*.config.json
+
+synctera-%-client.tar.gz: external-%-client
+	tar -C client/external/ --transform "s|^$*|synctera|" -czf synctera.tar.gz --exclude-from client/external/$*/.tar.ignore $*/
