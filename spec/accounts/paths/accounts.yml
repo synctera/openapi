@@ -30,15 +30,22 @@ get:
   parameters:
     - $ref: '../../common/parameters.yml#/components/parameters/limit'
     - $ref: '../../common/parameters.yml#/components/parameters/page_token'
+    - name: customer_id
+      description: Customer ID
+      in: query
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid
+    - name: has_details
+      in: query
+      description: >-
+        If true, the returned accounts will include relationships, aliases, balances and recent transactions.
+      schema:
+        type: boolean
   tags:
     - Accounts
-  requestBody:
-    description: account list conditions
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: '../schemas.yml#/components/schemas/list_account_request'
   responses:
     '200':
       description: List of accounts

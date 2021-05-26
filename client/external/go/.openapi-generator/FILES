@@ -21,6 +21,8 @@ docs/Alias.md
 docs/Balance.md
 docs/BalanceType.md
 docs/Customer.md
+docs/CustomerList.md
+docs/CustomerListAllOf.md
 docs/CustomerVerification.md
 docs/CustomerVerificationReasonCodes.md
 docs/CustomerVerificationResult.md
@@ -49,11 +51,12 @@ docs/InlineResponse201.md
 docs/KYCVerificationApi.md
 docs/KycMediaType.md
 docs/LeadModeAccount.md
-docs/ListAccountRequest.md
 docs/ModelError.md
 docs/PaginatedResponse.md
 docs/ProspectResponse.md
+docs/ProviderType.md
 docs/RDCDepositsApi.md
+docs/RawResponse.md
 docs/RdcMediaType.md
 docs/Reconciliation.md
 docs/ReconciliationInput.md
@@ -81,6 +84,8 @@ model_alias.go
 model_balance.go
 model_balance_type.go
 model_customer.go
+model_customer_list.go
+model_customer_list_all_of.go
 model_customer_verification.go
 model_customer_verification_reason_codes.go
 model_customer_verification_result.go
@@ -107,9 +112,10 @@ model_inline_response_200.go
 model_inline_response_201.go
 model_kyc_media_type.go
 model_lead_mode_account.go
-model_list_account_request.go
 model_paginated_response.go
 model_prospect_response.go
+model_provider_type.go
+model_raw_response.go
 model_rdc_media_type.go
 model_reconciliation.go
 model_reconciliation_input.go

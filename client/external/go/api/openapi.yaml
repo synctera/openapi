@@ -58,13 +58,24 @@ paths:
           example: faker.random.alphaNumeric(10)
           type: string
         style: form
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/list_account_request'
-        description: account list conditions
+      - description: Customer ID
+        explode: true
+        in: query
+        name: customer_id
         required: true
+        schema:
+          format: uuid
+          type: string
+        style: form
+      - description: If true, the returned accounts will include relationships, aliases,
+          balances and recent transactions.
+        explode: true
+        in: query
+        name: has_details
+        required: false
+        schema:
+          type: boolean
+        style: form
       responses:
         "200":
           content:
@@ -717,15 +728,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    customers:
-                      description: Array of Customers
-                      items:
-                        $ref: '#/components/schemas/customer'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/customer_list'
           description: List of customers
         "401":
           content:
@@ -3974,20 +3977,6 @@ components:
             $ref: '#/components/schemas/error'
       description: Transaction cannot be reversed
   schemas:
-    list_account_request:
-      properties:
-        customer_id:
-          description: Return accounts belonging to this customer ID
-          format: uuid
-          type: string
-        has_details:
-          default: false
-          description: Should the account include information for relationships, aliases,
-            balances and recent transactions
-          type: boolean
-      required:
-      - customer_id
-      type: object
     status:
       description: |
         The status of the account. Mandatory for shadow mode, optional for lead mode.
@@ -4658,6 +4647,10 @@ components:
       - shipping_address
       title: Customer
       type: object
+    customer_list:
+      allOf:
+      - $ref: '#/components/schemas/customer_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     disclosure:
       description: Represents a disclosure
       example:
@@ -4803,6 +4796,21 @@ components:
       example: NAME
       title: PersonVerificationReasonCodes
       type: string
+    provider_type:
+      enum:
+      - IDEOLOGY
+      - SOCURE
+      type: string
+    raw_response:
+      example:
+        raw_data: raw_data
+      properties:
+        provider:
+          $ref: '#/components/schemas/provider_type'
+        raw_data:
+          type: string
+      title: Raw Response From Providers
+      type: object
     customer_verification_result:
       description: Verification result
       example:
@@ -4811,7 +4819,8 @@ components:
         - KYC
         result: PASS
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        raw_response: '{}'
+        raw_response:
+          raw_data: raw_data
         issues:
         - NAME
         - NAME
@@ -4832,7 +4841,7 @@ components:
             $ref: '#/components/schemas/verification_type'
           type: array
         raw_response:
-          type: object
+          $ref: '#/components/schemas/raw_response'
         result:
           description: The determination of this KYC run
           enum:
@@ -5536,6 +5545,16 @@ components:
       properties:
         event:
           $ref: '#/components/schemas/event_type'
+      type: object
+    customer_list_allOf:
+      properties:
+        customers:
+          description: Array of Customers
+          items:
+            $ref: '#/components/schemas/customer'
+          type: array
+      required:
+      - customers
       type: object
     a2a_transfer_transfer_reversal:
       description: If transfer reversal happens, both original and reversal transfers

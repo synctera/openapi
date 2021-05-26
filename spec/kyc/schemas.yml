@@ -37,7 +37,7 @@ components:
           items:
             $ref: "#/components/schemas/verification_type"
         raw_response:
-          type: object
+          $ref: '#/components/schemas/raw_response'
         result:
           description: The determination of this KYC run
           type: string
@@ -185,8 +185,7 @@ components:
         document_data:
           $ref: "#/components/schemas/document_data"
         raw_response:
-          type: object
-          additionalProperties: true
+          $ref: '#/components/schemas/raw_response'
         result:
           description: The determination of this KYC run
           type: string
@@ -204,6 +203,21 @@ components:
         - verifications_run
         - result
         - verification_date
+    
+    raw_response:
+      title: Raw Response From Providers
+      type: object 
+      properties:
+        provider:
+          $ref: "#/components/schemas/provider_type"
+        raw_data:
+          type: string 
+
+    provider_type:
+      type: string 
+      enum:
+        - IDEOLOGY
+        - SOCURE
 
     documents_verification_reason_codes:
       title: DocumentsVerificationReasonCodes

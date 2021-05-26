@@ -52,15 +52,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  customers:
-                    type: array
-                    description: Array of Customers
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/customer'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/customer_list'
     '401':
       $ref: '../../common/responses.yml#/components/responses/unauthorized'
     '403':

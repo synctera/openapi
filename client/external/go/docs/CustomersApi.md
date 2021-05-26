@@ -362,7 +362,7 @@ Name | Type | Description  | Notes
 
 ## ListCustomers
 
-> map[string]interface{} ListCustomers(ctx).Limit(limit).PageToken(pageToken).Execute()
+> CustomerList ListCustomers(ctx).Limit(limit).PageToken(pageToken).Execute()
 
 List Customers
 
@@ -391,7 +391,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `CustomersApi.ListCustomers``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListCustomers`: map[string]interface{}
+    // response from `ListCustomers`: CustomerList
     fmt.Fprintf(os.Stdout, "Response from `CustomersApi.ListCustomers`: %v\n", resp)
 }
 ```
@@ -412,7 +412,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**CustomerList**](CustomerList.md)
 
 ### Authorization
 
