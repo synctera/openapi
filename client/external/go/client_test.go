@@ -3,6 +3,7 @@ package synctera
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"github.com/google/uuid"
 	"net/http"
 	"os"
@@ -15,7 +16,7 @@ const sandbox = false
 
 func createClient(t testing.TB, ctx context.Context) (*APIClient, context.Context) {
 	configuration := NewConfiguration()
-	//configuration.Debug = true
+	configuration.Debug = true
 
 	if sandbox {
 		ctx = context.WithValue(ctx, ContextServerIndex, 1)
@@ -54,9 +55,9 @@ func TestCreateCustomer(t *testing.T) {
 		CountryCode:       "US",
 	}
 	const firstName = "GoClient"
-	const lastName = "TestCustomer"
+	const lastName = "TestCreateCustomer"
 	testCustomer := NewCustomer(firstName, lastName, customerAddress, customerAddress, "1900-01-01", "", "+19178675309")
-	customerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(*testCustomer).Execute()
+	createCustomerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(*testCustomer).Execute()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -64,20 +65,18 @@ func TestCreateCustomer(t *testing.T) {
 		t.Error("Wrong status for create customer:", httpResponse.StatusCode)
 	}
 
-	if customerResponse.FirstName != firstName || customerResponse.LastName != lastName {
+	if createCustomerResponse.FirstName != firstName || createCustomerResponse.LastName != lastName {
 		t.Error("Wrong name for create customer")
 	}
 
-	list, httpResponse, err := client.CustomersApi.ListCustomers(ctx).Execute()
+	getCustomerResponse, httpResponse, err := client.CustomersApi.GetCustomer(ctx, createCustomerResponse.GetId()).Execute()
 	if err != nil {
 		t.Fatal(err)
 	}
 	if httpResponse.StatusCode != http.StatusOK {
-		t.Error("Wrong status for create customer:", httpResponse.StatusCode)
+		t.Error("Wrong status for get customer:", httpResponse.StatusCode)
 	}
-	customerList := list["customers"].([]interface{})
-	newCustomer := customerList[len(customerList)-1].(map[string]interface{})
-	if newCustomer["first_name"] != firstName || newCustomer["last_name"] != lastName {
+	if getCustomerResponse.GetFirstName() != firstName || getCustomerResponse.GetLastName() != lastName {
 		t.Error("Wrong name in list customers")
 	}
 }
@@ -105,14 +104,14 @@ func TestCreateDisclosure(t *testing.T) {
 		t.Error("Wrong disclosure version")
 	}
 
-	list, httpResponse, err  := client.DisclosuresApi.ListDisclosures(ctx, customerID).Execute()
+	list, httpResponse, err := client.DisclosuresApi.ListDisclosures(ctx, customerID).Execute()
 	if err != nil {
 		t.Fatal(err)
 	}
 	if httpResponse.StatusCode != http.StatusOK {
 		t.Error("Wrong status for create customer:", httpResponse.StatusCode)
 	}
-	if list.Disclosures == nil || len(*list.Disclosures) == 0{
+	if list.Disclosures == nil || len(*list.Disclosures) == 0 {
 		t.Fatal("Got empty list of disclosures")
 	}
 	lastDisclosure := (*list.Disclosures)[0]
@@ -122,5 +121,92 @@ func TestCreateDisclosure(t *testing.T) {
 	if lastDisclosure.Version != disclosureVersion {
 		t.Error("Wrong disclosure version")
 	}
+}
+
+func TestCreateCustomerVerification(t *testing.T) {
+	ctx := context.Background()
+	client, ctx := createClient(t, ctx)
+
+	customerAddress := Address{
+		Id:                nil,
+		DefaultAddressFlg: true,
+		Type:              "home",
+		AddressLine1:      "abc",
+		AddressLine2:      nil,
+		City:              "whoville",
+		State:             "xx",
+		PostalCode:        "abc123",
+		CountryCode:       "US",
+	}
+	const firstName = "GoClient"
+	const lastName = "TestCreateCustomerVerification"
+	testCustomer := NewCustomer(firstName, lastName, customerAddress, customerAddress, "1900-01-01", "", "+19178675309")
+	customerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(*testCustomer).Execute()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if httpResponse.StatusCode != http.StatusCreated {
+		t.Error("Wrong status for create customer:", httpResponse.StatusCode)
+	}
+	if customerResponse.Id == nil {
+		t.Fatal("Missing constumer ID")
+	}
+	customerID := *customerResponse.Id
+
+	const rawResponseData = `{"foo":"bar"}`
+	year, month, day := time.Now().Date()
+	customerVerificationResult := CustomerVerificationResult{
+		VerificationsRun: []VerificationType{VERIFICATIONTYPE_KYC},
+		Result:           "review",
+		VerificationDate: fmt.Sprintf("%04d-%02d-%02d", year, month, day),
+		RawResponse:      &RawResponse{Provider: PROVIDERTYPE_SOCURE.Ptr(), RawData: PtrString(rawResponseData)},
+	}
+	createResult, httpResponse, err := client.KYCVerificationApi.CreateCustomerVerificationResult(ctx, customerID).CustomerVerificationResult(customerVerificationResult).Execute()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if httpResponse.StatusCode != http.StatusCreated {
+		t.Error("Wrong status for create customer verification:", httpResponse.StatusCode)
+	}
+	verificationID, hasVerificationID := createResult.GetIdOk()
+	if !hasVerificationID {
+		t.Error("ID missing")
+	}
+
+	getResult, httpResponse, err := client.KYCVerificationApi.GetVerification(ctx, customerID, *verificationID).Execute()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if httpResponse.StatusCode != http.StatusOK {
+		t.Error("Wrong status for create customer verification:", httpResponse.StatusCode)
+	}
+	if run := getResult.GetVerificationsRun(); len(run) != 1 || run[0] != VERIFICATIONTYPE_KYC {
+		t.Error("Wrong verifications run")
+	}
+	rawResponse, rawResponseOk := getResult.GetRawResponseOk()
+	if !rawResponseOk {
+		t.Fatal("Missing raw response")
+	}
+	if rawResponse.GetProvider() != PROVIDERTYPE_SOCURE {
+		t.Error("Wrong provider")
+	}
+	if rawResponse.GetRawData() != rawResponseData {
+		t.Error("Wrong raw data")
+	}
+}
+
+func TestCreateShadowModeAccount(t *testing.T) {
+	ctx := context.Background()
+	client, ctx := createClient(t, ctx)
+
+	newAccount := ShadowModeAccountAsAccount(NewShadowModeAccount("foo-account-number", STATUS_APPLICATION_SUBMITTED))
+	account, httpResponse, err := client.AccountsApi.CreateAccount(ctx).Account(newAccount).Execute()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if httpResponse.StatusCode != http.StatusCreated {
+		t.Error("Wrong status for create account:", httpResponse.StatusCode)
+	}
+	t.Logf("%+v", account)
 
 }
