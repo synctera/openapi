@@ -594,7 +594,7 @@ Name | Type | Description  | Notes
 
 ## ListAccounts
 
-> map[string]interface{} ListAccounts(ctx).ListAccountRequest(listAccountRequest).Limit(limit).PageToken(pageToken).Execute()
+> map[string]interface{} ListAccounts(ctx).CustomerId(customerId).Limit(limit).PageToken(pageToken).HasDetails(hasDetails).Execute()
 
 List accounts
 
@@ -613,13 +613,14 @@ import (
 )
 
 func main() {
-    listAccountRequest := *openapiclient.NewListAccountRequest("CustomerId_example") // ListAccountRequest | account list conditions
+    customerId := TODO // string | Customer ID
     limit := int32(100) // int32 |  (optional) (default to 100)
     pageToken := "faker.random.alphaNumeric(10)" // string |  (optional)
+    hasDetails := true // bool | If true, the returned accounts will include relationships, aliases, balances and recent transactions. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background()).ListAccountRequest(listAccountRequest).Limit(limit).PageToken(pageToken).Execute()
+    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background()).CustomerId(customerId).Limit(limit).PageToken(pageToken).HasDetails(hasDetails).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.ListAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -640,9 +641,10 @@ Other parameters are passed through a pointer to a apiListAccountsRequest struct
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listAccountRequest** | [**ListAccountRequest**](ListAccountRequest.md) | account list conditions | 
+ **customerId** | [**string**](string.md) | Customer ID | 
  **limit** | **int32** |  | [default to 100]
  **pageToken** | **string** |  | 
+ **hasDetails** | **bool** | If true, the returned accounts will include relationships, aliases, balances and recent transactions. | 
 
 ### Return type
 
@@ -654,7 +656,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

@@ -1157,13 +1157,14 @@ func (a *AccountsApiService) GetAccountTransactionsExecute(r ApiGetAccountTransa
 type ApiListAccountsRequest struct {
 	ctx _context.Context
 	ApiService *AccountsApiService
-	listAccountRequest *ListAccountRequest
+	customerId *string
 	limit *int32
 	pageToken *string
+	hasDetails *bool
 }
 
-func (r ApiListAccountsRequest) ListAccountRequest(listAccountRequest ListAccountRequest) ApiListAccountsRequest {
-	r.listAccountRequest = &listAccountRequest
+func (r ApiListAccountsRequest) CustomerId(customerId string) ApiListAccountsRequest {
+	r.customerId = &customerId
 	return r
 }
 func (r ApiListAccountsRequest) Limit(limit int32) ApiListAccountsRequest {
@@ -1172,6 +1173,10 @@ func (r ApiListAccountsRequest) Limit(limit int32) ApiListAccountsRequest {
 }
 func (r ApiListAccountsRequest) PageToken(pageToken string) ApiListAccountsRequest {
 	r.pageToken = &pageToken
+	return r
+}
+func (r ApiListAccountsRequest) HasDetails(hasDetails bool) ApiListAccountsRequest {
+	r.hasDetails = &hasDetails
 	return r
 }
 
@@ -1216,8 +1221,8 @@ func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (map[
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
-	if r.listAccountRequest == nil {
-		return localVarReturnValue, nil, reportError("listAccountRequest is required and must be specified")
+	if r.customerId == nil {
+		return localVarReturnValue, nil, reportError("customerId is required and must be specified")
 	}
 
 	if r.limit != nil {
@@ -1226,8 +1231,12 @@ func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (map[
 	if r.pageToken != nil {
 		localVarQueryParams.Add("page_token", parameterToString(*r.pageToken, ""))
 	}
+	localVarQueryParams.Add("customer_id", parameterToString(*r.customerId, ""))
+	if r.hasDetails != nil {
+		localVarQueryParams.Add("has_details", parameterToString(*r.hasDetails, ""))
+	}
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
+	localVarHTTPContentTypes := []string{}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -1243,8 +1252,6 @@ func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (map[
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	// body params
-	localVarPostBody = r.listAccountRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err

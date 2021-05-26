@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Id** | Pointer to **string** | Verification object ID | [optional] 
 **Issues** | Pointer to [**[]CustomerVerificationReasonCodes**](CustomerVerificationReasonCodes.md) | List of found issues | [optional] 
 **VerificationsRun** | [**[]VerificationType**](VerificationType.md) | List of the verifications run | 
-**RawResponse** | Pointer to **map[string]interface{}** |  | [optional] 
+**RawResponse** | Pointer to [**RawResponse**](RawResponse.md) |  | [optional] 
 **Result** | **string** | The determination of this KYC run | 
 **VerificationDate** | **string** | The date on which the KYC run was completed | 
 
@@ -102,20 +102,20 @@ SetVerificationsRun sets VerificationsRun field to given value.
 
 ### GetRawResponse
 
-`func (o *CustomerVerificationResult) GetRawResponse() map[string]interface{}`
+`func (o *CustomerVerificationResult) GetRawResponse() RawResponse`
 
 GetRawResponse returns the RawResponse field if non-nil, zero value otherwise.
 
 ### GetRawResponseOk
 
-`func (o *CustomerVerificationResult) GetRawResponseOk() (*map[string]interface{}, bool)`
+`func (o *CustomerVerificationResult) GetRawResponseOk() (*RawResponse, bool)`
 
 GetRawResponseOk returns a tuple with the RawResponse field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRawResponse
 
-`func (o *CustomerVerificationResult) SetRawResponse(v map[string]interface{})`
+`func (o *CustomerVerificationResult) SetRawResponse(v RawResponse)`
 
 SetRawResponse sets RawResponse field to given value.
 

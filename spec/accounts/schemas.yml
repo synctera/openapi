@@ -506,17 +506,3 @@ components:
             amount_acct:
               type: number
               description: Amount in Account currency
-    
-    list_account_request:
-      type: object
-      properties:
-        customer_id:
-          type: string
-          format: uuid
-          description: Return accounts belonging to this customer ID
-        has_details:
-          type: boolean
-          default: false
-          description: Should the account include information for relationships, aliases, balances and recent transactions
-      required:
-        - customer_id

@@ -822,7 +822,7 @@ func (r ApiListCustomersRequest) PageToken(pageToken string) ApiListCustomersReq
 	return r
 }
 
-func (r ApiListCustomersRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListCustomersRequest) Execute() (CustomerList, *_nethttp.Response, error) {
 	return r.ApiService.ListCustomersExecute(r)
 }
 
@@ -841,16 +841,16 @@ func (a *CustomersApiService) ListCustomers(ctx _context.Context) ApiListCustome
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return CustomerList
  */
-func (a *CustomersApiService) ListCustomersExecute(r ApiListCustomersRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *CustomersApiService) ListCustomersExecute(r ApiListCustomersRequest) (CustomerList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  CustomerList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CustomersApiService.ListCustomers")

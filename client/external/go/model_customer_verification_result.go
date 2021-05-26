@@ -22,7 +22,7 @@ type CustomerVerificationResult struct {
 	Issues *[]CustomerVerificationReasonCodes `json:"issues,omitempty"`
 	// List of the verifications run
 	VerificationsRun []VerificationType `json:"verifications_run"`
-	RawResponse *map[string]interface{} `json:"raw_response,omitempty"`
+	RawResponse *RawResponse `json:"raw_response,omitempty"`
 	// The determination of this KYC run
 	Result string `json:"result"`
 	// The date on which the KYC run was completed
@@ -138,9 +138,9 @@ func (o *CustomerVerificationResult) SetVerificationsRun(v []VerificationType) {
 }
 
 // GetRawResponse returns the RawResponse field value if set, zero value otherwise.
-func (o *CustomerVerificationResult) GetRawResponse() map[string]interface{} {
+func (o *CustomerVerificationResult) GetRawResponse() RawResponse {
 	if o == nil || o.RawResponse == nil {
-		var ret map[string]interface{}
+		var ret RawResponse
 		return ret
 	}
 	return *o.RawResponse
@@ -148,7 +148,7 @@ func (o *CustomerVerificationResult) GetRawResponse() map[string]interface{} {
 
 // GetRawResponseOk returns a tuple with the RawResponse field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CustomerVerificationResult) GetRawResponseOk() (*map[string]interface{}, bool) {
+func (o *CustomerVerificationResult) GetRawResponseOk() (*RawResponse, bool) {
 	if o == nil || o.RawResponse == nil {
 		return nil, false
 	}
@@ -164,8 +164,8 @@ func (o *CustomerVerificationResult) HasRawResponse() bool {
 	return false
 }
 
-// SetRawResponse gets a reference to the given map[string]interface{} and assigns it to the RawResponse field.
-func (o *CustomerVerificationResult) SetRawResponse(v map[string]interface{}) {
+// SetRawResponse gets a reference to the given RawResponse and assigns it to the RawResponse field.
+func (o *CustomerVerificationResult) SetRawResponse(v RawResponse) {
 	o.RawResponse = &v
 }
 

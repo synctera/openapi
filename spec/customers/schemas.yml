@@ -95,6 +95,19 @@ components:
         - shipping_address
         - mobile_phone_number
 
+    customer_list:
+      allOf:
+        - type: object
+          required:
+            - customers
+          properties:
+            customers:
+              type: array
+              description: Array of Customers
+              items:
+                $ref: '#/components/schemas/customer'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
+
     device:
       type: object
       properties:
