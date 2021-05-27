@@ -5,17 +5,17 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | Pointer to **string** | Account ID | [optional] [readonly] 
-**AccountNumber** | **string** | Account number | 
+**AccountNumber** | Pointer to **string** | Account number. Required for shadow mode. | [optional] [readonly] 
 **Currency** | Pointer to **string** | Account currency or account settlement currency. ISO 4217 alphabetic currency code. Default USD | [optional] 
-**Status** | [**Status**](Status.md) |  | 
+**Status** | Pointer to [**Status**](Status.md) |  | [optional] 
 **ExchangeRateType** | Pointer to **string** | Exchange rate type | [optional] 
 **Iban** | Pointer to **string** | International bank account number | [optional] 
 **SwiftCode** | Pointer to **string** | SWIFT code | [optional] 
 **IsAccountPool** | Pointer to **bool** | Account is investment (variable balance) account or a multi-balance account pool. Default false | [optional] 
-**AccountTemplateCode** | Pointer to **string** | Account template code | [optional] 
-**AccountTemplateVersion** | Pointer to **float32** | Account template version | [optional] 
-**Relationships** | [**[]SchemasRelationship**](SchemasRelationship.md) | List of the relationship for this account to the parties | 
-**Aliases** | Pointer to [**[]Alias**](Alias.md) | A list of aliases for account. Account alias is the account number of different balance types to link to the same account ID | [optional] 
+**AccountTemplateCode** | Pointer to **string** | Account template code. Required for lead mode. | [optional] 
+**AccountTemplateVersion** | Pointer to **float32** | Account template version. Required for lead mode. | [optional] 
+**Relationships** | Pointer to [**[]SchemasRelationship**](SchemasRelationship.md) | List of the relationship for this account to the parties. Required for lead mode. | [optional] 
+**Aliases** | Pointer to [**[]Alias**](Alias.md) | A list of the aliases for account. Account alias is the account number of different balance types to link to the same account ID | [optional] 
 **Balances** | Pointer to [**[]Balance**](Balance.md) | A list of balances for account based on different type | [optional] [readonly] 
 **RecentTransactions** | Pointer to [**[]Transaction**](Transaction.md) | The most recent 10 transactions of the account | [optional] [readonly] 
 
@@ -23,7 +23,7 @@ Name | Type | Description | Notes
 
 ### NewAccount
 
-`func NewAccount(accountNumber string, status Status, relationships []SchemasRelationship, ) *Account`
+`func NewAccount() *Account`
 
 NewAccount instantiates a new Account object
 This constructor will assign default values to properties that have it defined,
@@ -82,6 +82,11 @@ and a boolean to check if the value has been set.
 
 SetAccountNumber sets AccountNumber field to given value.
 
+### HasAccountNumber
+
+`func (o *Account) HasAccountNumber() bool`
+
+HasAccountNumber returns a boolean if a field has been set.
 
 ### GetCurrency
 
@@ -127,6 +132,11 @@ and a boolean to check if the value has been set.
 
 SetStatus sets Status field to given value.
 
+### HasStatus
+
+`func (o *Account) HasStatus() bool`
+
+HasStatus returns a boolean if a field has been set.
 
 ### GetExchangeRateType
 
@@ -297,6 +307,11 @@ and a boolean to check if the value has been set.
 
 SetRelationships sets Relationships field to given value.
 
+### HasRelationships
+
+`func (o *Account) HasRelationships() bool`
+
+HasRelationships returns a boolean if a field has been set.
 
 ### GetAliases
 

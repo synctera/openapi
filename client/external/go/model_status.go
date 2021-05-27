@@ -15,7 +15,7 @@ import (
 	"fmt"
 )
 
-// Status The status of the account. Mandatory for shadow mode, optional for lead mode. 
+// Status The status of the account. Required for shadow mode on account creation 
 type Status string
 
 // List of status

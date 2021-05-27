@@ -47,15 +47,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  deposits:
-                    description: Array of RDC deposits
-                    type: array
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/deposit'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/deposit_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':

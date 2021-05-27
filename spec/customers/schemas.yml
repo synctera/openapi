@@ -43,7 +43,7 @@ components:
         ssn_last_four:
           description: Customer's masked tax ID eg SSN formatted with hyphens ***-**-6789
           type: string
-          pattern: '^\d{3}-\d{2}-\d{4}$'
+          pattern: '^\*{3}-\*{2}-\d{4}$'
           readOnly: true
           example: "***-**-6789"
         email:
@@ -86,14 +86,6 @@ components:
           items:
             $ref: "../accounts/schemas.yml#/components/schemas/account"
           readOnly: true
-      required:
-        - first_name
-        - last_name
-        - legal_address
-        - email
-        - dob
-        - shipping_address
-        - mobile_phone_number
 
     customer_list:
       allOf:
@@ -148,6 +140,9 @@ components:
           example: faker.random.uuid
         relationship_role:
           $ref: "#/components/schemas/relationship_role"
+      required:
+        - id
+        - relationship_role
 
     relationship_role:
       title: Relationship Role

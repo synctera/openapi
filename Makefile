@@ -16,7 +16,7 @@ merge-internal-config = merge-internal-apis.json
 $(shell jq -r .output $(merge-internal-config)): $(shell jq -r .inputs[].inputFile $(merge-internal-config))
 	openapi-merge-cli --config $(merge-internal-config)
 
-spec/%-api-bundled.yml: spec/%/api.yml spec/%/*.yml spec/%/*/*.yml spec/common/*.yml
+spec/%-api-bundled.yml: spec/%/api.yml spec/%/*.yml spec/*/*.yml spec/*/*/*.yml
 	openapi bundle $< --ext yml --output $@
 
 package-name = synctera

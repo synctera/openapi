@@ -5,16 +5,16 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | Pointer to **string** | Customer unique identifier | [optional] [readonly] 
-**FirstName** | **string** | Customer&#39;s first name | 
-**LastName** | **string** | Customer&#39;s last name | 
+**FirstName** | Pointer to **string** | Customer&#39;s first name | [optional] 
+**LastName** | Pointer to **string** | Customer&#39;s last name | [optional] 
 **MiddleName** | Pointer to **string** | Customer&#39;s middle name | [optional] 
-**LegalAddress** | [**Address**](Address.md) |  | 
-**ShippingAddress** | [**Address**](Address.md) |  | 
-**Dob** | **string** | Customer&#39;s date of birth in ISO-8601 date format YYYY-MM-DD | 
+**LegalAddress** | Pointer to [**Address**](Address.md) |  | [optional] 
+**ShippingAddress** | Pointer to [**Address**](Address.md) |  | [optional] 
+**Dob** | Pointer to **string** | Customer&#39;s date of birth in ISO-8601 date format YYYY-MM-DD | [optional] 
 **Ssn** | Pointer to **string** | Customer&#39;s full tax ID eg SSN formatted with hyphens 123-45-6789 | [optional] 
 **SsnLastFour** | Pointer to **string** | Customer&#39;s masked tax ID eg SSN formatted with hyphens ***-**-6789 | [optional] [readonly] 
-**Email** | **string** | Customer&#39;s email | 
-**MobilePhoneNumber** | **string** | Customer&#39;s mobile phone number in E.164 format e.g. +19178675309 | 
+**Email** | Pointer to **string** | Customer&#39;s email | [optional] 
+**MobilePhoneNumber** | Pointer to **string** | Customer&#39;s mobile phone number in E.164 format e.g. +19178675309 | [optional] 
 **AltPhoneNumber** | Pointer to **string** | Customer&#39;s alternate phone number in E.164 format e.g. +19178675309 | [optional] 
 **CreationTime** | Pointer to **time.Time** |  | [optional] [readonly] 
 **LastUpdatedTime** | Pointer to **time.Time** |  | [optional] [readonly] 
@@ -26,7 +26,7 @@ Name | Type | Description | Notes
 
 ### NewCustomer
 
-`func NewCustomer(firstName string, lastName string, legalAddress Address, shippingAddress Address, dob string, email string, mobilePhoneNumber string, ) *Customer`
+`func NewCustomer() *Customer`
 
 NewCustomer instantiates a new Customer object
 This constructor will assign default values to properties that have it defined,
@@ -85,6 +85,11 @@ and a boolean to check if the value has been set.
 
 SetFirstName sets FirstName field to given value.
 
+### HasFirstName
+
+`func (o *Customer) HasFirstName() bool`
+
+HasFirstName returns a boolean if a field has been set.
 
 ### GetLastName
 
@@ -105,6 +110,11 @@ and a boolean to check if the value has been set.
 
 SetLastName sets LastName field to given value.
 
+### HasLastName
+
+`func (o *Customer) HasLastName() bool`
+
+HasLastName returns a boolean if a field has been set.
 
 ### GetMiddleName
 
@@ -150,6 +160,11 @@ and a boolean to check if the value has been set.
 
 SetLegalAddress sets LegalAddress field to given value.
 
+### HasLegalAddress
+
+`func (o *Customer) HasLegalAddress() bool`
+
+HasLegalAddress returns a boolean if a field has been set.
 
 ### GetShippingAddress
 
@@ -170,6 +185,11 @@ and a boolean to check if the value has been set.
 
 SetShippingAddress sets ShippingAddress field to given value.
 
+### HasShippingAddress
+
+`func (o *Customer) HasShippingAddress() bool`
+
+HasShippingAddress returns a boolean if a field has been set.
 
 ### GetDob
 
@@ -190,6 +210,11 @@ and a boolean to check if the value has been set.
 
 SetDob sets Dob field to given value.
 
+### HasDob
+
+`func (o *Customer) HasDob() bool`
+
+HasDob returns a boolean if a field has been set.
 
 ### GetSsn
 
@@ -260,6 +285,11 @@ and a boolean to check if the value has been set.
 
 SetEmail sets Email field to given value.
 
+### HasEmail
+
+`func (o *Customer) HasEmail() bool`
+
+HasEmail returns a boolean if a field has been set.
 
 ### GetMobilePhoneNumber
 
@@ -280,6 +310,11 @@ and a boolean to check if the value has been set.
 
 SetMobilePhoneNumber sets MobilePhoneNumber field to given value.
 
+### HasMobilePhoneNumber
+
+`func (o *Customer) HasMobilePhoneNumber() bool`
+
+HasMobilePhoneNumber returns a boolean if a field has been set.
 
 ### GetAltPhoneNumber
 

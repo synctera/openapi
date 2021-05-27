@@ -59,6 +59,19 @@ components:
         - result
         - verification_date
 
+    customer_verification_result_list:
+      allOf:
+        - type: object
+          required:
+            - verifications
+          properties:
+            verifications:
+              type: array
+              description: Array of Verification results
+              items:
+                $ref: '#/components/schemas/customer_verification_result'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
+
     customer_verification_reason_codes:
       title: PersonVerificationReasonCodes
       type: string
@@ -122,6 +135,19 @@ components:
       required:
         - media_type
         - document_type
+
+    document_list:
+      allOf:
+        - type: object
+          required:
+            - documents
+          properties:
+            documents:
+              type: array
+              description: Array of documents
+              items:
+                $ref: '#/components/schemas/document'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
 
     document_data:
       title: DocumentData

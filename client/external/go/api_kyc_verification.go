@@ -684,7 +684,7 @@ func (r ApiListDocumentsRequest) PageToken(pageToken string) ApiListDocumentsReq
 	return r
 }
 
-func (r ApiListDocumentsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListDocumentsRequest) Execute() (DocumentList, *_nethttp.Response, error) {
 	return r.ApiService.ListDocumentsExecute(r)
 }
 
@@ -705,16 +705,16 @@ func (a *KYCVerificationApiService) ListDocuments(ctx _context.Context, customer
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return DocumentList
  */
-func (a *KYCVerificationApiService) ListDocumentsExecute(r ApiListDocumentsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *KYCVerificationApiService) ListDocumentsExecute(r ApiListDocumentsRequest) (DocumentList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  DocumentList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "KYCVerificationApiService.ListDocuments")
@@ -855,7 +855,7 @@ func (r ApiListVerificationsRequest) PageToken(pageToken string) ApiListVerifica
 	return r
 }
 
-func (r ApiListVerificationsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListVerificationsRequest) Execute() (CustomerVerificationResultList, *_nethttp.Response, error) {
 	return r.ApiService.ListVerificationsExecute(r)
 }
 
@@ -876,16 +876,16 @@ func (a *KYCVerificationApiService) ListVerifications(ctx _context.Context, cust
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return CustomerVerificationResultList
  */
-func (a *KYCVerificationApiService) ListVerificationsExecute(r ApiListVerificationsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *KYCVerificationApiService) ListVerificationsExecute(r ApiListVerificationsRequest) (CustomerVerificationResultList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  CustomerVerificationResultList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "KYCVerificationApiService.ListVerifications")

@@ -44,7 +44,7 @@ func (r ApiCreateAccountRequest) Execute() (Account, *_nethttp.Response, error) 
 
 /*
  * CreateAccount Create an account
- * Create a shadow mode account
+ * Create a shadow mode or lead mode account. You need to determine the mode according to integrator configuration, and specify the required fields accordingly.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @return ApiCreateAccountRequest
  */
@@ -125,6 +125,16 @@ func (a *AccountsApiService) CreateAccountExecute(r ApiCreateAccountRequest) (Ac
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
+			var v ModelError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 422 {
 			var v ModelError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1015,7 +1025,7 @@ func (r ApiGetAccountTransactionsRequest) PageToken(pageToken string) ApiGetAcco
 	return r
 }
 
-func (r ApiGetAccountTransactionsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiGetAccountTransactionsRequest) Execute() (TransactionList, *_nethttp.Response, error) {
 	return r.ApiService.GetAccountTransactionsExecute(r)
 }
 
@@ -1036,16 +1046,16 @@ func (a *AccountsApiService) GetAccountTransactions(ctx _context.Context, accoun
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return TransactionList
  */
-func (a *AccountsApiService) GetAccountTransactionsExecute(r ApiGetAccountTransactionsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *AccountsApiService) GetAccountTransactionsExecute(r ApiGetAccountTransactionsRequest) (TransactionList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  TransactionList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountsApiService.GetAccountTransactions")
@@ -1180,7 +1190,7 @@ func (r ApiListAccountsRequest) HasDetails(hasDetails bool) ApiListAccountsReque
 	return r
 }
 
-func (r ApiListAccountsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListAccountsRequest) Execute() (AccountList, *_nethttp.Response, error) {
 	return r.ApiService.ListAccountsExecute(r)
 }
 
@@ -1199,16 +1209,16 @@ func (a *AccountsApiService) ListAccounts(ctx _context.Context) ApiListAccountsR
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return AccountList
  */
-func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (AccountList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  AccountList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountsApiService.ListAccounts")

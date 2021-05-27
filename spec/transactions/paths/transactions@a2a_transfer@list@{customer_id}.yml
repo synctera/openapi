@@ -15,15 +15,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  a2a_transfers:
-                    type: array
-                    description: Array of account to account transfers
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/a2a_transfer'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/a2a_transfer_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':

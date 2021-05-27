@@ -47,15 +47,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  scans:
-                    description: Array of RDC scans
-                    type: array
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/scan'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/scan_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':

@@ -725,7 +725,7 @@ func (r ApiListEventsRequest) PageToken(pageToken string) ApiListEventsRequest {
 	return r
 }
 
-func (r ApiListEventsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListEventsRequest) Execute() (EventList, *_nethttp.Response, error) {
 	return r.ApiService.ListEventsExecute(r)
 }
 
@@ -746,16 +746,16 @@ func (a *WebhooksApiService) ListEvents(ctx _context.Context, webhookId string) 
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return EventList
  */
-func (a *WebhooksApiService) ListEventsExecute(r ApiListEventsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *WebhooksApiService) ListEventsExecute(r ApiListEventsRequest) (EventList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  EventList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhooksApiService.ListEvents")
@@ -876,7 +876,7 @@ func (r ApiListWebhooksRequest) IsEnabledOnly(isEnabledOnly bool) ApiListWebhook
 	return r
 }
 
-func (r ApiListWebhooksRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListWebhooksRequest) Execute() (WebhookList, *_nethttp.Response, error) {
 	return r.ApiService.ListWebhooksExecute(r)
 }
 
@@ -895,16 +895,16 @@ func (a *WebhooksApiService) ListWebhooks(ctx _context.Context) ApiListWebhooksR
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return WebhookList
  */
-func (a *WebhooksApiService) ListWebhooksExecute(r ApiListWebhooksRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *WebhooksApiService) ListWebhooksExecute(r ApiListWebhooksRequest) (WebhookList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  WebhookList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhooksApiService.ListWebhooks")

@@ -2,6 +2,9 @@ openapi: 3.0.3
 info:
   description: |
     <h2>Let's build something great.</h2><p>Welcome to the official reference documentation for Synctera APIs. Our APIs are the best way to automate your company's banking needs and are designed to be easy to understand and implement.</p><p>We're continuously growing this library and what you see here is just the start, but if you need something specific or have a question, <a class='text-blue-600' href='https://synctera.com/contact' target='_blank' rel='noreferrer'>contact us</a>.</p>
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Synctera API
   version: 0.5.0
 servers:
@@ -81,15 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    accounts:
-                      description: Array of Accounts
-                      items:
-                        $ref: '#/components/schemas/account'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/account_list'
           description: List of accounts
         "400":
           content:
@@ -125,7 +120,9 @@ paths:
       tags:
       - Accounts
     post:
-      description: Create a shadow mode account
+      description: Create a shadow mode or lead mode account. You need to determine
+        the mode according to integrator configuration, and specify the required fields
+        accordingly.
       operationId: createAccount
       requestBody:
         content:
@@ -147,6 +144,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Unauthorized
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Unprocessible entity request response
       summary: Create an account
       tags:
       - Accounts
@@ -400,15 +403,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    transactions:
-                      description: Array of transactions
-                      items:
-                        $ref: '#/components/schemas/transaction'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/transaction_list'
           description: Account transactions
         "401":
           content:
@@ -1018,15 +1013,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    accounts:
-                      description: Array of Accounts
-                      items:
-                        $ref: '#/components/schemas/account'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/account_list'
           description: List of accounts
         "400":
           content:
@@ -1355,15 +1342,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    verifications:
-                      description: Array of Verification results
-                      items:
-                        $ref: '#/components/schemas/customer_verification_result'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/customer_verification_result_list'
           description: List of customer verification results
         "400":
           content:
@@ -1560,15 +1539,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    documents:
-                      description: Array of documents
-                      items:
-                        $ref: '#/components/schemas/document'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/document_list'
           description: List of documents
         "400":
           content:
@@ -1908,15 +1879,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    deposits:
-                      description: Array of RDC deposits
-                      items:
-                        $ref: '#/components/schemas/deposit'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/deposit_list'
           description: List of deposits made with remote deposit capture
         "400":
           content:
@@ -2080,15 +2043,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    images:
-                      description: Array of RDC images
-                      items:
-                        $ref: '#/components/schemas/image'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/image_list'
           description: List of check images made for remote deposit capture
         "400":
           content:
@@ -2246,15 +2201,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    scans:
-                      description: Array of RDC scans
-                      items:
-                        $ref: '#/components/schemas/scan'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/scan_list'
           description: List of OCR scans of check images made for remote deposit capture
         "400":
           content:
@@ -2410,15 +2357,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    reconciliations:
-                      description: Array of reconciliations
-                      items:
-                        $ref: '#/components/schemas/reconciliation'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/reconciliation_list'
           description: List of reconciliations
         "401":
           content:
@@ -2571,15 +2510,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    customers:
-                      description: Array of ACH
-                      items:
-                        $ref: '#/components/schemas/ach_outgoing'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/ach_outgoing_list'
           description: List of pending ACH
         "400":
           content:
@@ -3071,15 +3002,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    a2a_transfers:
-                      description: Array of account to account transfers
-                      items:
-                        $ref: '#/components/schemas/a2a_transfer'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/a2a_transfer_list'
           description: Account to account transfer list
         "400":
           content:
@@ -3153,15 +3076,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    documents:
-                      description: Array of webhooks
-                      items:
-                        $ref: '#/components/schemas/webhook'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/webhook_list'
           description: List of webhooks
         "401":
           content:
@@ -3400,15 +3315,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - properties:
-                    event_list:
-                      description: Array of events
-                      items:
-                        $ref: '#/components/schemas/event'
-                      type: array
-                  type: object
-                - $ref: '#/components/schemas/paginated_response'
+                $ref: '#/components/schemas/event_list'
           description: List of webhook events
         "401":
           content:
@@ -3898,6 +3805,12 @@ components:
           schema:
             $ref: '#/components/schemas/error'
       description: Internal server error
+    unprocessible_entity:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      description: Unprocessible entity request response
     account_closed:
       content:
         application/json:
@@ -3979,7 +3892,7 @@ components:
   schemas:
     status:
       description: |
-        The status of the account. Mandatory for shadow mode, optional for lead mode.
+        The status of the account. Required for shadow mode on account creation
       enum:
       - APPLICATION_SUBMITTED
       - FAILED_KYC
@@ -4016,9 +3929,19 @@ components:
           description: Customer that the current account is associated with
           format: uuid
           type: string
+      required:
+      - customer_id
+      - relationship_type
       title: Account Relationship
       type: object
     alias:
+      example:
+        alias_type: alias_type
+        connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        alias_source: alias_source
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        alias_name: alias_name
+        alias_info: alias_info
       properties:
         connect_id:
           description: Connection ID of the account
@@ -4092,6 +4015,17 @@ components:
       title: Account balance
       type: object
     transaction:
+      example:
+        amount: 0
+        authorization_ref: authorization_ref
+        account_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        profit_center: profit_center
+        effective_date: 2000-01-23T04:56:07.000+00:00
+        ext_reference: ext_reference
+        currency: faker.finance.currencyCode
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        transaction_type: ACCOUNT_CLOSING_ACH
+        status: status
       properties:
         id:
           description: Transaction ID
@@ -4177,7 +4111,68 @@ components:
           type: string
       title: Transaction
       type: object
-    lead_mode_account:
+    account:
+      description: Account
+      example:
+        account_number: account_number
+        aliases:
+        - alias_type: alias_type
+          connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          alias_source: alias_source
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          alias_name: alias_name
+          alias_info: alias_info
+        - alias_type: alias_type
+          connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          alias_source: alias_source
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          alias_name: alias_name
+          alias_info: alias_info
+        swift_code: swift_code
+        is_account_pool: true
+        relationships:
+        - connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          relationship_type: ACCOUNT_HOLDER
+          customer_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          relationship_type: ACCOUNT_HOLDER
+          customer_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        balances:
+        - amount: 0
+          currency: faker.finance.currencyCode
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          posting_date: 2000-01-23T04:56:07.000+00:00
+        - amount: 0
+          currency: faker.finance.currencyCode
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          posting_date: 2000-01-23T04:56:07.000+00:00
+        recent_transactions:
+        - amount: 0
+          authorization_ref: authorization_ref
+          account_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          profit_center: profit_center
+          effective_date: 2000-01-23T04:56:07.000+00:00
+          ext_reference: ext_reference
+          currency: faker.finance.currencyCode
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          transaction_type: ACCOUNT_CLOSING_ACH
+          status: status
+        - amount: 0
+          authorization_ref: authorization_ref
+          account_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          profit_center: profit_center
+          effective_date: 2000-01-23T04:56:07.000+00:00
+          ext_reference: ext_reference
+          currency: faker.finance.currencyCode
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          transaction_type: ACCOUNT_CLOSING_ACH
+          status: status
+        exchange_rate_type: M, INTERBANK, CUST
+        account_template_version: 0.8008281904610115
+        account_template_code: account_template_code
+        iban: iban
+        currency: faker.finance.currencyCode
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         id:
           description: Account ID
@@ -4185,7 +4180,7 @@ components:
           readOnly: true
           type: string
         account_number:
-          description: Account number
+          description: Account number. Required for shadow mode.
           readOnly: true
           type: string
         currency:
@@ -4210,13 +4205,14 @@ components:
             account pool. Default false
           type: boolean
         account_template_code:
-          description: Account template code
+          description: Account template code. Required for lead mode.
           type: string
         account_template_version:
-          description: Account template version
+          description: Account template version. Required for lead mode.
           type: number
         relationships:
-          description: List of the relationship for this account to the parties
+          description: List of the relationship for this account to the parties. Required
+            for lead mode.
           items:
             $ref: '#/components/schemas/schemas-relationship'
           type: array
@@ -4239,67 +4235,7 @@ components:
             $ref: '#/components/schemas/transaction'
           readOnly: true
           type: array
-      required:
-      - relationships
-      - template_code
-      - template_version
-      title: Account Lead Mode
       type: object
-    shadow_mode_account:
-      properties:
-        id:
-          description: Account ID
-          format: uuid
-          readOnly: true
-          type: string
-        account_number:
-          description: Account number
-          type: string
-        currency:
-          description: Account currency or account settlement currency. ISO 4217 alphabetic
-            currency code. Default USD
-          example: faker.finance.currencyCode
-          type: string
-        status:
-          $ref: '#/components/schemas/status'
-        is_account_pool:
-          description: Account is investment (variable balance) account or a multi-balance
-            account pool. Default false
-          type: boolean
-        relationships:
-          description: List of the relationship for this account to the parties
-          items:
-            $ref: '#/components/schemas/schemas-relationship'
-          type: array
-        aliases:
-          description: A list of aliases for account. Account alias is the account
-            number of different balance types to link to the same account ID
-          items:
-            $ref: '#/components/schemas/alias'
-          type: array
-          writeOnly: true
-        balances:
-          description: A list of balances for account based on different type
-          items:
-            $ref: '#/components/schemas/balance'
-          readOnly: true
-          type: array
-        recent_transactions:
-          description: The most recent 10 transactions of the account
-          items:
-            $ref: '#/components/schemas/transaction'
-          readOnly: true
-          type: array
-      required:
-      - account_number
-      - status
-      title: Shadow mode account
-      type: object
-    account:
-      description: Account
-      oneOf:
-      - $ref: '#/components/schemas/lead_mode_account'
-      - $ref: '#/components/schemas/shadow_mode_account'
     paginated_response:
       properties:
         next_page_token:
@@ -4309,6 +4245,10 @@ components:
           type: string
       title: Paginated List response
       type: object
+    account_list:
+      allOf:
+      - $ref: '#/components/schemas/account_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     error:
       properties:
         error_details:
@@ -4332,6 +4272,10 @@ components:
           type: string
       title: Deleted Object
       type: object
+    transaction_list:
+      allOf:
+      - $ref: '#/components/schemas/transaction_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     address:
       example:
         country_code: faker.address.countryCode
@@ -4479,9 +4423,16 @@ components:
           type: string
         relationship_role:
           $ref: '#/components/schemas/relationship_role'
+      required:
+      - id
+      - relationship_role
       title: Relationship
       type: object
     schemas-relationship:
+      example:
+        connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        relationship_type: ACCOUNT_HOLDER
+        customer_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         connect_id:
           description: Connection ID of the account
@@ -4503,6 +4454,9 @@ components:
           description: Customer that the current account is associated with
           format: uuid
           type: string
+      required:
+      - customer_id
+      - relationship_type
       title: Account Relationship
       type: object
     customer:
@@ -4557,8 +4511,124 @@ components:
           type: work
           postal_code: faker.address.zipCode(#####)
         accounts:
-        - null
-        - null
+        - account_number: account_number
+          aliases:
+          - alias_type: alias_type
+            connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            alias_source: alias_source
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            alias_name: alias_name
+            alias_info: alias_info
+          - alias_type: alias_type
+            connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            alias_source: alias_source
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            alias_name: alias_name
+            alias_info: alias_info
+          swift_code: swift_code
+          is_account_pool: true
+          relationships:
+          - connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            relationship_type: ACCOUNT_HOLDER
+            customer_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            relationship_type: ACCOUNT_HOLDER
+            customer_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          balances:
+          - amount: 0
+            currency: faker.finance.currencyCode
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            posting_date: 2000-01-23T04:56:07.000+00:00
+          - amount: 0
+            currency: faker.finance.currencyCode
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            posting_date: 2000-01-23T04:56:07.000+00:00
+          recent_transactions:
+          - amount: 0
+            authorization_ref: authorization_ref
+            account_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            profit_center: profit_center
+            effective_date: 2000-01-23T04:56:07.000+00:00
+            ext_reference: ext_reference
+            currency: faker.finance.currencyCode
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            transaction_type: ACCOUNT_CLOSING_ACH
+            status: status
+          - amount: 0
+            authorization_ref: authorization_ref
+            account_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            profit_center: profit_center
+            effective_date: 2000-01-23T04:56:07.000+00:00
+            ext_reference: ext_reference
+            currency: faker.finance.currencyCode
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            transaction_type: ACCOUNT_CLOSING_ACH
+            status: status
+          exchange_rate_type: M, INTERBANK, CUST
+          account_template_version: 0.8008281904610115
+          account_template_code: account_template_code
+          iban: iban
+          currency: faker.finance.currencyCode
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - account_number: account_number
+          aliases:
+          - alias_type: alias_type
+            connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            alias_source: alias_source
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            alias_name: alias_name
+            alias_info: alias_info
+          - alias_type: alias_type
+            connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            alias_source: alias_source
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            alias_name: alias_name
+            alias_info: alias_info
+          swift_code: swift_code
+          is_account_pool: true
+          relationships:
+          - connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            relationship_type: ACCOUNT_HOLDER
+            customer_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - connect_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            relationship_type: ACCOUNT_HOLDER
+            customer_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          balances:
+          - amount: 0
+            currency: faker.finance.currencyCode
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            posting_date: 2000-01-23T04:56:07.000+00:00
+          - amount: 0
+            currency: faker.finance.currencyCode
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            posting_date: 2000-01-23T04:56:07.000+00:00
+          recent_transactions:
+          - amount: 0
+            authorization_ref: authorization_ref
+            account_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            profit_center: profit_center
+            effective_date: 2000-01-23T04:56:07.000+00:00
+            ext_reference: ext_reference
+            currency: faker.finance.currencyCode
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            transaction_type: ACCOUNT_CLOSING_ACH
+            status: status
+          - amount: 0
+            authorization_ref: authorization_ref
+            account_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            profit_center: profit_center
+            effective_date: 2000-01-23T04:56:07.000+00:00
+            ext_reference: ext_reference
+            currency: faker.finance.currencyCode
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            transaction_type: ACCOUNT_CLOSING_ACH
+            status: status
+          exchange_rate_type: M, INTERBANK, CUST
+          account_template_version: 0.8008281904610115
+          account_template_code: account_template_code
+          iban: iban
+          currency: faker.finance.currencyCode
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         first_name: faker.name.firstName
         email: faker.internet.email
       properties:
@@ -4596,7 +4666,7 @@ components:
         ssn_last_four:
           description: Customer's masked tax ID eg SSN formatted with hyphens ***-**-6789
           example: '***-**-6789'
-          pattern: ^\d{3}-\d{2}-\d{4}$
+          pattern: ^\*{3}-\*{2}-\d{4}$
           readOnly: true
           type: string
         email:
@@ -4637,14 +4707,6 @@ components:
             $ref: '#/components/schemas/account'
           readOnly: true
           type: array
-      required:
-      - dob
-      - email
-      - first_name
-      - last_name
-      - legal_address
-      - mobile_phone_number
-      - shipping_address
       title: Customer
       type: object
     customer_list:
@@ -4863,6 +4925,10 @@ components:
       - verifications_run
       title: CustomerVerificationResult
       type: object
+    customer_verification_result_list:
+      allOf:
+      - $ref: '#/components/schemas/customer_verification_result_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     kyc_media_type:
       description: 'Type of image: PNG, JPG. Note that PDF and GIF are valid values,
         but not currently supported.'
@@ -4916,6 +4982,10 @@ components:
       - media_type
       title: Document
       type: object
+    document_list:
+      allOf:
+      - $ref: '#/components/schemas/document_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     deposit:
       description: Deposit using remote deposit capture
       example:
@@ -5004,6 +5074,10 @@ components:
       - scan_id
       title: RDC Deposit
       type: object
+    deposit_list:
+      allOf:
+      - $ref: '#/components/schemas/deposit_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     rdc_media_type:
       description: 'Type of image: PNG, JPG. Note that PDF and GIF are valid values,
         but not currently supported.'
@@ -5041,11 +5115,15 @@ components:
           type: string
       required:
       - byte_data
-      - data_uploaded
+      - date_uploaded
       - id
       - media_type
       title: RDC Image
       type: object
+    image_list:
+      allOf:
+      - $ref: '#/components/schemas/image_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     scan:
       description: Scanning image to be used for remote deposit capture
       example:
@@ -5106,6 +5184,10 @@ components:
       - routing_number
       title: RDC Scan
       type: object
+    scan_list:
+      allOf:
+      - $ref: '#/components/schemas/scan_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     ingestion_status:
       description: Reconciliation ingestion status values
       enum:
@@ -5138,6 +5220,10 @@ components:
       - ingestion_status
       title: Reconciliation
       type: object
+    reconciliation_list:
+      allOf:
+      - $ref: '#/components/schemas/reconciliation_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     reconciliation_input:
       description: Input data for a reconciliation
       properties:
@@ -5267,6 +5353,10 @@ components:
       - target_bank_country
       title: Outgoing ACH
       type: object
+    ach_outgoing_list:
+      allOf:
+      - $ref: '#/components/schemas/ach_outgoing_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     a2a_transfer:
       example:
         amount: 0
@@ -5331,6 +5421,10 @@ components:
       - source_account
       - target_account
       type: object
+    a2a_transfer_list:
+      allOf:
+      - $ref: '#/components/schemas/a2a_transfer_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     event_type:
       description: The type of the webhook event. Items ends with .* means all events
         that match the prefix (major type. e.g. ACCOUNT, KYC etc). One webhook allows
@@ -5409,6 +5503,10 @@ components:
       - url
       title: Webhook
       type: object
+    webhook_list:
+      allOf:
+      - $ref: '#/components/schemas/webhook_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     event:
       description: Webhook event object
       example:
@@ -5468,6 +5566,10 @@ components:
           type: array
       title: Webhook event
       type: object
+    event_list:
+      allOf:
+      - $ref: '#/components/schemas/event_list_allOf'
+      - $ref: '#/components/schemas/paginated_response'
     inline_object:
       properties:
         posting_date:
@@ -5546,6 +5648,26 @@ components:
         event:
           $ref: '#/components/schemas/event_type'
       type: object
+    account_list_allOf:
+      properties:
+        accounts:
+          description: Array of Accounts
+          items:
+            $ref: '#/components/schemas/account'
+          type: array
+      required:
+      - accounts
+      type: object
+    transaction_list_allOf:
+      properties:
+        transactions:
+          description: Array of transactions
+          items:
+            $ref: '#/components/schemas/transaction'
+          type: array
+      required:
+      - transactions
+      type: object
     customer_list_allOf:
       properties:
         customers:
@@ -5555,6 +5677,76 @@ components:
           type: array
       required:
       - customers
+      type: object
+    customer_verification_result_list_allOf:
+      properties:
+        verifications:
+          description: Array of Verification results
+          items:
+            $ref: '#/components/schemas/customer_verification_result'
+          type: array
+      required:
+      - verifications
+      type: object
+    document_list_allOf:
+      properties:
+        documents:
+          description: Array of documents
+          items:
+            $ref: '#/components/schemas/document'
+          type: array
+      required:
+      - documents
+      type: object
+    deposit_list_allOf:
+      properties:
+        deposits:
+          description: Array of RDC deposits
+          items:
+            $ref: '#/components/schemas/deposit'
+          type: array
+      required:
+      - deposits
+      type: object
+    image_list_allOf:
+      properties:
+        images:
+          description: Array of RDC images
+          items:
+            $ref: '#/components/schemas/image'
+          type: array
+      required:
+      - images
+      type: object
+    scan_list_allOf:
+      properties:
+        scans:
+          description: Array of RDC scans
+          items:
+            $ref: '#/components/schemas/scan'
+          type: array
+      required:
+      - scans
+      type: object
+    reconciliation_list_allOf:
+      properties:
+        reconciliations:
+          description: Array of reconciliations
+          items:
+            $ref: '#/components/schemas/reconciliation'
+          type: array
+      required:
+      - reconciliations
+      type: object
+    ach_outgoing_list_allOf:
+      properties:
+        ach_outgoings:
+          description: Array of ACH
+          items:
+            $ref: '#/components/schemas/ach_outgoing'
+          type: array
+      required:
+      - ach_outgoings
       type: object
     a2a_transfer_transfer_reversal:
       description: If transfer reversal happens, both original and reversal transfers
@@ -5571,6 +5763,26 @@ components:
           format: uuid
           type: string
       readOnly: true
+      type: object
+    a2a_transfer_list_allOf:
+      properties:
+        a2a_transfers:
+          description: Array of account to account transfers
+          items:
+            $ref: '#/components/schemas/a2a_transfer'
+          type: array
+      required:
+      - a2a_transfers
+      type: object
+    webhook_list_allOf:
+      properties:
+        webhooks:
+          description: Array of webhooks
+          items:
+            $ref: '#/components/schemas/webhook'
+          type: array
+      required:
+      - webhooks
       type: object
     event_response_history:
       example:
@@ -5593,6 +5805,16 @@ components:
           description: Timestamp that the response is received
           format: date-time
           type: string
+      type: object
+    event_list_allOf:
+      properties:
+        event_list:
+          description: Array of events
+          items:
+            $ref: '#/components/schemas/event'
+          type: array
+      required:
+      - event_list
       type: object
   securitySchemes:
     bearerAuth:

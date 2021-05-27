@@ -291,7 +291,7 @@ Name | Type | Description  | Notes
 
 ## GetOutgoingACH
 
-> map[string]interface{} GetOutgoingACH(ctx).ACHExecutionDate(aCHExecutionDate).Limit(limit).PageToken(pageToken).Execute()
+> AchOutgoingList GetOutgoingACH(ctx).ACHExecutionDate(aCHExecutionDate).Limit(limit).PageToken(pageToken).Execute()
 
 Get Pending ACH List
 
@@ -322,7 +322,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.GetOutgoingACH``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetOutgoingACH`: map[string]interface{}
+    // response from `GetOutgoingACH`: AchOutgoingList
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.GetOutgoingACH`: %v\n", resp)
 }
 ```
@@ -344,7 +344,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**AchOutgoingList**](AchOutgoingList.md)
 
 ### Authorization
 
@@ -362,7 +362,7 @@ Name | Type | Description  | Notes
 
 ## ListA2ATransfer
 
-> map[string]interface{} ListA2ATransfer(ctx, customerId).Limit(limit).PageToken(pageToken).Execute()
+> A2aTransferList ListA2ATransfer(ctx, customerId).Limit(limit).PageToken(pageToken).Execute()
 
 List account to account transfer
 
@@ -392,7 +392,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.ListA2ATransfer``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListA2ATransfer`: map[string]interface{}
+    // response from `ListA2ATransfer`: A2aTransferList
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.ListA2ATransfer`: %v\n", resp)
 }
 ```
@@ -418,7 +418,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**A2aTransferList**](A2aTransferList.md)
 
 ### Authorization
 

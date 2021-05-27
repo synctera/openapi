@@ -46,15 +46,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  reconciliations:
-                    description: Array of reconciliations
-                    type: array
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/reconciliation'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/reconciliation_list'
     '401':
       $ref: '../../common/responses.yml#/components/responses/unauthorized'
     '403':

@@ -148,7 +148,7 @@ Name | Type | Description  | Notes
 
 ## ListReconciliations
 
-> map[string]interface{} ListReconciliations(ctx).Limit(limit).PageToken(pageToken).Execute()
+> ReconciliationList ListReconciliations(ctx).Limit(limit).PageToken(pageToken).Execute()
 
 List reconciliations
 
@@ -177,7 +177,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `ReconciliationsApi.ListReconciliations``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListReconciliations`: map[string]interface{}
+    // response from `ListReconciliations`: ReconciliationList
     fmt.Fprintf(os.Stdout, "Response from `ReconciliationsApi.ListReconciliations`: %v\n", resp)
 }
 ```
@@ -198,7 +198,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**ReconciliationList**](ReconciliationList.md)
 
 ### Authorization
 

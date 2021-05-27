@@ -44,16 +44,8 @@ get:
       description: List of check images made for remote deposit capture
       content:
         application/json:
-          schema: 
-            allOf:
-              - type: object
-                properties:
-                  images:
-                    description: Array of RDC images
-                    type: array
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/image'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+          schema:
+            $ref: '../schemas.yml#/components/schemas/image_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':

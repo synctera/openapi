@@ -58,6 +58,19 @@ components:
                 format: date-time
                 description: Timestamp that the response is received
 
+    event_list:
+      allOf:
+        - type: object
+          required:
+            - event_list
+          properties:
+            event_list:
+              type: array
+              description: Array of events
+              items:
+                $ref: '#/components/schemas/event'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
+
     event_type:
       title: All the webhook event types
       type: string
@@ -153,3 +166,15 @@ components:
         - enabled_events
         - is_enabled
 
+    webhook_list:
+      allOf:
+        - type: object
+          required:
+            - webhooks
+          properties:
+            webhooks:
+              type: array
+              description: Array of webhooks
+              items:
+                $ref: '#/components/schemas/webhook'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'

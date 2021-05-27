@@ -880,7 +880,7 @@ func (r ApiListRdcDepositsRequest) PageToken(pageToken string) ApiListRdcDeposit
 	return r
 }
 
-func (r ApiListRdcDepositsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListRdcDepositsRequest) Execute() (DepositList, *_nethttp.Response, error) {
 	return r.ApiService.ListRdcDepositsExecute(r)
 }
 
@@ -901,16 +901,16 @@ func (a *RDCDepositsApiService) ListRdcDeposits(ctx _context.Context, accountId 
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return DepositList
  */
-func (a *RDCDepositsApiService) ListRdcDepositsExecute(r ApiListRdcDepositsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *RDCDepositsApiService) ListRdcDepositsExecute(r ApiListRdcDepositsRequest) (DepositList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  DepositList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RDCDepositsApiService.ListRdcDeposits")
@@ -1021,7 +1021,7 @@ func (r ApiListRdcImageIdsRequest) PageToken(pageToken string) ApiListRdcImageId
 	return r
 }
 
-func (r ApiListRdcImageIdsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListRdcImageIdsRequest) Execute() (ImageList, *_nethttp.Response, error) {
 	return r.ApiService.ListRdcImageIdsExecute(r)
 }
 
@@ -1042,16 +1042,16 @@ func (a *RDCDepositsApiService) ListRdcImageIds(ctx _context.Context, accountId 
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return ImageList
  */
-func (a *RDCDepositsApiService) ListRdcImageIdsExecute(r ApiListRdcImageIdsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *RDCDepositsApiService) ListRdcImageIdsExecute(r ApiListRdcImageIdsRequest) (ImageList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  ImageList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RDCDepositsApiService.ListRdcImageIds")
@@ -1162,7 +1162,7 @@ func (r ApiListRdcScansRequest) PageToken(pageToken string) ApiListRdcScansReque
 	return r
 }
 
-func (r ApiListRdcScansRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListRdcScansRequest) Execute() (ScanList, *_nethttp.Response, error) {
 	return r.ApiService.ListRdcScansExecute(r)
 }
 
@@ -1183,16 +1183,16 @@ func (a *RDCDepositsApiService) ListRdcScans(ctx _context.Context, accountId str
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return ScanList
  */
-func (a *RDCDepositsApiService) ListRdcScansExecute(r ApiListRdcScansRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *RDCDepositsApiService) ListRdcScansExecute(r ApiListRdcScansRequest) (ScanList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  ScanList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RDCDepositsApiService.ListRdcScans")

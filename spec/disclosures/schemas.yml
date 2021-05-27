@@ -14,7 +14,7 @@ components:
         type:
           description: Disclosure Type
           type: string
-          enum: [REG_DD, KYC_DATA_COLLECTION, REG_E]
+          enum: [ REG_DD, KYC_DATA_COLLECTION, REG_E ]
           example: REG_DD
         version:
           description: Disclosure Version
@@ -37,13 +37,26 @@ components:
           example: "2021-05-01T23:59:59Z"
         event_type:
           type: string
-          enum: [DISPLAYED, VIEWED, ACKNOWLEDGED]
+          enum: [ DISPLAYED, VIEWED, ACKNOWLEDGED ]
           example: VIEWED
       required:
         - type
         - version
         - timestamp
         - event_type
+
+    disclosure_list:
+      allOf:
+        - type: object
+          required:
+            - disclosures
+          properties:
+            disclosures:
+              type: array
+              description: Array of disclosures
+              items:
+                $ref: '#/components/schemas/disclosure'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
 
     disclosure_response:
       title: List of Customer Disclosures
@@ -55,7 +68,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/disclosure"
-  
+
     disclosure_assignment:
       title: Disclosure Assignments
       type: object
@@ -108,6 +121,19 @@ components:
           readOnly: true
           example: "2021-05-01T23:59:50Z"
 
+    disclosure_assignment_list:
+      allOf:
+        - type: object
+          required:
+            - disclosure_assignments
+          properties:
+            disclosure_assignments:
+              type: array
+              description: Array of Disclosures
+              items:
+                $ref: '#/components/schemas/disclosure_assignment'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
+
     disclosure_master:
       title: Disclosure Master
       type: object
@@ -141,3 +167,16 @@ components:
           format: date-time
           readOnly: true
           example: "2021-05-01T23:59:50Z"
+
+    disclosure_master_list:
+      allOf:
+        - type: object
+          required:
+            - disclosure_masters
+          properties:
+            disclosure_masters:
+              type: array
+              description: Array of Disclosures
+              items:
+                $ref: '#/components/schemas/disclosure_master'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'

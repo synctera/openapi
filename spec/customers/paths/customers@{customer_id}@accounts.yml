@@ -15,15 +15,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  accounts:
-                    type: array
-                    description: Array of Accounts
-                    items:
-                      $ref: '../../accounts/schemas.yml#/components/schemas/account'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../../accounts/schemas.yml#/components/schemas/account_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':

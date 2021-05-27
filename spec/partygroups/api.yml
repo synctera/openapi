@@ -1,0 +1,35 @@
+openapi: 3.0.3
+info:
+  title: Synctera API
+  version: 0.5.0
+  description: |
+    <h2>Let's build something great.</h2><p>Welcome to the official reference documentation for Synctera APIs. Our APIs are the best way to automate your company's banking needs and are designed to be easy to understand and implement.</p><p>We're continuously growing this library and what you see here is just the start, but if you need something specific or have a question, <a class='text-blue-600' href='https://synctera.com/contact' target='_blank' rel='noreferrer'>contact us</a>.</p>
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://api.synctera.com/v0
+    description: Production
+  - url: https://api.sandbox.synctera.com/v0
+    description: Sandbox (no real world financial impact)
+tags:
+  - name: Party Groups
+    description: Request to create and manage party groups and party group members
+components: #Components
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: api_key
+paths:
+  /party_groups:
+    $ref: './paths/party_groups.yml'
+  /party_groups/{party_group_id}:
+    $ref: './paths/party_groups@{party_group_id}.yml'
+  /party_groups/{party_group_id}/related_parties:
+    $ref: './paths/party_groups@{party_group_id}@related_parties.yml'
+  /party_groups/{party_group_id}/related_parties/{related_party_id}:
+    $ref: './paths/party_groups@{party_group_id}@related_parties@{related_party_id}.yml'
+security:
+  - bearerAuth: []
+

@@ -15,15 +15,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  customers:
-                    type: array
-                    description: Array of ACH
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/ach_outgoing'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/ach_outgoing_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':

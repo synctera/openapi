@@ -788,7 +788,7 @@ func (r ApiGetOutgoingACHRequest) PageToken(pageToken string) ApiGetOutgoingACHR
 	return r
 }
 
-func (r ApiGetOutgoingACHRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiGetOutgoingACHRequest) Execute() (AchOutgoingList, *_nethttp.Response, error) {
 	return r.ApiService.GetOutgoingACHExecute(r)
 }
 
@@ -807,16 +807,16 @@ func (a *TransactionsApiService) GetOutgoingACH(ctx _context.Context) ApiGetOutg
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return AchOutgoingList
  */
-func (a *TransactionsApiService) GetOutgoingACHExecute(r ApiGetOutgoingACHRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *TransactionsApiService) GetOutgoingACHExecute(r ApiGetOutgoingACHRequest) (AchOutgoingList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  AchOutgoingList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.GetOutgoingACH")
@@ -960,7 +960,7 @@ func (r ApiListA2ATransferRequest) PageToken(pageToken string) ApiListA2ATransfe
 	return r
 }
 
-func (r ApiListA2ATransferRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListA2ATransferRequest) Execute() (A2aTransferList, *_nethttp.Response, error) {
 	return r.ApiService.ListA2ATransferExecute(r)
 }
 
@@ -981,16 +981,16 @@ func (a *TransactionsApiService) ListA2ATransfer(ctx _context.Context, customerI
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return A2aTransferList
  */
-func (a *TransactionsApiService) ListA2ATransferExecute(r ApiListA2ATransferRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *TransactionsApiService) ListA2ATransferExecute(r ApiListA2ATransferRequest) (A2aTransferList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  A2aTransferList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.ListA2ATransfer")

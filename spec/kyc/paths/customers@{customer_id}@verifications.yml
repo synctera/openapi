@@ -17,15 +17,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  verifications:
-                    type: array
-                    description: Array of Verification results
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/customer_verification_result'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/customer_verification_result_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':
