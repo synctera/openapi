@@ -16,7 +16,7 @@ const sandbox = false
 
 func createClient(t testing.TB, ctx context.Context) (*APIClient, context.Context) {
 	configuration := NewConfiguration()
-	configuration.Debug = true
+	//configuration.Debug = true
 
 	if sandbox {
 		ctx = context.WithValue(ctx, ContextServerIndex, 1)
@@ -43,6 +43,8 @@ func TestCreateCustomer(t *testing.T) {
 	ctx := context.Background()
 	client, ctx := createClient(t, ctx)
 
+	const firstName = "GoClient"
+	const lastName = "TestCreateCustomer"
 	customerAddress := Address{
 		Id:                nil,
 		DefaultAddressFlg: true,
@@ -54,10 +56,15 @@ func TestCreateCustomer(t *testing.T) {
 		PostalCode:        "abc123",
 		CountryCode:       "US",
 	}
-	const firstName = "GoClient"
-	const lastName = "TestCreateCustomer"
-	testCustomer := NewCustomer(firstName, lastName, customerAddress, customerAddress, "1900-01-01", "", "+19178675309")
-	createCustomerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(*testCustomer).Execute()
+	testCustomer := Customer{
+		FirstName:         PtrString(firstName),
+		LastName:          PtrString(lastName),
+		LegalAddress:      &customerAddress,
+		ShippingAddress:   &customerAddress,
+		Dob:               PtrString("1900-01-01"),
+		MobilePhoneNumber: PtrString("+19178675309"),
+	}
+	createCustomerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(testCustomer).Execute()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -65,7 +72,7 @@ func TestCreateCustomer(t *testing.T) {
 		t.Error("Wrong status for create customer:", httpResponse.StatusCode)
 	}
 
-	if createCustomerResponse.FirstName != firstName || createCustomerResponse.LastName != lastName {
+	if createCustomerResponse.GetFirstName() != firstName || createCustomerResponse.GetLastName() != lastName {
 		t.Error("Wrong name for create customer")
 	}
 
@@ -127,6 +134,8 @@ func TestCreateCustomerVerification(t *testing.T) {
 	ctx := context.Background()
 	client, ctx := createClient(t, ctx)
 
+	const firstName = "GoClient"
+	const lastName = "TestCreateCustomerVerification"
 	customerAddress := Address{
 		Id:                nil,
 		DefaultAddressFlg: true,
@@ -138,10 +147,16 @@ func TestCreateCustomerVerification(t *testing.T) {
 		PostalCode:        "abc123",
 		CountryCode:       "US",
 	}
-	const firstName = "GoClient"
-	const lastName = "TestCreateCustomerVerification"
-	testCustomer := NewCustomer(firstName, lastName, customerAddress, customerAddress, "1900-01-01", "", "+19178675309")
-	customerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(*testCustomer).Execute()
+	testCustomer := Customer{
+		FirstName:         PtrString(firstName),
+		LastName:          PtrString(lastName),
+		LegalAddress:      &customerAddress,
+		ShippingAddress:   &customerAddress,
+		Dob:               PtrString("1900-01-01"),
+		MobilePhoneNumber: PtrString("+19178675309"),
+	}
+
+	customerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(testCustomer).Execute()
 	if err != nil {
 		t.Fatal(err)
 	}

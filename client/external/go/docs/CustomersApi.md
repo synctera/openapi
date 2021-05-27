@@ -32,12 +32,11 @@ import (
     "context"
     "fmt"
     "os"
-    "time"
     openapiclient "./openapi"
 )
 
 func main() {
-    customer := *openapiclient.NewCustomer("faker.name.firstName", "faker.name.lastName", *openapiclient.NewAddress(false, "work", "faker.address.streetAddress", "faker.address.city", "faker.address.stateAbbr", "faker.address.zipCode(#####)", "faker.address.countryCode"), *openapiclient.NewAddress(false, "work", "faker.address.streetAddress", "faker.address.city", "faker.address.stateAbbr", "faker.address.zipCode(#####)", "faker.address.countryCode"), time.Now(), "faker.internet.email", "faker.helpers.replaceSymbols(+###########)") // Customer | Customer to create
+    customer := *openapiclient.NewCustomer() // Customer | Customer to create
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -443,13 +442,12 @@ import (
     "context"
     "fmt"
     "os"
-    "time"
     openapiclient "./openapi"
 )
 
 func main() {
     customerId := TODO // string | Customer ID
-    customer := *openapiclient.NewCustomer("faker.name.firstName", "faker.name.lastName", *openapiclient.NewAddress(false, "work", "faker.address.streetAddress", "faker.address.city", "faker.address.stateAbbr", "faker.address.zipCode(#####)", "faker.address.countryCode"), *openapiclient.NewAddress(false, "work", "faker.address.streetAddress", "faker.address.city", "faker.address.stateAbbr", "faker.address.zipCode(#####)", "faker.address.countryCode"), time.Now(), "faker.internet.email", "faker.helpers.replaceSymbols(+###########)") // Customer | Customer to be patched
+    customer := *openapiclient.NewCustomer() // Customer | Customer to be patched
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -514,13 +512,12 @@ import (
     "context"
     "fmt"
     "os"
-    "time"
     openapiclient "./openapi"
 )
 
 func main() {
     customerId := TODO // string | Customer ID
-    customer := *openapiclient.NewCustomer("faker.name.firstName", "faker.name.lastName", *openapiclient.NewAddress(false, "work", "faker.address.streetAddress", "faker.address.city", "faker.address.stateAbbr", "faker.address.zipCode(#####)", "faker.address.countryCode"), *openapiclient.NewAddress(false, "work", "faker.address.streetAddress", "faker.address.city", "faker.address.stateAbbr", "faker.address.zipCode(#####)", "faker.address.countryCode"), time.Now(), "faker.internet.email", "faker.helpers.replaceSymbols(+###########)") // Customer | Customer to be updated
+    customer := *openapiclient.NewCustomer() // Customer | Customer to be updated
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)

@@ -20,23 +20,23 @@ type Customer struct {
 	// Customer unique identifier
 	Id *string `json:"id,omitempty"`
 	// Customer's first name
-	FirstName string `json:"first_name"`
+	FirstName *string `json:"first_name,omitempty"`
 	// Customer's last name
-	LastName string `json:"last_name"`
+	LastName *string `json:"last_name,omitempty"`
 	// Customer's middle name
 	MiddleName *string `json:"middle_name,omitempty"`
-	LegalAddress Address `json:"legal_address"`
-	ShippingAddress Address `json:"shipping_address"`
+	LegalAddress *Address `json:"legal_address,omitempty"`
+	ShippingAddress *Address `json:"shipping_address,omitempty"`
 	// Customer's date of birth in ISO-8601 date format YYYY-MM-DD
-	Dob string `json:"dob"`
+	Dob *string `json:"dob,omitempty"`
 	// Customer's full tax ID eg SSN formatted with hyphens 123-45-6789
 	Ssn *string `json:"ssn,omitempty"`
 	// Customer's masked tax ID eg SSN formatted with hyphens ***-**-6789
 	SsnLastFour *string `json:"ssn_last_four,omitempty"`
 	// Customer's email
-	Email string `json:"email"`
+	Email *string `json:"email,omitempty"`
 	// Customer's mobile phone number in E.164 format e.g. +19178675309
-	MobilePhoneNumber string `json:"mobile_phone_number"`
+	MobilePhoneNumber *string `json:"mobile_phone_number,omitempty"`
 	// Customer's alternate phone number in E.164 format e.g. +19178675309
 	AltPhoneNumber *string `json:"alt_phone_number,omitempty"`
 	CreationTime *time.Time `json:"creation_time,omitempty"`
@@ -53,15 +53,8 @@ type Customer struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCustomer(firstName string, lastName string, legalAddress Address, shippingAddress Address, dob string, email string, mobilePhoneNumber string) *Customer {
+func NewCustomer() *Customer {
 	this := Customer{}
-	this.FirstName = firstName
-	this.LastName = lastName
-	this.LegalAddress = legalAddress
-	this.ShippingAddress = shippingAddress
-	this.Dob = dob
-	this.Email = email
-	this.MobilePhoneNumber = mobilePhoneNumber
 	return &this
 }
 
@@ -105,52 +98,68 @@ func (o *Customer) SetId(v string) {
 	o.Id = &v
 }
 
-// GetFirstName returns the FirstName field value
+// GetFirstName returns the FirstName field value if set, zero value otherwise.
 func (o *Customer) GetFirstName() string {
-	if o == nil {
+	if o == nil || o.FirstName == nil {
 		var ret string
 		return ret
 	}
-
-	return o.FirstName
+	return *o.FirstName
 }
 
-// GetFirstNameOk returns a tuple with the FirstName field value
+// GetFirstNameOk returns a tuple with the FirstName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Customer) GetFirstNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil || o.FirstName == nil {
 		return nil, false
 	}
-	return &o.FirstName, true
+	return o.FirstName, true
 }
 
-// SetFirstName sets field value
+// HasFirstName returns a boolean if a field has been set.
+func (o *Customer) HasFirstName() bool {
+	if o != nil && o.FirstName != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetFirstName gets a reference to the given string and assigns it to the FirstName field.
 func (o *Customer) SetFirstName(v string) {
-	o.FirstName = v
+	o.FirstName = &v
 }
 
-// GetLastName returns the LastName field value
+// GetLastName returns the LastName field value if set, zero value otherwise.
 func (o *Customer) GetLastName() string {
-	if o == nil {
+	if o == nil || o.LastName == nil {
 		var ret string
 		return ret
 	}
-
-	return o.LastName
+	return *o.LastName
 }
 
-// GetLastNameOk returns a tuple with the LastName field value
+// GetLastNameOk returns a tuple with the LastName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Customer) GetLastNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil || o.LastName == nil {
 		return nil, false
 	}
-	return &o.LastName, true
+	return o.LastName, true
 }
 
-// SetLastName sets field value
+// HasLastName returns a boolean if a field has been set.
+func (o *Customer) HasLastName() bool {
+	if o != nil && o.LastName != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetLastName gets a reference to the given string and assigns it to the LastName field.
 func (o *Customer) SetLastName(v string) {
-	o.LastName = v
+	o.LastName = &v
 }
 
 // GetMiddleName returns the MiddleName field value if set, zero value otherwise.
@@ -185,76 +194,100 @@ func (o *Customer) SetMiddleName(v string) {
 	o.MiddleName = &v
 }
 
-// GetLegalAddress returns the LegalAddress field value
+// GetLegalAddress returns the LegalAddress field value if set, zero value otherwise.
 func (o *Customer) GetLegalAddress() Address {
-	if o == nil {
+	if o == nil || o.LegalAddress == nil {
 		var ret Address
 		return ret
 	}
-
-	return o.LegalAddress
+	return *o.LegalAddress
 }
 
-// GetLegalAddressOk returns a tuple with the LegalAddress field value
+// GetLegalAddressOk returns a tuple with the LegalAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Customer) GetLegalAddressOk() (*Address, bool) {
-	if o == nil  {
+	if o == nil || o.LegalAddress == nil {
 		return nil, false
 	}
-	return &o.LegalAddress, true
+	return o.LegalAddress, true
 }
 
-// SetLegalAddress sets field value
+// HasLegalAddress returns a boolean if a field has been set.
+func (o *Customer) HasLegalAddress() bool {
+	if o != nil && o.LegalAddress != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetLegalAddress gets a reference to the given Address and assigns it to the LegalAddress field.
 func (o *Customer) SetLegalAddress(v Address) {
-	o.LegalAddress = v
+	o.LegalAddress = &v
 }
 
-// GetShippingAddress returns the ShippingAddress field value
+// GetShippingAddress returns the ShippingAddress field value if set, zero value otherwise.
 func (o *Customer) GetShippingAddress() Address {
-	if o == nil {
+	if o == nil || o.ShippingAddress == nil {
 		var ret Address
 		return ret
 	}
-
-	return o.ShippingAddress
+	return *o.ShippingAddress
 }
 
-// GetShippingAddressOk returns a tuple with the ShippingAddress field value
+// GetShippingAddressOk returns a tuple with the ShippingAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Customer) GetShippingAddressOk() (*Address, bool) {
-	if o == nil  {
+	if o == nil || o.ShippingAddress == nil {
 		return nil, false
 	}
-	return &o.ShippingAddress, true
+	return o.ShippingAddress, true
 }
 
-// SetShippingAddress sets field value
+// HasShippingAddress returns a boolean if a field has been set.
+func (o *Customer) HasShippingAddress() bool {
+	if o != nil && o.ShippingAddress != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetShippingAddress gets a reference to the given Address and assigns it to the ShippingAddress field.
 func (o *Customer) SetShippingAddress(v Address) {
-	o.ShippingAddress = v
+	o.ShippingAddress = &v
 }
 
-// GetDob returns the Dob field value
+// GetDob returns the Dob field value if set, zero value otherwise.
 func (o *Customer) GetDob() string {
-	if o == nil {
+	if o == nil || o.Dob == nil {
 		var ret string
 		return ret
 	}
-
-	return o.Dob
+	return *o.Dob
 }
 
-// GetDobOk returns a tuple with the Dob field value
+// GetDobOk returns a tuple with the Dob field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Customer) GetDobOk() (*string, bool) {
-	if o == nil  {
+	if o == nil || o.Dob == nil {
 		return nil, false
 	}
-	return &o.Dob, true
+	return o.Dob, true
 }
 
-// SetDob sets field value
+// HasDob returns a boolean if a field has been set.
+func (o *Customer) HasDob() bool {
+	if o != nil && o.Dob != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDob gets a reference to the given string and assigns it to the Dob field.
 func (o *Customer) SetDob(v string) {
-	o.Dob = v
+	o.Dob = &v
 }
 
 // GetSsn returns the Ssn field value if set, zero value otherwise.
@@ -321,52 +354,68 @@ func (o *Customer) SetSsnLastFour(v string) {
 	o.SsnLastFour = &v
 }
 
-// GetEmail returns the Email field value
+// GetEmail returns the Email field value if set, zero value otherwise.
 func (o *Customer) GetEmail() string {
-	if o == nil {
+	if o == nil || o.Email == nil {
 		var ret string
 		return ret
 	}
-
-	return o.Email
+	return *o.Email
 }
 
-// GetEmailOk returns a tuple with the Email field value
+// GetEmailOk returns a tuple with the Email field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Customer) GetEmailOk() (*string, bool) {
-	if o == nil  {
+	if o == nil || o.Email == nil {
 		return nil, false
 	}
-	return &o.Email, true
+	return o.Email, true
 }
 
-// SetEmail sets field value
+// HasEmail returns a boolean if a field has been set.
+func (o *Customer) HasEmail() bool {
+	if o != nil && o.Email != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetEmail gets a reference to the given string and assigns it to the Email field.
 func (o *Customer) SetEmail(v string) {
-	o.Email = v
+	o.Email = &v
 }
 
-// GetMobilePhoneNumber returns the MobilePhoneNumber field value
+// GetMobilePhoneNumber returns the MobilePhoneNumber field value if set, zero value otherwise.
 func (o *Customer) GetMobilePhoneNumber() string {
-	if o == nil {
+	if o == nil || o.MobilePhoneNumber == nil {
 		var ret string
 		return ret
 	}
-
-	return o.MobilePhoneNumber
+	return *o.MobilePhoneNumber
 }
 
-// GetMobilePhoneNumberOk returns a tuple with the MobilePhoneNumber field value
+// GetMobilePhoneNumberOk returns a tuple with the MobilePhoneNumber field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Customer) GetMobilePhoneNumberOk() (*string, bool) {
-	if o == nil  {
+	if o == nil || o.MobilePhoneNumber == nil {
 		return nil, false
 	}
-	return &o.MobilePhoneNumber, true
+	return o.MobilePhoneNumber, true
 }
 
-// SetMobilePhoneNumber sets field value
+// HasMobilePhoneNumber returns a boolean if a field has been set.
+func (o *Customer) HasMobilePhoneNumber() bool {
+	if o != nil && o.MobilePhoneNumber != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetMobilePhoneNumber gets a reference to the given string and assigns it to the MobilePhoneNumber field.
 func (o *Customer) SetMobilePhoneNumber(v string) {
-	o.MobilePhoneNumber = v
+	o.MobilePhoneNumber = &v
 }
 
 // GetAltPhoneNumber returns the AltPhoneNumber field value if set, zero value otherwise.
@@ -566,22 +615,22 @@ func (o Customer) MarshalJSON() ([]byte, error) {
 	if o.Id != nil {
 		toSerialize["id"] = o.Id
 	}
-	if true {
+	if o.FirstName != nil {
 		toSerialize["first_name"] = o.FirstName
 	}
-	if true {
+	if o.LastName != nil {
 		toSerialize["last_name"] = o.LastName
 	}
 	if o.MiddleName != nil {
 		toSerialize["middle_name"] = o.MiddleName
 	}
-	if true {
+	if o.LegalAddress != nil {
 		toSerialize["legal_address"] = o.LegalAddress
 	}
-	if true {
+	if o.ShippingAddress != nil {
 		toSerialize["shipping_address"] = o.ShippingAddress
 	}
-	if true {
+	if o.Dob != nil {
 		toSerialize["dob"] = o.Dob
 	}
 	if o.Ssn != nil {
@@ -590,10 +639,10 @@ func (o Customer) MarshalJSON() ([]byte, error) {
 	if o.SsnLastFour != nil {
 		toSerialize["ssn_last_four"] = o.SsnLastFour
 	}
-	if true {
+	if o.Email != nil {
 		toSerialize["email"] = o.Email
 	}
-	if true {
+	if o.MobilePhoneNumber != nil {
 		toSerialize["mobile_phone_number"] = o.MobilePhoneNumber
 	}
 	if o.AltPhoneNumber != nil {

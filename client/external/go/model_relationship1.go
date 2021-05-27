@@ -17,16 +17,18 @@ import (
 // Relationship1 struct for Relationship1
 type Relationship1 struct {
 	// ID of related entity
-	Id *string `json:"id,omitempty"`
-	RelationshipRole *RelationshipRole `json:"relationship_role,omitempty"`
+	Id string `json:"id"`
+	RelationshipRole RelationshipRole `json:"relationship_role"`
 }
 
 // NewRelationship1 instantiates a new Relationship1 object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRelationship1() *Relationship1 {
+func NewRelationship1(id string, relationshipRole RelationshipRole) *Relationship1 {
 	this := Relationship1{}
+	this.Id = id
+	this.RelationshipRole = relationshipRole
 	return &this
 }
 
@@ -38,76 +40,60 @@ func NewRelationship1WithDefaults() *Relationship1 {
 	return &this
 }
 
-// GetId returns the Id field value if set, zero value otherwise.
+// GetId returns the Id field value
 func (o *Relationship1) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Id
+
+	return o.Id
 }
 
-// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *Relationship1) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Id, true
+	return &o.Id, true
 }
 
-// HasId returns a boolean if a field has been set.
-func (o *Relationship1) HasId() bool {
-	if o != nil && o.Id != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetId gets a reference to the given string and assigns it to the Id field.
+// SetId sets field value
 func (o *Relationship1) SetId(v string) {
-	o.Id = &v
+	o.Id = v
 }
 
-// GetRelationshipRole returns the RelationshipRole field value if set, zero value otherwise.
+// GetRelationshipRole returns the RelationshipRole field value
 func (o *Relationship1) GetRelationshipRole() RelationshipRole {
-	if o == nil || o.RelationshipRole == nil {
+	if o == nil {
 		var ret RelationshipRole
 		return ret
 	}
-	return *o.RelationshipRole
+
+	return o.RelationshipRole
 }
 
-// GetRelationshipRoleOk returns a tuple with the RelationshipRole field value if set, nil otherwise
+// GetRelationshipRoleOk returns a tuple with the RelationshipRole field value
 // and a boolean to check if the value has been set.
 func (o *Relationship1) GetRelationshipRoleOk() (*RelationshipRole, bool) {
-	if o == nil || o.RelationshipRole == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.RelationshipRole, true
+	return &o.RelationshipRole, true
 }
 
-// HasRelationshipRole returns a boolean if a field has been set.
-func (o *Relationship1) HasRelationshipRole() bool {
-	if o != nil && o.RelationshipRole != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetRelationshipRole gets a reference to the given RelationshipRole and assigns it to the RelationshipRole field.
+// SetRelationshipRole sets field value
 func (o *Relationship1) SetRelationshipRole(v RelationshipRole) {
-	o.RelationshipRole = &v
+	o.RelationshipRole = v
 }
 
 func (o Relationship1) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
+	if true {
 		toSerialize["id"] = o.Id
 	}
-	if o.RelationshipRole != nil {
+	if true {
 		toSerialize["relationship_role"] = o.RelationshipRole
 	}
 	return json.Marshal(toSerialize)

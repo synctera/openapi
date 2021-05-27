@@ -4479,6 +4479,9 @@ components:
           type: string
         relationship_role:
           $ref: '#/components/schemas/relationship_role'
+      required:
+      - id
+      - relationship_role
       title: Relationship
       type: object
     schemas-relationship:
@@ -4596,7 +4599,7 @@ components:
         ssn_last_four:
           description: Customer's masked tax ID eg SSN formatted with hyphens ***-**-6789
           example: '***-**-6789'
-          pattern: ^\d{3}-\d{2}-\d{4}$
+          pattern: ^\*{3}-\*{2}-\d{4}$
           readOnly: true
           type: string
         email:
@@ -4637,14 +4640,6 @@ components:
             $ref: '#/components/schemas/account'
           readOnly: true
           type: array
-      required:
-      - dob
-      - email
-      - first_name
-      - last_name
-      - legal_address
-      - mobile_phone_number
-      - shipping_address
       title: Customer
       type: object
     customer_list:
