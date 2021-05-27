@@ -309,7 +309,7 @@ Name | Type | Description  | Notes
 
 ## ListDocuments
 
-> map[string]interface{} ListDocuments(ctx, customerId).Limit(limit).PageToken(pageToken).Execute()
+> DocumentList ListDocuments(ctx, customerId).Limit(limit).PageToken(pageToken).Execute()
 
 List Documents
 
@@ -339,7 +339,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `KYCVerificationApi.ListDocuments``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListDocuments`: map[string]interface{}
+    // response from `ListDocuments`: DocumentList
     fmt.Fprintf(os.Stdout, "Response from `KYCVerificationApi.ListDocuments`: %v\n", resp)
 }
 ```
@@ -365,7 +365,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**DocumentList**](DocumentList.md)
 
 ### Authorization
 
@@ -383,7 +383,7 @@ Name | Type | Description  | Notes
 
 ## ListVerifications
 
-> map[string]interface{} ListVerifications(ctx, customerId).Limit(limit).PageToken(pageToken).Execute()
+> CustomerVerificationResultList ListVerifications(ctx, customerId).Limit(limit).PageToken(pageToken).Execute()
 
 List Verification Results
 
@@ -413,7 +413,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `KYCVerificationApi.ListVerifications``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListVerifications`: map[string]interface{}
+    // response from `ListVerifications`: CustomerVerificationResultList
     fmt.Fprintf(os.Stdout, "Response from `KYCVerificationApi.ListVerifications`: %v\n", resp)
 }
 ```
@@ -439,7 +439,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**CustomerVerificationResultList**](CustomerVerificationResultList.md)
 
 ### Authorization
 

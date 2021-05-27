@@ -327,7 +327,7 @@ func (r ApiListReconciliationsRequest) PageToken(pageToken string) ApiListReconc
 	return r
 }
 
-func (r ApiListReconciliationsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiListReconciliationsRequest) Execute() (ReconciliationList, *_nethttp.Response, error) {
 	return r.ApiService.ListReconciliationsExecute(r)
 }
 
@@ -346,16 +346,16 @@ func (a *ReconciliationsApiService) ListReconciliations(ctx _context.Context) Ap
 
 /*
  * Execute executes the request
- * @return map[string]interface{}
+ * @return ReconciliationList
  */
-func (a *ReconciliationsApiService) ListReconciliationsExecute(r ApiListReconciliationsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *ReconciliationsApiService) ListReconciliationsExecute(r ApiListReconciliationsRequest) (ReconciliationList, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  ReconciliationList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ReconciliationsApiService.ListReconciliations")

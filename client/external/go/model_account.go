@@ -12,94 +12,549 @@ package synctera
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
-// Account - Account
+// Account Account
 type Account struct {
-	LeadModeAccount *LeadModeAccount
-	ShadowModeAccount *ShadowModeAccount
+	// Account ID
+	Id *string `json:"id,omitempty"`
+	// Account number. Required for shadow mode.
+	AccountNumber *string `json:"account_number,omitempty"`
+	// Account currency or account settlement currency. ISO 4217 alphabetic currency code. Default USD
+	Currency *string `json:"currency,omitempty"`
+	Status *Status `json:"status,omitempty"`
+	// Exchange rate type
+	ExchangeRateType *string `json:"exchange_rate_type,omitempty"`
+	// International bank account number
+	Iban *string `json:"iban,omitempty"`
+	// SWIFT code
+	SwiftCode *string `json:"swift_code,omitempty"`
+	// Account is investment (variable balance) account or a multi-balance account pool. Default false
+	IsAccountPool *bool `json:"is_account_pool,omitempty"`
+	// Account template code. Required for lead mode.
+	AccountTemplateCode *string `json:"account_template_code,omitempty"`
+	// Account template version. Required for lead mode.
+	AccountTemplateVersion *float32 `json:"account_template_version,omitempty"`
+	// List of the relationship for this account to the parties. Required for lead mode.
+	Relationships *[]SchemasRelationship `json:"relationships,omitempty"`
+	// A list of the aliases for account. Account alias is the account number of different balance types to link to the same account ID
+	Aliases *[]Alias `json:"aliases,omitempty"`
+	// A list of balances for account based on different type
+	Balances *[]Balance `json:"balances,omitempty"`
+	// The most recent 10 transactions of the account
+	RecentTransactions *[]Transaction `json:"recent_transactions,omitempty"`
 }
 
-// LeadModeAccountAsAccount is a convenience function that returns LeadModeAccount wrapped in Account
-func LeadModeAccountAsAccount(v *LeadModeAccount) Account {
-	return Account{ LeadModeAccount: v}
+// NewAccount instantiates a new Account object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewAccount() *Account {
+	this := Account{}
+	return &this
 }
 
-// ShadowModeAccountAsAccount is a convenience function that returns ShadowModeAccount wrapped in Account
-func ShadowModeAccountAsAccount(v *ShadowModeAccount) Account {
-	return Account{ ShadowModeAccount: v}
+// NewAccountWithDefaults instantiates a new Account object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewAccountWithDefaults() *Account {
+	this := Account{}
+	return &this
 }
 
-
-// Unmarshal JSON data into one of the pointers in the struct
-func (dst *Account) UnmarshalJSON(data []byte) error {
-	var err error
-	match := 0
-	// try to unmarshal data into LeadModeAccount
-	err = json.Unmarshal(data, &dst.LeadModeAccount)
-	if err == nil {
-		jsonLeadModeAccount, _ := json.Marshal(dst.LeadModeAccount)
-		if string(jsonLeadModeAccount) == "{}" { // empty struct
-			dst.LeadModeAccount = nil
-		} else {
-			match++
-		}
-	} else {
-		dst.LeadModeAccount = nil
+// GetId returns the Id field value if set, zero value otherwise.
+func (o *Account) GetId() string {
+	if o == nil || o.Id == nil {
+		var ret string
+		return ret
 	}
-
-	// try to unmarshal data into ShadowModeAccount
-	err = json.Unmarshal(data, &dst.ShadowModeAccount)
-	if err == nil {
-		jsonShadowModeAccount, _ := json.Marshal(dst.ShadowModeAccount)
-		if string(jsonShadowModeAccount) == "{}" { // empty struct
-			dst.ShadowModeAccount = nil
-		} else {
-			match++
-		}
-	} else {
-		dst.ShadowModeAccount = nil
-	}
-
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.LeadModeAccount = nil
-		dst.ShadowModeAccount = nil
-
-		return fmt.Errorf("Data matches more than one schema in oneOf(Account)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("Data failed to match schemas in oneOf(Account)")
-	}
+	return *o.Id
 }
 
-// Marshal data from the first non-nil pointers in the struct to JSON
-func (src Account) MarshalJSON() ([]byte, error) {
-	if src.LeadModeAccount != nil {
-		return json.Marshal(&src.LeadModeAccount)
+// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetIdOk() (*string, bool) {
+	if o == nil || o.Id == nil {
+		return nil, false
 	}
-
-	if src.ShadowModeAccount != nil {
-		return json.Marshal(&src.ShadowModeAccount)
-	}
-
-	return nil, nil // no data in oneOf schemas
+	return o.Id, true
 }
 
-// Get the actual instance
-func (obj *Account) GetActualInstance() (interface{}) {
-	if obj.LeadModeAccount != nil {
-		return obj.LeadModeAccount
+// HasId returns a boolean if a field has been set.
+func (o *Account) HasId() bool {
+	if o != nil && o.Id != nil {
+		return true
 	}
 
-	if obj.ShadowModeAccount != nil {
-		return obj.ShadowModeAccount
+	return false
+}
+
+// SetId gets a reference to the given string and assigns it to the Id field.
+func (o *Account) SetId(v string) {
+	o.Id = &v
+}
+
+// GetAccountNumber returns the AccountNumber field value if set, zero value otherwise.
+func (o *Account) GetAccountNumber() string {
+	if o == nil || o.AccountNumber == nil {
+		var ret string
+		return ret
+	}
+	return *o.AccountNumber
+}
+
+// GetAccountNumberOk returns a tuple with the AccountNumber field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetAccountNumberOk() (*string, bool) {
+	if o == nil || o.AccountNumber == nil {
+		return nil, false
+	}
+	return o.AccountNumber, true
+}
+
+// HasAccountNumber returns a boolean if a field has been set.
+func (o *Account) HasAccountNumber() bool {
+	if o != nil && o.AccountNumber != nil {
+		return true
 	}
 
-	// all schemas are nil
-	return nil
+	return false
+}
+
+// SetAccountNumber gets a reference to the given string and assigns it to the AccountNumber field.
+func (o *Account) SetAccountNumber(v string) {
+	o.AccountNumber = &v
+}
+
+// GetCurrency returns the Currency field value if set, zero value otherwise.
+func (o *Account) GetCurrency() string {
+	if o == nil || o.Currency == nil {
+		var ret string
+		return ret
+	}
+	return *o.Currency
+}
+
+// GetCurrencyOk returns a tuple with the Currency field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetCurrencyOk() (*string, bool) {
+	if o == nil || o.Currency == nil {
+		return nil, false
+	}
+	return o.Currency, true
+}
+
+// HasCurrency returns a boolean if a field has been set.
+func (o *Account) HasCurrency() bool {
+	if o != nil && o.Currency != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCurrency gets a reference to the given string and assigns it to the Currency field.
+func (o *Account) SetCurrency(v string) {
+	o.Currency = &v
+}
+
+// GetStatus returns the Status field value if set, zero value otherwise.
+func (o *Account) GetStatus() Status {
+	if o == nil || o.Status == nil {
+		var ret Status
+		return ret
+	}
+	return *o.Status
+}
+
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetStatusOk() (*Status, bool) {
+	if o == nil || o.Status == nil {
+		return nil, false
+	}
+	return o.Status, true
+}
+
+// HasStatus returns a boolean if a field has been set.
+func (o *Account) HasStatus() bool {
+	if o != nil && o.Status != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStatus gets a reference to the given Status and assigns it to the Status field.
+func (o *Account) SetStatus(v Status) {
+	o.Status = &v
+}
+
+// GetExchangeRateType returns the ExchangeRateType field value if set, zero value otherwise.
+func (o *Account) GetExchangeRateType() string {
+	if o == nil || o.ExchangeRateType == nil {
+		var ret string
+		return ret
+	}
+	return *o.ExchangeRateType
+}
+
+// GetExchangeRateTypeOk returns a tuple with the ExchangeRateType field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetExchangeRateTypeOk() (*string, bool) {
+	if o == nil || o.ExchangeRateType == nil {
+		return nil, false
+	}
+	return o.ExchangeRateType, true
+}
+
+// HasExchangeRateType returns a boolean if a field has been set.
+func (o *Account) HasExchangeRateType() bool {
+	if o != nil && o.ExchangeRateType != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetExchangeRateType gets a reference to the given string and assigns it to the ExchangeRateType field.
+func (o *Account) SetExchangeRateType(v string) {
+	o.ExchangeRateType = &v
+}
+
+// GetIban returns the Iban field value if set, zero value otherwise.
+func (o *Account) GetIban() string {
+	if o == nil || o.Iban == nil {
+		var ret string
+		return ret
+	}
+	return *o.Iban
+}
+
+// GetIbanOk returns a tuple with the Iban field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetIbanOk() (*string, bool) {
+	if o == nil || o.Iban == nil {
+		return nil, false
+	}
+	return o.Iban, true
+}
+
+// HasIban returns a boolean if a field has been set.
+func (o *Account) HasIban() bool {
+	if o != nil && o.Iban != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetIban gets a reference to the given string and assigns it to the Iban field.
+func (o *Account) SetIban(v string) {
+	o.Iban = &v
+}
+
+// GetSwiftCode returns the SwiftCode field value if set, zero value otherwise.
+func (o *Account) GetSwiftCode() string {
+	if o == nil || o.SwiftCode == nil {
+		var ret string
+		return ret
+	}
+	return *o.SwiftCode
+}
+
+// GetSwiftCodeOk returns a tuple with the SwiftCode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetSwiftCodeOk() (*string, bool) {
+	if o == nil || o.SwiftCode == nil {
+		return nil, false
+	}
+	return o.SwiftCode, true
+}
+
+// HasSwiftCode returns a boolean if a field has been set.
+func (o *Account) HasSwiftCode() bool {
+	if o != nil && o.SwiftCode != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetSwiftCode gets a reference to the given string and assigns it to the SwiftCode field.
+func (o *Account) SetSwiftCode(v string) {
+	o.SwiftCode = &v
+}
+
+// GetIsAccountPool returns the IsAccountPool field value if set, zero value otherwise.
+func (o *Account) GetIsAccountPool() bool {
+	if o == nil || o.IsAccountPool == nil {
+		var ret bool
+		return ret
+	}
+	return *o.IsAccountPool
+}
+
+// GetIsAccountPoolOk returns a tuple with the IsAccountPool field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetIsAccountPoolOk() (*bool, bool) {
+	if o == nil || o.IsAccountPool == nil {
+		return nil, false
+	}
+	return o.IsAccountPool, true
+}
+
+// HasIsAccountPool returns a boolean if a field has been set.
+func (o *Account) HasIsAccountPool() bool {
+	if o != nil && o.IsAccountPool != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetIsAccountPool gets a reference to the given bool and assigns it to the IsAccountPool field.
+func (o *Account) SetIsAccountPool(v bool) {
+	o.IsAccountPool = &v
+}
+
+// GetAccountTemplateCode returns the AccountTemplateCode field value if set, zero value otherwise.
+func (o *Account) GetAccountTemplateCode() string {
+	if o == nil || o.AccountTemplateCode == nil {
+		var ret string
+		return ret
+	}
+	return *o.AccountTemplateCode
+}
+
+// GetAccountTemplateCodeOk returns a tuple with the AccountTemplateCode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetAccountTemplateCodeOk() (*string, bool) {
+	if o == nil || o.AccountTemplateCode == nil {
+		return nil, false
+	}
+	return o.AccountTemplateCode, true
+}
+
+// HasAccountTemplateCode returns a boolean if a field has been set.
+func (o *Account) HasAccountTemplateCode() bool {
+	if o != nil && o.AccountTemplateCode != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAccountTemplateCode gets a reference to the given string and assigns it to the AccountTemplateCode field.
+func (o *Account) SetAccountTemplateCode(v string) {
+	o.AccountTemplateCode = &v
+}
+
+// GetAccountTemplateVersion returns the AccountTemplateVersion field value if set, zero value otherwise.
+func (o *Account) GetAccountTemplateVersion() float32 {
+	if o == nil || o.AccountTemplateVersion == nil {
+		var ret float32
+		return ret
+	}
+	return *o.AccountTemplateVersion
+}
+
+// GetAccountTemplateVersionOk returns a tuple with the AccountTemplateVersion field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetAccountTemplateVersionOk() (*float32, bool) {
+	if o == nil || o.AccountTemplateVersion == nil {
+		return nil, false
+	}
+	return o.AccountTemplateVersion, true
+}
+
+// HasAccountTemplateVersion returns a boolean if a field has been set.
+func (o *Account) HasAccountTemplateVersion() bool {
+	if o != nil && o.AccountTemplateVersion != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAccountTemplateVersion gets a reference to the given float32 and assigns it to the AccountTemplateVersion field.
+func (o *Account) SetAccountTemplateVersion(v float32) {
+	o.AccountTemplateVersion = &v
+}
+
+// GetRelationships returns the Relationships field value if set, zero value otherwise.
+func (o *Account) GetRelationships() []SchemasRelationship {
+	if o == nil || o.Relationships == nil {
+		var ret []SchemasRelationship
+		return ret
+	}
+	return *o.Relationships
+}
+
+// GetRelationshipsOk returns a tuple with the Relationships field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetRelationshipsOk() (*[]SchemasRelationship, bool) {
+	if o == nil || o.Relationships == nil {
+		return nil, false
+	}
+	return o.Relationships, true
+}
+
+// HasRelationships returns a boolean if a field has been set.
+func (o *Account) HasRelationships() bool {
+	if o != nil && o.Relationships != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRelationships gets a reference to the given []SchemasRelationship and assigns it to the Relationships field.
+func (o *Account) SetRelationships(v []SchemasRelationship) {
+	o.Relationships = &v
+}
+
+// GetAliases returns the Aliases field value if set, zero value otherwise.
+func (o *Account) GetAliases() []Alias {
+	if o == nil || o.Aliases == nil {
+		var ret []Alias
+		return ret
+	}
+	return *o.Aliases
+}
+
+// GetAliasesOk returns a tuple with the Aliases field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetAliasesOk() (*[]Alias, bool) {
+	if o == nil || o.Aliases == nil {
+		return nil, false
+	}
+	return o.Aliases, true
+}
+
+// HasAliases returns a boolean if a field has been set.
+func (o *Account) HasAliases() bool {
+	if o != nil && o.Aliases != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAliases gets a reference to the given []Alias and assigns it to the Aliases field.
+func (o *Account) SetAliases(v []Alias) {
+	o.Aliases = &v
+}
+
+// GetBalances returns the Balances field value if set, zero value otherwise.
+func (o *Account) GetBalances() []Balance {
+	if o == nil || o.Balances == nil {
+		var ret []Balance
+		return ret
+	}
+	return *o.Balances
+}
+
+// GetBalancesOk returns a tuple with the Balances field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetBalancesOk() (*[]Balance, bool) {
+	if o == nil || o.Balances == nil {
+		return nil, false
+	}
+	return o.Balances, true
+}
+
+// HasBalances returns a boolean if a field has been set.
+func (o *Account) HasBalances() bool {
+	if o != nil && o.Balances != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetBalances gets a reference to the given []Balance and assigns it to the Balances field.
+func (o *Account) SetBalances(v []Balance) {
+	o.Balances = &v
+}
+
+// GetRecentTransactions returns the RecentTransactions field value if set, zero value otherwise.
+func (o *Account) GetRecentTransactions() []Transaction {
+	if o == nil || o.RecentTransactions == nil {
+		var ret []Transaction
+		return ret
+	}
+	return *o.RecentTransactions
+}
+
+// GetRecentTransactionsOk returns a tuple with the RecentTransactions field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Account) GetRecentTransactionsOk() (*[]Transaction, bool) {
+	if o == nil || o.RecentTransactions == nil {
+		return nil, false
+	}
+	return o.RecentTransactions, true
+}
+
+// HasRecentTransactions returns a boolean if a field has been set.
+func (o *Account) HasRecentTransactions() bool {
+	if o != nil && o.RecentTransactions != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetRecentTransactions gets a reference to the given []Transaction and assigns it to the RecentTransactions field.
+func (o *Account) SetRecentTransactions(v []Transaction) {
+	o.RecentTransactions = &v
+}
+
+func (o Account) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if o.Id != nil {
+		toSerialize["id"] = o.Id
+	}
+	if o.AccountNumber != nil {
+		toSerialize["account_number"] = o.AccountNumber
+	}
+	if o.Currency != nil {
+		toSerialize["currency"] = o.Currency
+	}
+	if o.Status != nil {
+		toSerialize["status"] = o.Status
+	}
+	if o.ExchangeRateType != nil {
+		toSerialize["exchange_rate_type"] = o.ExchangeRateType
+	}
+	if o.Iban != nil {
+		toSerialize["iban"] = o.Iban
+	}
+	if o.SwiftCode != nil {
+		toSerialize["swift_code"] = o.SwiftCode
+	}
+	if o.IsAccountPool != nil {
+		toSerialize["is_account_pool"] = o.IsAccountPool
+	}
+	if o.AccountTemplateCode != nil {
+		toSerialize["account_template_code"] = o.AccountTemplateCode
+	}
+	if o.AccountTemplateVersion != nil {
+		toSerialize["account_template_version"] = o.AccountTemplateVersion
+	}
+	if o.Relationships != nil {
+		toSerialize["relationships"] = o.Relationships
+	}
+	if o.Aliases != nil {
+		toSerialize["aliases"] = o.Aliases
+	}
+	if o.Balances != nil {
+		toSerialize["balances"] = o.Balances
+	}
+	if o.RecentTransactions != nil {
+		toSerialize["recent_transactions"] = o.RecentTransactions
+	}
+	return json.Marshal(toSerialize)
 }
 
 type NullableAccount struct {

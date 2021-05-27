@@ -11,7 +11,7 @@ components:
         target_account:
           type: string
           format: uuid
-          description: Account ID that is receiving the transfer  
+          description: Account ID that is receiving the transfer
         amount:
           minimum: 0
           description: amount in ISO 4217 minor currency units
@@ -61,6 +61,19 @@ components:
         - currency
         - dc_sign
 
+    a2a_transfer_list:
+      allOf:
+        - type: object
+          required:
+            - a2a_transfers
+          properties:
+            a2a_transfers:
+              type: array
+              description: Array of account to account transfers
+              items:
+                $ref: '#/components/schemas/a2a_transfer'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
+
     ach_outgoing:
       title: Outgoing ACH
       type: object
@@ -90,7 +103,7 @@ components:
         transaction_direction:
           description: The type of transaction (DEBIT/CREDIT) for originating account
           type: string
-          enum: [DEBIT, CREDIT]
+          enum: [ DEBIT, CREDIT ]
           example: DEBIT
         reference_info:
           description: Reference information for the payment
@@ -143,6 +156,19 @@ components:
         - target_bank_country
         - recipient_name
 
+    ach_outgoing_list:
+      allOf:
+        - type: object
+          required:
+            - ach_outgoings
+          properties:
+            ach_outgoings:
+              type: array
+              description: Array of ACH
+              items:
+                $ref: '#/components/schemas/ach_outgoing'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
+
     recurrence_data:
       title: Recurrence Data
       type: object
@@ -184,7 +210,7 @@ components:
         effective_date:
           type: string
           format: date-time
-          description: The effective date of the transaction (value_date) 
+          description: The effective date of the transaction (value_date)
         profit_center:
           type: string
           description: Profit center of the transaction
@@ -245,3 +271,16 @@ components:
             - RETURN_DEBIT_SAVING_ACH
             - REVERSAL_ACH
             - REVERSAL_CARD
+
+    transaction_list:
+      allOf:
+        - type: object
+          required:
+            - transactions
+          properties:
+            transactions:
+              type: array
+              description: Array of transactions
+              items:
+                $ref: '#/components/schemas/transaction'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'

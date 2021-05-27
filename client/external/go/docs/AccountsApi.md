@@ -39,7 +39,7 @@ import (
 )
 
 func main() {
-    account := openapiclient.account{LeadModeAccount: openapiclient.NewLeadModeAccount([]openapiclient.SchemasRelationship{*openapiclient.NewSchemasRelationship()})} // Account | Account to create
+    account := *openapiclient.NewAccount() // Account | Account to create
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -518,7 +518,7 @@ Name | Type | Description  | Notes
 
 ## GetAccountTransactions
 
-> map[string]interface{} GetAccountTransactions(ctx, accountId).InlineObject1(inlineObject1).Limit(limit).PageToken(pageToken).Execute()
+> TransactionList GetAccountTransactions(ctx, accountId).InlineObject1(inlineObject1).Limit(limit).PageToken(pageToken).Execute()
 
 Get account transactions
 
@@ -549,7 +549,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.GetAccountTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetAccountTransactions`: map[string]interface{}
+    // response from `GetAccountTransactions`: TransactionList
     fmt.Fprintf(os.Stdout, "Response from `AccountsApi.GetAccountTransactions`: %v\n", resp)
 }
 ```
@@ -576,7 +576,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**TransactionList**](TransactionList.md)
 
 ### Authorization
 
@@ -594,7 +594,7 @@ Name | Type | Description  | Notes
 
 ## ListAccounts
 
-> map[string]interface{} ListAccounts(ctx).CustomerId(customerId).Limit(limit).PageToken(pageToken).HasDetails(hasDetails).Execute()
+> AccountList ListAccounts(ctx).CustomerId(customerId).Limit(limit).PageToken(pageToken).HasDetails(hasDetails).Execute()
 
 List accounts
 
@@ -625,7 +625,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.ListAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListAccounts`: map[string]interface{}
+    // response from `ListAccounts`: AccountList
     fmt.Fprintf(os.Stdout, "Response from `AccountsApi.ListAccounts`: %v\n", resp)
 }
 ```
@@ -648,7 +648,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**AccountList**](AccountList.md)
 
 ### Authorization
 
@@ -686,7 +686,7 @@ import (
 
 func main() {
     accountId := TODO // string | Account ID
-    account := openapiclient.account{LeadModeAccount: openapiclient.NewLeadModeAccount([]openapiclient.SchemasRelationship{*openapiclient.NewSchemasRelationship()})} // Account | Account to update
+    account := *openapiclient.NewAccount() // Account | Account to update
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)

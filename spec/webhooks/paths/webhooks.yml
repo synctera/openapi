@@ -42,15 +42,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  documents:
-                    type: array
-                    description: Array of webhooks
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/webhook'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/webhook_list'
     '401':
       $ref: '../../common/responses.yml#/components/responses/unauthorized'
     '500':

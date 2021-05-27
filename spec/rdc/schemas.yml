@@ -83,6 +83,19 @@ components:
         - back_image_id
         - scan_id
 
+    deposit_list:
+      allOf:
+        - type: object
+          required:
+            - deposits
+          properties:
+            deposits:
+              description: Array of RDC deposits
+              type: array
+              items:
+                $ref: '#/components/schemas/deposit'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
+
     image:
       title: RDC Image
       description: Image uploaded for a remote deposit capture
@@ -110,7 +123,20 @@ components:
         - id
         - media_type
         - byte_data
-        - data_uploaded
+        - date_uploaded
+
+    image_list:
+      allOf:
+        - type: object
+          required:
+            - images
+          properties:
+            images:
+              description: Array of RDC images
+              type: array
+              items:
+                $ref: '#/components/schemas/image'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
 
     rdc_media_type:
       title: RDC MediaType
@@ -188,3 +214,15 @@ components:
         - front_image_id
         - back_image_id
 
+    scan_list:
+      allOf:
+        - type: object
+          required:
+            - scans
+          properties:
+            scans:
+              description: Array of RDC scans
+              type: array
+              items:
+                $ref: '#/components/schemas/scan'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'

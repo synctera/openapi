@@ -5,14 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ConnectId** | Pointer to **string** | Connection ID of the account | [optional] 
-**RelationshipType** | Pointer to **string** | Relationship type | [optional] 
-**CustomerId** | Pointer to **string** | Customer that the current account is associated with | [optional] 
+**RelationshipType** | **string** | Relationship type | 
+**CustomerId** | **string** | Customer that the current account is associated with | 
 
 ## Methods
 
 ### NewRelationship
 
-`func NewRelationship() *Relationship`
+`func NewRelationship(relationshipType string, customerId string, ) *Relationship`
 
 NewRelationship instantiates a new Relationship object
 This constructor will assign default values to properties that have it defined,
@@ -71,11 +71,6 @@ and a boolean to check if the value has been set.
 
 SetRelationshipType sets RelationshipType field to given value.
 
-### HasRelationshipType
-
-`func (o *Relationship) HasRelationshipType() bool`
-
-HasRelationshipType returns a boolean if a field has been set.
 
 ### GetCustomerId
 
@@ -96,11 +91,6 @@ and a boolean to check if the value has been set.
 
 SetCustomerId sets CustomerId field to given value.
 
-### HasCustomerId
-
-`func (o *Relationship) HasCustomerId() bool`
-
-HasCustomerId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

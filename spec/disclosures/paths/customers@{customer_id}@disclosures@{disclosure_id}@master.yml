@@ -19,15 +19,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  customers:
-                    type: array
-                    description: Array of Disclosures
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/disclosure_master'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/disclosure_master_list'
     '401':
       $ref: '../../common/responses.yml#/components/responses/unauthorized'
     '403':

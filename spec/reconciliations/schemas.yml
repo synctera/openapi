@@ -33,6 +33,19 @@ components:
         - file_name
         - ingestion_status
 
+    reconciliation_list:
+      allOf:
+        - type: object
+          required:
+            - reconciliations
+          properties:
+            reconciliations:
+              description: Array of reconciliations
+              type: array
+              items:
+                $ref: '#/components/schemas/reconciliation'
+        - $ref: '../common/schemas.yml#/components/schemas/paginated_response'
+
     reconciliation_input:
       title: Reconciliation Input
       description: Input data for a reconciliation

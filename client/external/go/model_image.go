@@ -22,18 +22,19 @@ type Image struct {
 	// Base64url encoded image
 	ByteData string `json:"byte_data"`
 	// Date the image was uploaded, in RFC 3339 format
-	DateUploaded *string `json:"date_uploaded,omitempty"`
+	DateUploaded string `json:"date_uploaded"`
 }
 
 // NewImage instantiates a new Image object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewImage(id string, mediaType RdcMediaType, byteData string) *Image {
+func NewImage(id string, mediaType RdcMediaType, byteData string, dateUploaded string) *Image {
 	this := Image{}
 	this.Id = id
 	this.MediaType = mediaType
 	this.ByteData = byteData
+	this.DateUploaded = dateUploaded
 	return &this
 }
 
@@ -117,36 +118,28 @@ func (o *Image) SetByteData(v string) {
 	o.ByteData = v
 }
 
-// GetDateUploaded returns the DateUploaded field value if set, zero value otherwise.
+// GetDateUploaded returns the DateUploaded field value
 func (o *Image) GetDateUploaded() string {
-	if o == nil || o.DateUploaded == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.DateUploaded
+
+	return o.DateUploaded
 }
 
-// GetDateUploadedOk returns a tuple with the DateUploaded field value if set, nil otherwise
+// GetDateUploadedOk returns a tuple with the DateUploaded field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetDateUploadedOk() (*string, bool) {
-	if o == nil || o.DateUploaded == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.DateUploaded, true
+	return &o.DateUploaded, true
 }
 
-// HasDateUploaded returns a boolean if a field has been set.
-func (o *Image) HasDateUploaded() bool {
-	if o != nil && o.DateUploaded != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetDateUploaded gets a reference to the given string and assigns it to the DateUploaded field.
+// SetDateUploaded sets field value
 func (o *Image) SetDateUploaded(v string) {
-	o.DateUploaded = &v
+	o.DateUploaded = v
 }
 
 func (o Image) MarshalJSON() ([]byte, error) {
@@ -160,7 +153,7 @@ func (o Image) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["byte_data"] = o.ByteData
 	}
-	if o.DateUploaded != nil {
+	if true {
 		toSerialize["date_uploaded"] = o.DateUploaded
 	}
 	return json.Marshal(toSerialize)

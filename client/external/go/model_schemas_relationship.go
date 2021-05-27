@@ -19,17 +19,19 @@ type SchemasRelationship struct {
 	// Connection ID of the account
 	ConnectId *string `json:"connect_id,omitempty"`
 	// Relationship type
-	RelationshipType *string `json:"relationship_type,omitempty"`
+	RelationshipType string `json:"relationship_type"`
 	// Customer that the current account is associated with
-	CustomerId *string `json:"customer_id,omitempty"`
+	CustomerId string `json:"customer_id"`
 }
 
 // NewSchemasRelationship instantiates a new SchemasRelationship object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSchemasRelationship() *SchemasRelationship {
+func NewSchemasRelationship(relationshipType string, customerId string) *SchemasRelationship {
 	this := SchemasRelationship{}
+	this.RelationshipType = relationshipType
+	this.CustomerId = customerId
 	return &this
 }
 
@@ -73,68 +75,52 @@ func (o *SchemasRelationship) SetConnectId(v string) {
 	o.ConnectId = &v
 }
 
-// GetRelationshipType returns the RelationshipType field value if set, zero value otherwise.
+// GetRelationshipType returns the RelationshipType field value
 func (o *SchemasRelationship) GetRelationshipType() string {
-	if o == nil || o.RelationshipType == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.RelationshipType
+
+	return o.RelationshipType
 }
 
-// GetRelationshipTypeOk returns a tuple with the RelationshipType field value if set, nil otherwise
+// GetRelationshipTypeOk returns a tuple with the RelationshipType field value
 // and a boolean to check if the value has been set.
 func (o *SchemasRelationship) GetRelationshipTypeOk() (*string, bool) {
-	if o == nil || o.RelationshipType == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.RelationshipType, true
+	return &o.RelationshipType, true
 }
 
-// HasRelationshipType returns a boolean if a field has been set.
-func (o *SchemasRelationship) HasRelationshipType() bool {
-	if o != nil && o.RelationshipType != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetRelationshipType gets a reference to the given string and assigns it to the RelationshipType field.
+// SetRelationshipType sets field value
 func (o *SchemasRelationship) SetRelationshipType(v string) {
-	o.RelationshipType = &v
+	o.RelationshipType = v
 }
 
-// GetCustomerId returns the CustomerId field value if set, zero value otherwise.
+// GetCustomerId returns the CustomerId field value
 func (o *SchemasRelationship) GetCustomerId() string {
-	if o == nil || o.CustomerId == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.CustomerId
+
+	return o.CustomerId
 }
 
-// GetCustomerIdOk returns a tuple with the CustomerId field value if set, nil otherwise
+// GetCustomerIdOk returns a tuple with the CustomerId field value
 // and a boolean to check if the value has been set.
 func (o *SchemasRelationship) GetCustomerIdOk() (*string, bool) {
-	if o == nil || o.CustomerId == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.CustomerId, true
+	return &o.CustomerId, true
 }
 
-// HasCustomerId returns a boolean if a field has been set.
-func (o *SchemasRelationship) HasCustomerId() bool {
-	if o != nil && o.CustomerId != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetCustomerId gets a reference to the given string and assigns it to the CustomerId field.
+// SetCustomerId sets field value
 func (o *SchemasRelationship) SetCustomerId(v string) {
-	o.CustomerId = &v
+	o.CustomerId = v
 }
 
 func (o SchemasRelationship) MarshalJSON() ([]byte, error) {
@@ -142,10 +128,10 @@ func (o SchemasRelationship) MarshalJSON() ([]byte, error) {
 	if o.ConnectId != nil {
 		toSerialize["connect_id"] = o.ConnectId
 	}
-	if o.RelationshipType != nil {
+	if true {
 		toSerialize["relationship_type"] = o.RelationshipType
 	}
-	if o.CustomerId != nil {
+	if true {
 		toSerialize["customer_id"] = o.CustomerId
 	}
 	return json.Marshal(toSerialize)

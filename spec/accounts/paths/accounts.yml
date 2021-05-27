@@ -2,7 +2,7 @@ summary: Accounts
 post:
   summary: Create an account
   operationId: createAccount
-  description: Create a shadow mode account
+  description: Create a shadow mode or lead mode account. You need to determine the mode according to integrator configuration, and specify the required fields accordingly.
   tags:
     - Accounts
   requestBody:
@@ -19,9 +19,10 @@ post:
         application/json:
           schema:
             $ref: '../schemas.yml#/components/schemas/account'
-
     '401':
       $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '422':
+      $ref: '../../common/responses.yml#/components/responses/unprocessible_entity'
 
 get:
   summary: List accounts
@@ -52,15 +53,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  accounts:
-                    type: array
-                    description: Array of Accounts
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/account'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/account_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':

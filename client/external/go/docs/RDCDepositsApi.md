@@ -110,7 +110,7 @@ import (
 
 func main() {
     accountId := TODO // string | Account ID
-    image := *openapiclient.NewImage("Id_example", openapiclient.rdc_media_type("PDF"), string(123)) // Image | RDC image to create (optional)
+    image := *openapiclient.NewImage("Id_example", openapiclient.rdc_media_type("PDF"), string(123), "2019-01-02T03:04:05.678Z") // Image | RDC image to create (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -453,7 +453,7 @@ Name | Type | Description  | Notes
 
 ## ListRdcDeposits
 
-> map[string]interface{} ListRdcDeposits(ctx, accountId).Limit(limit).PageToken(pageToken).Execute()
+> DepositList ListRdcDeposits(ctx, accountId).Limit(limit).PageToken(pageToken).Execute()
 
 List RDC Deposits
 
@@ -483,7 +483,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `RDCDepositsApi.ListRdcDeposits``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListRdcDeposits`: map[string]interface{}
+    // response from `ListRdcDeposits`: DepositList
     fmt.Fprintf(os.Stdout, "Response from `RDCDepositsApi.ListRdcDeposits`: %v\n", resp)
 }
 ```
@@ -509,7 +509,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**DepositList**](DepositList.md)
 
 ### Authorization
 
@@ -527,7 +527,7 @@ Name | Type | Description  | Notes
 
 ## ListRdcImageIds
 
-> map[string]interface{} ListRdcImageIds(ctx, accountId).Limit(limit).PageToken(pageToken).Execute()
+> ImageList ListRdcImageIds(ctx, accountId).Limit(limit).PageToken(pageToken).Execute()
 
 List RDC Image Ids
 
@@ -557,7 +557,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `RDCDepositsApi.ListRdcImageIds``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListRdcImageIds`: map[string]interface{}
+    // response from `ListRdcImageIds`: ImageList
     fmt.Fprintf(os.Stdout, "Response from `RDCDepositsApi.ListRdcImageIds`: %v\n", resp)
 }
 ```
@@ -583,7 +583,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**ImageList**](ImageList.md)
 
 ### Authorization
 
@@ -601,7 +601,7 @@ Name | Type | Description  | Notes
 
 ## ListRdcScans
 
-> map[string]interface{} ListRdcScans(ctx, accountId).Limit(limit).PageToken(pageToken).Execute()
+> ScanList ListRdcScans(ctx, accountId).Limit(limit).PageToken(pageToken).Execute()
 
 List RDC Scans
 
@@ -631,7 +631,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `RDCDepositsApi.ListRdcScans``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListRdcScans`: map[string]interface{}
+    // response from `ListRdcScans`: ScanList
     fmt.Fprintf(os.Stdout, "Response from `RDCDepositsApi.ListRdcScans`: %v\n", resp)
 }
 ```
@@ -657,7 +657,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**ScanList**](ScanList.md)
 
 ### Authorization
 

@@ -26,15 +26,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  event_list:
-                    type: array
-                    description: Array of events
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/event'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/event_list'
     '401':
       $ref: '../../common/responses.yml#/components/responses/unauthorized'
     '500':

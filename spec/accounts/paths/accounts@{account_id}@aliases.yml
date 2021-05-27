@@ -43,15 +43,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  customers:
-                    type: array
-                    description: Array of account alias
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/alias'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            '../schemas.yml#/components/schemas/alias_list'
     '401':
       $ref: '../../common/responses.yml#/components/responses/unauthorized'
     '461':

@@ -7,13 +7,13 @@ Name | Type | Description | Notes
 **Id** | **string** | RDC image id | [readonly] 
 **MediaType** | [**RdcMediaType**](RdcMediaType.md) |  | 
 **ByteData** | **string** | Base64url encoded image | 
-**DateUploaded** | Pointer to **string** | Date the image was uploaded, in RFC 3339 format | [optional] [readonly] 
+**DateUploaded** | **string** | Date the image was uploaded, in RFC 3339 format | [readonly] 
 
 ## Methods
 
 ### NewImage
 
-`func NewImage(id string, mediaType RdcMediaType, byteData string, ) *Image`
+`func NewImage(id string, mediaType RdcMediaType, byteData string, dateUploaded string, ) *Image`
 
 NewImage instantiates a new Image object
 This constructor will assign default values to properties that have it defined,
@@ -107,11 +107,6 @@ and a boolean to check if the value has been set.
 
 SetDateUploaded sets DateUploaded field to given value.
 
-### HasDateUploaded
-
-`func (o *Image) HasDateUploaded() bool`
-
-HasDateUploaded returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

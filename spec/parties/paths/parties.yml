@@ -1,0 +1,44 @@
+summary: Parties Operations
+description: >
+  For all parties and party group/group member operations
+post:
+  summary: Create a party
+  operationId: addParty
+  description: Create a party
+  tags:
+    - Parties
+  requestBody:
+    description: Party to create
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/party'
+  responses:
+    '200':
+      description: Created party id 
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/uuid'
+
+    '401':
+      $ref: '../../common/responses.yml#/components/responses/unauthorized'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+get:
+  summary: List parties
+  description: Get list of parties with communicatons
+  operationId: getParties
+  tags:
+    - Parties
+  responses:
+    '200':
+      description: List of parties with communications
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/parties_list'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

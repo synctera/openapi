@@ -31,15 +31,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-            - type: object
-              properties:
-                transactions:
-                  type: array
-                  description: Array of transactions
-                  items:
-                    $ref: '../../transactions/schemas.yml#/components/schemas/transaction'
-            - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../../transactions/schemas.yml#/components/schemas/transaction_list'
     '401':
       $ref: '../../common/responses.yml#/components/responses/unauthorized'
     '404':

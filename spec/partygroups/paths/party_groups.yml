@@ -1,0 +1,47 @@
+summary: Party Group Operations
+post:
+  summary: Create a party group
+  operationId: createPartyGroup
+  description: Create a party group
+  tags:
+    - Party Groups
+  requestBody:
+    description: Party Group to create
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/party_group'
+  responses:
+    '200':
+      description: Created party group
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/party_group_body'
+
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+
+get:
+  summary: List party groups
+  description: Get list of party groups with party group members
+  operationId: getPartyGroups
+  tags:
+    - Party Groups
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/members'
+  responses:
+    '200':
+      description: List of party groups with party group members
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/party_groups_list'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

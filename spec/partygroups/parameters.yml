@@ -1,0 +1,39 @@
+components:
+  parameters:
+    party_id:
+      name: party_id
+      description: Party ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid
+
+    party_group_id:
+      name: party_group_id
+      description: Party Group ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid
+    
+    members:
+      name: members
+      description: Whether to populate the party group members or not
+      in: query
+      required: false
+      schema:
+        type: boolean
+    
+    related_party_id:
+      name: related_party_id
+      description: Related Party ID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: faker.random.uuid

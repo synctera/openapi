@@ -361,7 +361,7 @@ Name | Type | Description  | Notes
 
 ## ListEvents
 
-> map[string]interface{} ListEvents(ctx, webhookId).StartDate(startDate).EndDate(endDate).Limit(limit).PageToken(pageToken).Execute()
+> EventList ListEvents(ctx, webhookId).StartDate(startDate).EndDate(endDate).Limit(limit).PageToken(pageToken).Execute()
 
 List webhook events
 
@@ -394,7 +394,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `WebhooksApi.ListEvents``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListEvents`: map[string]interface{}
+    // response from `ListEvents`: EventList
     fmt.Fprintf(os.Stdout, "Response from `WebhooksApi.ListEvents`: %v\n", resp)
 }
 ```
@@ -422,7 +422,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**EventList**](EventList.md)
 
 ### Authorization
 
@@ -440,7 +440,7 @@ Name | Type | Description  | Notes
 
 ## ListWebhooks
 
-> map[string]interface{} ListWebhooks(ctx).Limit(limit).PageToken(pageToken).IsEnabledOnly(isEnabledOnly).Execute()
+> WebhookList ListWebhooks(ctx).Limit(limit).PageToken(pageToken).IsEnabledOnly(isEnabledOnly).Execute()
 
 List webhooks
 
@@ -470,7 +470,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `WebhooksApi.ListWebhooks``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListWebhooks`: map[string]interface{}
+    // response from `ListWebhooks`: WebhookList
     fmt.Fprintf(os.Stdout, "Response from `WebhooksApi.ListWebhooks`: %v\n", resp)
 }
 ```
@@ -492,7 +492,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**WebhookList**](WebhookList.md)
 
 ### Authorization
 

@@ -15,15 +15,7 @@ get:
       content:
         application/json:
           schema:
-            allOf:
-              - type: object
-                properties:
-                  documents:
-                    type: array
-                    description: Array of documents
-                    items:
-                      $ref: '../schemas.yml#/components/schemas/document'
-              - $ref: '../../common/schemas.yml#/components/schemas/paginated_response'
+            $ref: '../schemas.yml#/components/schemas/document_list'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':
