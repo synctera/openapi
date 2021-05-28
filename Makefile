@@ -29,3 +29,12 @@ internal-%-client: spec/internal-api-merged-bundled.yml
 
 synctera-%-client.tar.gz: external-%-client
 	tar -C client/external/ --transform "s|^$*|synctera|" -czf synctera.tar.gz --exclude-from client/external/$*/.tar.ignore $*/
+
+docker-%:
+	docker run --user $(shell id -u):$(shell id -g) \
+		--mount type=bind,source=$(shell go env GOMODCACHE),destination=/go/pkg/mod,readonly \
+		--mount type=bind,source=$(CURDIR),destination=/openapi \
+		--workdir /openapi \
+		--pull always \
+		registry.gitlab.com/synctera/tools/build-tools \
+		make $*
