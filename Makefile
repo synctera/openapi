@@ -28,7 +28,7 @@ internal-%-client: spec/internal-api-merged-bundled.yml
 	./generate-client.sh internal $*
 
 synctera-%-client.tar.gz: external-%-client
-	tar -C client/external/ --transform "s|^$*|synctera|" -czf synctera.tar.gz --exclude-from client/external/$*/.tar.ignore $*/
+	tar -C client/external/ --transform "s|^$*|synctera|" -czf $@ --exclude-from client/external/$*/.tar.ignore $*/
 
 docker-%:
 	docker run --user $(shell id -u):$(shell id -g) \
