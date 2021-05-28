@@ -1,0 +1,6 @@
+{
+  "withSeparateModelsAndApi": true,
+  "modelPackage": "models",
+  "apiPackage": "api",
+  "withInterfaces": true
+}
