@@ -22,7 +22,7 @@ openapi-generator-cli generate --strict-spec true --generator-name "$2" \
   --input-spec spec/"$1"-api-merged-bundled.yml --output client/"$1"/"$2"/ \
 	--package-name synctera --config "${config_file}" 2>&1 | tee "${log_file}"
 
-bad_warnings=$(grep WARN "${log_file}" | grep --invert-match "error (reserved word) cannot be used as model name. Renamed to model_error$")
+bad_warnings=$(grep WARN "${log_file}" | grep -P --invert-match "Renamed to [Mm]odel_?[Ee]rror$")
 if [ "${bad_warnings}" != "" ]; then
   echo
   echo openapi-generator-cli produced the following warnings:
