@@ -1,0 +1,45 @@
+summary: User Operations
+post:
+  summary: Create an user
+  operationId: addUser
+  description: Add an user
+  tags:
+    - Users
+  requestBody:
+    description: user to create
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/user'
+  responses:
+    '201':
+      description: Created user
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/user'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '409':
+      $ref: '../../common/responses.yml#/components/responses/already_exists'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+get:
+  summary: list users
+  operationId: getUsers
+  description: list all users
+  tags:
+    - Users
+  responses:
+    '200':
+      description: Users
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/users_list'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'

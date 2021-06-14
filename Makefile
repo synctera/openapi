@@ -8,6 +8,9 @@ doc/%-api.html: spec/%-api-merged-bundled.yml
 	redoc-cli bundle $<
 	mv redoc-static.html $@
 
+pull_specs:
+	cd cmd/pull_specs && go run . --output $(CURDIR)/spec
+
 merge-external-config = merge-external-apis.json
 $(shell jq -r .output $(merge-external-config)): $(shell jq -r .inputs[].inputFile $(merge-external-config))
 	openapi-merge-cli --config $(merge-external-config)

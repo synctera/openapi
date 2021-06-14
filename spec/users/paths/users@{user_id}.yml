@@ -1,0 +1,47 @@
+summary: User Operations
+get:
+  summary: Get an user
+  operationId: getUser
+  description: get an user
+  tags:
+    - Users
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/user_id'
+  responses:
+    '200':
+      description: User
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/user'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
+
+put:
+  summary: Update user
+  operationId: updateUser
+  description: Update user
+  tags:
+    - Users
+  parameters:
+    - $ref: '../parameters.yml#/components/parameters/user_id'
+  requestBody:
+    description: User to update
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/user'
+  responses:
+    '200':
+      description: Updated user
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/user'
+    '400':
+      $ref: '../../common/responses.yml#/components/responses/bad_request'
+    '500':
+      $ref: '../../common/responses.yml#/components/responses/internal_server_error'
