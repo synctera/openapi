@@ -5,7 +5,7 @@ post:
   summary: Verify a Customer
   operationId: verifyCustomer
   description: >
-    This will intiate identity verification and run through the
+    This will initiate identity verification and run through the
     specified identity checks
   tags:
     - KYC Verification
@@ -24,7 +24,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas.yml#/components/schemas/customer_verification'
+            $ref: '../schemas.yml#/components/schemas/customer_verification_result'
     '400':
       $ref: '../../common/responses.yml#/components/responses/bad_request'
     '401':

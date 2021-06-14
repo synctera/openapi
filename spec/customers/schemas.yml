@@ -30,7 +30,7 @@ components:
           description: Customer's shipping address
           $ref: "../common/schemas.yml#/components/schemas/address"
         dob:
-          description: Customer's date of birth in ISO-8601 date format YYYY-MM-DD
+          description: Customer's date of birth in RFC 3339 full-date format (YYYY-MM-DD)
           type: string
           format: date
           example: 2000-01-01
@@ -51,14 +51,14 @@ components:
           type: string
           example: faker.internet.email
         mobile_phone_number:
-          description: Customer's mobile phone number in E.164 format e.g. +19178675309
+          description: Customer's mobile phone number with country code in E.164 format e.g. +19178675309
           type: string
-          pattern: '^\+?[1-9]\d{1,14}$' # E.164 regex from https://stackoverflow.com/questions/6478875/regular-expression-matching-e-164-formatted-phone-numbers
+          pattern: '^\+[1-9]\d{1,14}$'
           example: faker.helpers.replaceSymbols(+###########)
         alt_phone_number:
-          description: Customer's alternate phone number in E.164 format e.g. +19178675309
+          description: Customer's alternate phone number with country code in E.164 format e.g. +19178675309
           type: string
-          pattern: '^\+?[1-9]\d{1,14}$' # E.164 regex from https://stackoverflow.com/questions/6478875/regular-expression-matching-e-164-formatted-phone-numbers
+          pattern: '^\+[1-9]\d{1,14}$'
           example: faker.helpers.replaceSymbols(+###########)
         creation_time:
           type: string

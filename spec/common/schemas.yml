@@ -42,7 +42,6 @@ components:
           example: faker.address.countryCode
       required:
         - default_address_flg
-        - type
         - address_line_1
         - city
         - state
