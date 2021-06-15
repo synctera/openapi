@@ -1,3 +1,66 @@
-say_hello:
+stages:
+  - update
+  - generate
+  - release
+
+variables:
+  GOPRIVATE: gitlab.com/synctera
+
+before_script:
+  - echo "${NETRC}" > ~/.netrc
+
+spec:
+  stage: update
+  image: registry.gitlab.com/synctera/tools/build-tools:latest
   script:
-    - echo "hello, world"
+    - ./update
+  artifacts:
+    paths:
+      - internal-api-merged-bundled.yml
+      - external-api-merged-bundled.yml
+
+docs:
+  stage: generate
+  needs:
+    - spec
+  image: registry.gitlab.com/synctera/tools/build-tools:latest
+  script:
+    - make --file=ci.makefile internal-api.html
+    - make --file=ci.makefile external-api.html
+  artifacts:
+    paths:
+      - internal-api.html
+      - external-api.html
+
+go-internal:
+  stage: generate
+  needs:
+    - spec
+  image: registry.gitlab.com/synctera/tools/build-tools:latest
+  script:
+    - make --file=ci.makefile go-internal.tar.gz
+  artifacts:
+    paths:
+      - go-internal.tar.gz
+
+go-external:
+  stage: generate
+  needs:
+    - spec
+  image: registry.gitlab.com/synctera/tools/build-tools:latest
+  script:
+    - make --file=ci.makefile go-external.tar.gz
+  artifacts:
+    paths:
+      - go-external.tar.gz
+
+typescript-axios-internal:
+  stage: generate
+  needs:
+    - spec
+  image: registry.gitlab.com/synctera/tools/build-tools:latest
+  script:
+    - make --file=ci.makefile typescript-axios-internal.tar.gz
+  artifacts:
+    paths:
+      - typescript-axios-internal.tar.gz

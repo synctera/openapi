@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+if [ "$#" != 2 ]; then
+  echo "Usage: $0 <internal/external> <generator-name>"
+  exit 1
+fi
+
+if [ "$1" != internal ] && [ "$1" != external ]; then
+  echo "Usage: $0 <internal/external> <generator-name>"
+  exit 1
+fi
+
+mkdir -p code/"$1"/"$2"/
+
+config_file=code/"$2".config.json
+if [ ! -f "${config_file}" ]; then
+    echo "${config_file}" not found, creating with empty config
+    echo {} > "${config_file}"
+fi
+
+tar_exclude_file=code/"$1"/"$2"/.tar.ignore
+if [ ! -f "${tar_exclude_file}" ]; then
+    echo "${tar_exclude_file}" not found, creating with defaults
+    echo "api/*" >> "${tar_exclude_file}"
+    echo ".*" >> "${tar_exclude_file}"
+fi
+
+log_file=$(mktemp --suffix .openapi-generator-cli.log)
+
+openapi-generator-cli generate --strict-spec true --generator-name "$2" \
+  --input-spec ./"$1"-api-merged-bundled.yml --output code/"$1"/"$2"/ \
+	--package-name synctera --config "${config_file}" 2>&1 | tee "${log_file}"
+
+bad_warnings=$(grep WARN "${log_file}" | grep -P --invert-match "Renamed to [Mm]odel_?[Ee]rror$")
+if [ "${bad_warnings}" != "" ]; then
+  echo
+  echo openapi-generator-cli produced the following warnings:
+  echo
+  echo "${bad_warnings}"
+  exit 1
+fi

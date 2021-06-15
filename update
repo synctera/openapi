@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+start_dir=$(pwd)
+spec_dir=$(mktemp --directory --suffix .spec)
+
+cd cmd/pull_specs
+go run . --output "${spec_dir}" \
+	--project mainapi \
+	--internal users \
+	--internal signups
+
+cd "${spec_dir}"
+
+openapi-merge-cli --config merge-internal-apis.json
+openapi-merge-cli --config merge-external-apis.json
+
+cp ./*-api-merged-bundled.yml "${start_dir}"
