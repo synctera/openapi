@@ -48,7 +48,7 @@ func TestCreateCustomer(t *testing.T) {
 	customerAddress := Address{
 		Id:                nil,
 		DefaultAddressFlg: true,
-		Type:              "home",
+		Type:              PtrString("home"),
 		AddressLine1:      "abc",
 		AddressLine2:      nil,
 		City:              "whoville",
@@ -57,12 +57,12 @@ func TestCreateCustomer(t *testing.T) {
 		CountryCode:       "US",
 	}
 	testCustomer := Customer{
-		FirstName:         PtrString(firstName),
-		LastName:          PtrString(lastName),
-		LegalAddress:      &customerAddress,
-		ShippingAddress:   &customerAddress,
-		Dob:               PtrString("1900-01-01"),
-		MobilePhoneNumber: PtrString("+19178675309"),
+		FirstName:       PtrString(firstName),
+		LastName:        PtrString(lastName),
+		LegalAddress:    &customerAddress,
+		ShippingAddress: &customerAddress,
+		Dob:             PtrString("1900-01-01"),
+		PhoneNumber:     PtrString("+19178675309"),
 	}
 	createCustomerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(testCustomer).Execute()
 	if err != nil {
@@ -139,7 +139,7 @@ func TestCreateCustomerVerification(t *testing.T) {
 	customerAddress := Address{
 		Id:                nil,
 		DefaultAddressFlg: true,
-		Type:              "home",
+		Type:              PtrString("home"),
 		AddressLine1:      "abc",
 		AddressLine2:      nil,
 		City:              "whoville",
@@ -153,7 +153,7 @@ func TestCreateCustomerVerification(t *testing.T) {
 		LegalAddress:      &customerAddress,
 		ShippingAddress:   &customerAddress,
 		Dob:               PtrString("1900-01-01"),
-		MobilePhoneNumber: PtrString("+19178675309"),
+		PhoneNumber: PtrString("+19178675309"),
 	}
 
 	customerResponse, httpResponse, err := client.CustomersApi.CreateCustomer(ctx).Customer(testCustomer).Execute()
