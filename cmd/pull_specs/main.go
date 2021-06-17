@@ -8,6 +8,7 @@ import (
 	"github.com/go-git/go-billy/v5"
 	"github.com/go-git/go-billy/v5/memfs"
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"io"
 	"log"
@@ -34,7 +35,7 @@ func main() {
 	var projects multiStringFlag
 	var internalApis multiStringFlag
 
-	flag.Var(&projects, "project", "project name, use this multiple times for multiple projects")
+	flag.Var(&projects, "project", "project name and optional reference, use this multiple times for multiple projects, format repo[:branch] (eg mainapi:my_branch)")
 	flag.Var(&internalApis, "internal", "API endpoint name to be considered internal only (eg signups)")
 	flag.Parse()
 
@@ -74,10 +75,17 @@ func main() {
 
 	var specFiles specSearchResults
 	for _, project := range projects {
+		projectParts := strings.SplitN(project, ":", 2)
+		repoName := projectParts[0]
+		referenceName := plumbing.HEAD
+		if len(projectParts) > 1 && len(projectParts[1]) > 0 {
+			referenceName = plumbing.NewBranchReferenceName(projectParts[1])
+		}
 		repo, err := git.CloneContext(ctx, memory.NewStorage(), memfs.New(), &git.CloneOptions{
-			URL:          gitUrlPrefix + project,
-			SingleBranch: true,
-			Depth:        1,
+			URL:           gitUrlPrefix + repoName,
+			ReferenceName: referenceName,
+			SingleBranch:  true,
+			Depth:         1,
 		})
 		if err != nil {
 			log.Fatalf("Error cloning %s: %s", project, err)
