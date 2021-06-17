@@ -7,9 +7,10 @@ spec_dir=$(mktemp --directory --suffix .spec)
 
 cd cmd/pull_specs
 go run . --output "${spec_dir}" \
-	--project mainapi \
+	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
 	--internal users \
-	--internal signups
+	--internal signups \
+#	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
 
 cd "${spec_dir}"
 
