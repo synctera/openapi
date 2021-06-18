@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"flag"
@@ -15,6 +16,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"sort"
 	"strings"
 	"time"
 )
@@ -73,7 +75,9 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
-	var specFiles specSearchResults
+	specFiles := specSearchResults{
+		all: make(map[string]struct{}),
+	}
 	for _, project := range projects {
 		projectParts := strings.SplitN(project, ":", 2)
 		repoName := projectParts[0]
@@ -95,7 +99,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error finding HEAD for %s: %s", project, err)
 		}
-		log.Printf("Pulling OpenAPI specs from %s %s", project, head.String())
+		log.Printf("Pulling OpenAPI specs from %s:%s", project, head.String())
 
 		tree, err := repo.Worktree()
 		if err != nil {
@@ -105,7 +109,7 @@ func main() {
 		projectSpecFiles := findSpecs(tree.Filesystem, openapiDirName)
 		log.Printf("Found %d root API files (%d individual files)", len(projectSpecFiles.apiRoots), len(projectSpecFiles.all))
 
-		for _, specFileName := range projectSpecFiles.all {
+		for specFileName := range projectSpecFiles.all {
 			inputFile, err := tree.Filesystem.Open(specFileName)
 			if err != nil {
 				log.Fatalf("Error opening %s: %s", specFileName, err)
@@ -115,7 +119,7 @@ func main() {
 			if err := os.MkdirAll(path.Dir(output), os.ModePerm); err != nil {
 				log.Fatalf("Error creating directory for %s: %s", output, err)
 			}
-			outputFile, err := os.Create(output)
+			outputFile, err := os.OpenFile(output, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 			if err != nil {
 				log.Fatalf("Error creating %s: %s", output, err)
 			}
@@ -160,31 +164,43 @@ func main() {
 
 		log.Println("bundling", input, "->", bundledOutput)
 		command := exec.Command("openapi", "bundle", input, "--ext", "yml", "--output", bundledOutput)
-
+		var bundleLog bytes.Buffer
+		command.Stderr = &bundleLog
+		command.Stdout = &bundleLog
 		if err := command.Run(); err != nil {
+			log.Print(bundleLog.String())
 			log.Fatalf("Error bundling %s: %s", input, err)
 		}
 	}
 }
 
 type specSearchResults struct {
-	all      []string
+	all      map[string]struct{}
 	apiRoots []string
 }
 
 func (r *specSearchResults) add(specPath string) {
-	r.all = append(r.all, specPath)
+	if _, exists := r.all[specPath]; exists {
+		log.Fatalf("File %s already exists!", specPath)
+	}
+	r.all[specPath] = struct{}{}
+
 	if path.Base(specPath) == "api.yml" || path.Base(specPath) == "api.yaml" {
 		r.apiRoots = append(r.apiRoots, specPath)
 	}
 }
 
 func (r *specSearchResults) join(other specSearchResults) {
-	r.all = append(r.all, other.all...)
-	r.apiRoots = append(r.apiRoots, other.apiRoots...)
+	for spec := range other.all {
+		r.add(spec)
+	}
 }
 
-func findSpecs(fileSystem billy.Filesystem, dirPath string) (results specSearchResults) {
+func findSpecs(fileSystem billy.Filesystem, dirPath string) specSearchResults {
+	results := specSearchResults{
+		all: make(map[string]struct{}),
+	}
+
 	dirEntries, err := fileSystem.ReadDir(dirPath)
 	if err != nil {
 		log.Fatalf("Failed to read directory %s: %s", dirPath, err)
@@ -210,7 +226,7 @@ func findSpecs(fileSystem billy.Filesystem, dirPath string) (results specSearchR
 			results.add(fullPath)
 		}
 	}
-	return
+	return results
 }
 
 // MergeConfig is compatible with openapi-merge-cli
@@ -228,6 +244,8 @@ func writeMergeConfig(inputs []string, output string, config string) {
 	if err != nil {
 		log.Fatalf("Error creating %s: %s", config, err)
 	}
+
+	sort.Strings(inputs) // for consistent generated output
 
 	var mergeConfig MergeConfig
 	for _, input := range inputs {

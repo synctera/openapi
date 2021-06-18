@@ -5,16 +5,22 @@ set -e
 start_dir=$(pwd)
 spec_dir=$(mktemp --directory --suffix .spec)
 
+cp --recursive common/ "${spec_dir}"
+
 cd cmd/pull_specs
 go run . --output "${spec_dir}" \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
 	--internal users \
 	--internal signups \
-#	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
+	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
 
 cd "${spec_dir}"
 
 openapi-merge-cli --config merge-internal-apis.json
 openapi-merge-cli --config merge-external-apis.json
+
+for spec in **/api.yml *-api-merged-bundled.yml; do
+  swagger-cli validate "$spec"
+done
 
 cp ./*-api-merged-bundled.yml "${start_dir}"
