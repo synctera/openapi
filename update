@@ -12,7 +12,7 @@ go run . --output "${spec_dir}" \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
 	--internal users \
 	--internal signups \
-#	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
+	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
 
 cd "${spec_dir}"
 

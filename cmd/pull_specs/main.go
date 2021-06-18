@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"flag"
@@ -15,6 +16,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"sort"
 	"strings"
 	"time"
 )
@@ -162,8 +164,11 @@ func main() {
 
 		log.Println("bundling", input, "->", bundledOutput)
 		command := exec.Command("openapi", "bundle", input, "--ext", "yml", "--output", bundledOutput)
-
+		var bundleLog bytes.Buffer
+		command.Stderr = &bundleLog
+		command.Stdout = &bundleLog
 		if err := command.Run(); err != nil {
+			log.Print(bundleLog.String())
 			log.Fatalf("Error bundling %s: %s", input, err)
 		}
 	}
@@ -239,6 +244,8 @@ func writeMergeConfig(inputs []string, output string, config string) {
 	if err != nil {
 		log.Fatalf("Error creating %s: %s", config, err)
 	}
+
+	sort.Strings(inputs) // for consistent generated output
 
 	var mergeConfig MergeConfig
 	for _, input := range inputs {
