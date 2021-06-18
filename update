@@ -17,4 +17,8 @@ cd "${spec_dir}"
 openapi-merge-cli --config merge-internal-apis.json
 openapi-merge-cli --config merge-external-apis.json
 
+for spec in **/api.yml *-api-merged-bundled.yml; do
+  swagger-cli validate "$spec"
+done
+
 cp ./*-api-merged-bundled.yml "${start_dir}"
