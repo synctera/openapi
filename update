@@ -5,6 +5,8 @@ set -e
 start_dir=$(pwd)
 spec_dir=$(mktemp --directory --suffix .spec)
 
+cp --recursive common/ "${spec_dir}"
+
 cd cmd/pull_specs
 go run . --output "${spec_dir}" \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \

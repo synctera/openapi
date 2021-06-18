@@ -1,0 +1,32 @@
+components:
+  schemas:
+    paginated_response:
+      title: Paginated List response
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: If returned, use the next_page_token to query for the next page of results.
+          example: faker.random.alphaNumeric(10)
+
+    error:
+      title: Error
+      type: object
+      properties:
+        error_details:
+          type: string
+          description: Detailed description of error
+          example: faker.lorem.sentence
+
+    delete_response:
+      title:  Deleted Object
+      type: object
+      description: Deleted object information
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Object ID
+        resource:
+          type: string
+          description: The resource name

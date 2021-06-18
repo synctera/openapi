@@ -1,0 +1,21 @@
+components:
+  parameters:
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+        description: Maximum of objects to return per page
+        example: 100
+
+    page_token:
+      name: page_token
+      in: query
+      required: false
+      schema:
+        type: string
+        description: Optional pagination token to be provided to retrieve subsequent pages, returned from previous get
+        example: faker.random.alphaNumeric(10)
