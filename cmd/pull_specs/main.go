@@ -35,10 +35,10 @@ func (flag *multiStringFlag) Set(value string) error {
 func main() {
 	outputBasePath := flag.String("output", "", "Base output path for OpenAPI specification files")
 	var projects multiStringFlag
-	var internalApis multiStringFlag
+	var externalApis multiStringFlag
 
 	flag.Var(&projects, "project", "project name and optional reference, use this multiple times for multiple projects, format repo[:branch] (eg mainapi:my_branch)")
-	flag.Var(&internalApis, "internal", "API endpoint name to be considered internal only (eg signups)")
+	flag.Var(&externalApis, "external", "API endpoint name to be considered external or public (eg customers)")
 	flag.Parse()
 
 	if outputBasePath == nil || len(*outputBasePath) == 0 {
@@ -54,12 +54,12 @@ func main() {
 
 	isInternal := func(apiRootSpec string) bool {
 		entity := entityName(apiRootSpec)
-		for _, internalApi := range internalApis {
-			if internalApi == entity {
-				return true
+		for _, externalApi := range externalApis {
+			if externalApi == entity {
+				return false
 			}
 		}
-		return false
+		return true
 	}
 
 	const openapiDirName = "openapi"

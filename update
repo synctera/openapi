@@ -10,9 +10,17 @@ cp --recursive common/ "${spec_dir}"
 cd cmd/pull_specs
 go run . --output "${spec_dir}" \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
-	--internal users \
-	--internal signups \
+	--external accounts \
+	--external customers \
+	--external disclosures \
+	--external kyc \
+	--external parties \
+	--external partygroups \
+	--external rdc \
+  --external reconciliations \
+  --external transactions \
 	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
+	--external webhooks
 
 cd "${spec_dir}"
 
