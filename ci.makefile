@@ -1,13 +1,16 @@
 # NB: this Makefile is intended to be used by CI *after* the ./update script has run successfully
 
-%-api.html: %-api-merged-bundled.yml
+%-api-faked-merged-bundled.yml: %-api-merged-bundled.yml
+	NODE_PATH=$(shell npm root -g) node ./datafaker.js $< $@
+
+%-api.html: %-api-faked-merged-bundled.yml
 	redoc-cli bundle $<
 	mv redoc-static.html $@
 
-external-%-code: external-api-merged-bundled.yml
+external-%-code: external-api-faked-merged-bundled.yml
 	./generate-code external $*
 
-internal-%-code: internal-api-merged-bundled.yml
+internal-%-code: internal-api-faked-merged-bundled.yml
 	./generate-code internal $*
 
 %-external.tar.gz: external-%-code
