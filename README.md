@@ -31,7 +31,7 @@ This repository assumes all the following:
 - Ensure that your OpenAPI specification files have unique paths across all OpenAPI services
 
 To add your repository to the flow make these changes to this repo:
-- Edit `update` to add parameters for the `pull_specs` command.
+- Edit `update` to add parameters for the `gather_openapi_specs` command.
   - Add a `--project` option matching your GitLab project name
     - follow the pattern there and use a variable name for your project. Eg: `--project "foo:${FOO_OPENAPI_BRANCH}"`
   - Add `--external` options for any API endpoints that you want to be publicly-available
