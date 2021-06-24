@@ -64,3 +64,14 @@ typescript-axios-internal:
   artifacts:
     paths:
       - typescript-axios-internal.tar.gz
+
+java-internal:
+  stage: generate
+  needs:
+    - spec
+  image: registry.gitlab.com/synctera/tools/build-tools:latest
+  script:
+    - make --file=ci.makefile java-internal.tar.gz
+  artifacts:
+    paths:
+      - java-internal.tar.gz
