@@ -17,10 +17,12 @@ go run . --output "${spec_dir}" \
 	--external parties \
 	--external partygroups \
 	--external rdc \
-  --external reconciliations \
-  --external transactions \
+	--external reconciliations \
+	--external transactions \
 	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
-	--external webhooks
+	--external webhooks \
+	--project "cards:${CARDS_OPENAPI_BRANCH:-main}" \
+	--external cards
 
 cd "${spec_dir}"
 
