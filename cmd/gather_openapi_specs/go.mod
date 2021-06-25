@@ -1,4 +1,4 @@
-module pull_specs
+module gather_openapi_specs
 
 go 1.16
 

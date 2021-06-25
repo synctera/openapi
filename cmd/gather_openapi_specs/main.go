@@ -95,12 +95,6 @@ func main() {
 			log.Fatalf("Error cloning %s: %s", project, err)
 		}
 
-		head, err := repo.Head()
-		if err != nil {
-			log.Fatalf("Error finding HEAD for %s: %s", project, err)
-		}
-		log.Printf("Pulling OpenAPI specs from %s:%s", project, head.String())
-
 		tree, err := repo.Worktree()
 		if err != nil {
 			log.Fatalf("Error getting working tree: %s", err)
