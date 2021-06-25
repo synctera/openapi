@@ -1,4 +1,4 @@
-module gather_openapi_specs
+module gitlab.com/synctera/openapi/cmd/gather_openapi_specs
 
 go 1.16
 
