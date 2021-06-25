@@ -1,4 +1,4 @@
-module synctera.com/openapi/cmd/pull_openapi_common
+module gitlab.com/synctera/openapi/cmd/pull_openapi_common
 
 go 1.16
 
