@@ -40,7 +40,7 @@ func main() {
 		}
 
 		fullPath := path.Join(*outputPath, name)
-		log.Println("Removing", fullPath)
+		log.Println("Removing", name)
 		if err := os.Remove(fullPath); err != nil {
 			log.Fatalf("Error removing %s: %s", name, err)
 		}
@@ -49,9 +49,9 @@ func main() {
 	gitlabPassword := ""
 	if ciToken := os.Getenv("CI_JOB_TOKEN"); len(ciToken) > 0 {
 		gitlabPassword = ciToken
-	}
-
-	if gitlabPassword == "" {
+	} else if gitlabToken := os.Getenv("GITLAB_TOKEN"); len(gitlabToken) > 0 {
+		gitlabPassword = gitlabToken
+	} else {
 		netrcFilePath := os.Getenv("NETRC")
 		if netrcFilePath == "" {
 			homeDir, err := os.UserHomeDir()
@@ -76,7 +76,7 @@ func main() {
 	defer cancel()
 
 	repo, err := git.CloneContext(ctx, memory.NewStorage(), memfs.New(), &git.CloneOptions{
-		URL:           fmt.Sprintf("https://git:%s@gitlab.com/synctera/openapi.git/", gitlabPassword),
+		URL:           fmt.Sprintf("https://gitlab-ci-token:%s@gitlab.com/synctera/openapi.git/", gitlabPassword),
 		ReferenceName: plumbing.HEAD,
 		SingleBranch:  true,
 		Depth:         1,
@@ -107,7 +107,7 @@ func main() {
 			continue
 		}
 
-		log.Println("Copying", name)
+		log.Println("Creating", name)
 
 		fullPath := fileSystem.Join(dirPath, name)
 		inputFile, err := fileSystem.Open(fullPath)
