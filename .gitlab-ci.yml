@@ -14,10 +14,13 @@ spec:
   image: registry.gitlab.com/synctera/tools/build-tools:latest
   script:
     - ./update
+    - make --file=ci.makefile internal-api.yml external-api.yml internal-api.json external-api.json
   artifacts:
     paths:
-      - internal-api-merged-bundled.yml
-      - external-api-merged-bundled.yml
+      - internal-api.yml
+      - external-api.yml
+      - internal-api.json
+      - external-api.json
 
 docs:
   stage: generate

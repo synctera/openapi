@@ -27,8 +27,17 @@ cd "${spec_dir}"
 openapi-merge-cli --config merge-internal-apis.json
 openapi-merge-cli --config merge-external-apis.json
 
+# override each spec with header.yml to ensure they all match openapi version, our version and our servers
+for spec in *-api-bundled.yml; do
+  for field in openapi info servers; do
+    yq eval-all "select(fileIndex==0).${field} = select(fileIndex==1).${field} | select(fileIndex==0)" "${spec}" "${start_dir}/header.yml" > ".tmp.${spec}"
+    mv ".tmp.${spec}" "${spec}"
+  done
+done
+
 for spec in **/api.yml *-api-merged-bundled.yml; do
   swagger-cli validate "$spec"
+  openapi lint "$spec"
 done
 
 cp ./*-api-merged-bundled.yml "${start_dir}"
