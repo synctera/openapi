@@ -81,7 +81,7 @@ func main() {
 	for _, project := range projects {
 		projectParts := strings.SplitN(project, ":", 2)
 		repoName := projectParts[0]
-		referenceName := plumbing.HEAD
+		referenceName := plumbing.NewBranchReferenceName("main")
 		if len(projectParts) > 1 && len(projectParts[1]) > 0 {
 			referenceName = plumbing.NewBranchReferenceName(projectParts[1])
 		}
