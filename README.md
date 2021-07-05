@@ -6,9 +6,9 @@ repository is to automatically generate OpenAPI artifacts as part of a multi-rep
 
 ```mermaid
 graph LR
-O1(openapi/common/*.yml) -->|mainapi/openapi/common/pull| M(mainapi)
-O1 -->|webhook/openapi/common/pull| W(webhook)
-O1 -->|cards/openapi/common/pull| C(cards)
+O1(openapi/common/*.yml) -->|sc git cp| M(mainapi)
+O1 -->|sc git cp| W(webhook)
+O1 -->|sc git cp| C(cards)
 M -->|CI:openapi trigger| O2(openapi)
 W -->|CI:openapi trigger| O2(openapi)
 C -->|CI:openapi trigger| O2(openapi)
