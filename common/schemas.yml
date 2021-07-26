@@ -6,7 +6,7 @@ components:
       properties:
         next_page_token:
           type: string
-          description: If returned, use the next_page_token to query for the next page of results.
+          description: If returned, use the next_page_token to query for the next page of results. Not returned if there are no more rows.
           example: faker.random.alphaNumeric(10)
 
     error:
