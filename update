@@ -20,7 +20,9 @@ go run . --output "${spec_dir}" \
 	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
 	--external webhooks \
 	--project "cards:${CARDS_OPENAPI_BRANCH}" \
-	--external cards
+	--external cards \
+	--project "trisk:${TRISK_OPENAPI_BRANCH}" \
+	--external transactions
 
 cd "${spec_dir}"
 
