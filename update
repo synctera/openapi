@@ -17,6 +17,7 @@ go run . --output "${spec_dir}" \
 	--external rdc \
 	--external reconciliations \
 	--external transactions \
+	--external watchlist \
 	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
 	--external webhooks \
 	--project "cards:${CARDS_OPENAPI_BRANCH}" \
