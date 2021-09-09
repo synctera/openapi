@@ -12,10 +12,9 @@ components:
     error:
       title: Standard error response (RFC 7807 problem report)
       type: object
-      required:
-        - type
-        - status
-        - title
+      # When all of our error responses use this format, then we can specify
+      # the required fields here. Until then, it would just cause test failures
+      # to do so, because legacy error responses do not fit this schema.
       properties:
         type:
           type: string
