@@ -10,13 +10,29 @@ components:
           example: faker.random.alphaNumeric(10)
 
     error:
-      title: Error
+      title: Standard error response (RFC 7807 problem report)
       type: object
+      required:
+        - type
+        - status
+        - title
       properties:
-        error_details:
+        type:
           type: string
-          description: Detailed description of error
-          example: faker.lorem.sentence
+          description: a URI that identifies this general category of error
+          example: "https://dev.synctera.com/errors/bad-request-body"
+        status:
+          type: integer
+          description: the HTTP status code for this response
+          example: 400
+        title:
+          type: string
+          description: a human-readable string for this general category of error
+          example: "Bad Request Body"
+        detail:
+          type: string
+          description: a human-readable string explaining this particular error
+          example: "missing required fields: first_name, dob"
 
     delete_response:
       title:  Deleted Object
