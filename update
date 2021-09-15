@@ -7,7 +7,7 @@ spec_dir=$(mktemp --directory --suffix .spec)
 
 cp --recursive common/ "${spec_dir}"
 
-cd cmd/gather_openapi_specs
+cd "${start_dir}/cmd/gather_openapi_specs"
 go run . --output "${spec_dir}" \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
 	--external accounts \
@@ -31,6 +31,11 @@ cd "${spec_dir}"
 
 openapi-merge-cli --config merge-internal-apis.json
 openapi-merge-cli --config merge-external-apis.json
+
+cd "${start_dir}/cmd/externalfilter"
+go run . -v "${spec_dir}/external-api-merged-bundled.yml"
+
+cd "${spec_dir}"
 
 # override each spec with header.yml to ensure they all match openapi version, our version and our servers
 for spec in *-api-bundled.yml; do
