@@ -19,3 +19,18 @@ components:
         type: string
         description: Optional pagination token to be provided to retrieve subsequent pages, returned from previous get
         example: faker.random.alphaNumeric(10)
+
+    id:
+      name: id
+      description: Unique resource identifier
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          format: uuid
+          example: faker.random.uuid
+      style: form
+      explode: false
+      uniqueItems: true
