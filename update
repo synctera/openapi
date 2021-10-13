@@ -13,6 +13,7 @@ go run . --output "${spec_dir}" \
 	--external accounts \
 	--external customers \
 	--external disclosures \
+	--external externalaccounts \
 	--external kyc \
 	--external rdc \
 	--external reconciliations \
