@@ -8,7 +8,9 @@ components:
         type: integer
         minimum: 1
         default: 100
-        description: Maximum of objects to return per page. If the limit is greater than 100, then it will be set to 100
+        description: >
+          Maximum number of objects to return per page.
+          If the limit is greater than 100, then it will be set to 100.
         example: 100
 
     page_token:
