@@ -45,3 +45,54 @@ components:
         resource:
           type: string
           description: The resource name
+
+    vendor_info:
+      title:  Vendor Info
+      type: object
+      description: >
+        The information provided to Synctera from the vendor.
+        Interpretation of this object is up to the client.
+      discriminator:
+        propertyName: content_type
+        mapping:
+          "application/json": "#/components/schemas/vendor_json"
+          "text/xml": "#/components/schemas/vendor_xml"
+      oneOf:
+        - $ref: "#/components/schemas/vendor_json"
+        - $ref: "#/components/schemas/vendor_xml"
+
+    vendor_json:
+      properties:
+        vendor:
+          type: string
+          example: SOCURE
+        content_type:
+          type: string
+          description: Describes the content-type encoding received from the vendor
+          enum: 
+            - "application/json"
+        json:
+          type: object
+          description: Data representation in JSON
+      required: 
+        - vendor
+        - content_type
+        - json
+
+    vendor_xml:
+      properties:
+        vendor:
+          type: string
+          example: IDOLOGY
+        content_type:
+          type: string
+          description: Describes the content-type encoding received from the vendor
+          enum: 
+            - "text/xml"
+        xml:
+          type: string
+          description: Data representaion in XML
+      required: 
+        - vendor
+        - content_type
+        - xml
