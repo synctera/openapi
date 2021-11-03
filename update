@@ -19,7 +19,6 @@ go run . --output "${spec_dir}" \
 	--external kyc \
 	--external rdc \
 	--external reconciliations \
-	--external transactions \
 	--external watchlist \
 	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
 	--external webhooks \
@@ -30,7 +29,7 @@ go run . --output "${spec_dir}" \
 	--external waitlist \
 	--project "trisk:${TRISK_OPENAPI_BRANCH}" \
 	--project "achilles:${ACHILLES_OPENAPI_BRANCH}" \
-	--external outgoing
+	--external transactions
 
 cd "${spec_dir}"
 
