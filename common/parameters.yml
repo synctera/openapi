@@ -3,6 +3,7 @@ components:
     limit:
       name: limit
       in: query
+      x-external: true
       required: false
       schema:
         type: integer
@@ -16,6 +17,7 @@ components:
     page_token:
       name: page_token
       in: query
+      x-external: true
       required: false
       schema:
         type: string
@@ -26,6 +28,7 @@ components:
       name: id
       description: Unique resource identifier
       in: query
+      x-external: true
       required: false
       schema:
         type: array
