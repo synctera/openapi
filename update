@@ -29,7 +29,7 @@ go run . --output "${spec_dir}" \
 	--external waitlist \
 	--project "trisk:${TRISK_OPENAPI_BRANCH}" \
 	--project "achilles:${ACHILLES_OPENAPI_BRANCH}" \
-	--external transactions
+	--external outgoing
 
 cd "${spec_dir}"
 
