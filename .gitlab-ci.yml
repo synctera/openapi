@@ -7,7 +7,7 @@ variables:
   GOPRIVATE: gitlab.com/synctera
 
 before_script:
-  - echo "${NETRC}" > ~/.netrc
+  - echo "${_NETRC}" > ~/.netrc
 
 spec:
   stage: update
