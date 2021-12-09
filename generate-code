@@ -29,7 +29,10 @@ log_file=$(mktemp --suffix .openapi-generator-cli.log)
 
 openapi-generator-cli generate --strict-spec true --generator-name "$2" \
   --input-spec ./"$1"-api.yml --output code/"$1"/"$2"/ \
-	--package-name synctera --config "${config_file}" 2>&1 | tee "${log_file}"
+  --git-host "github.com" \
+  --git-user-id "synctera" \
+  --git-repo-id "client-libraries-$2" \
+  --config ~/openapi/code/go.config.json 2>&1 | tee "${log_file}"
 
 bad_warnings=$(grep WARN "${log_file}" | grep -P --invert-match "Renamed to [Mm]odel_?[Ee]rror$")
 if [ "${bad_warnings}" != "" ]; then
