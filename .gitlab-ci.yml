@@ -22,7 +22,19 @@ spec:
       - internal-api.json
       - external-api.json
 
-docs:
+go-external:
+  stage: generate
+  needs:
+    - spec
+  image: registry.gitlab.com/synctera/tools/build-tools:latest
+  script:
+    - make --file=ci.makefile go-external.tar.gz
+  artifacts:
+    paths:
+      - go-external.tar.gz
+
+# this is outdated, see https://dev-staging.synctera.com/reference
+.docs:
   stage: generate
   needs:
     - spec
@@ -35,7 +47,9 @@ docs:
       - internal-api.html
       - external-api.html
 
-go-internal:
+# this is outdated, see https://gitlab.com/synctera/clients
+.go-internal:
+  when: never 
   stage: generate
   needs:
     - spec
@@ -46,18 +60,9 @@ go-internal:
     paths:
       - go-internal.tar.gz
 
-go-external:
-  stage: generate
-  needs:
-    - spec
-  image: registry.gitlab.com/synctera/tools/build-tools:latest
-  script:
-    - make --file=ci.makefile go-external.tar.gz
-  artifacts:
-    paths:
-      - go-external.tar.gz
 
-typescript-axios-internal:
+# this is outdated, typescript devs have their own code generation pipeline
+.typescript-axios-internal:
   stage: generate
   needs:
     - spec
@@ -68,13 +73,3 @@ typescript-axios-internal:
     paths:
       - typescript-axios-internal.tar.gz
 
-java-internal:
-  stage: generate
-  needs:
-    - spec
-  image: registry.gitlab.com/synctera/tools/build-tools:latest
-  script:
-    - make --file=ci.makefile java-internal.tar.gz
-  artifacts:
-    paths:
-      - java-internal.tar.gz
