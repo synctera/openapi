@@ -49,8 +49,16 @@ components:
           schema:
             $ref: "schemas.yml#/components/schemas/error"
 
+    # Deprecated: Use unprocessable_entity instead
     unprocessible_entity:
       description: Unprocessible entity request response
+      content:
+        application/problem+json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/error"
+
+    unprocessable_entity:
+      description: Unprocessable entity request response
       content:
         application/problem+json:
           schema:
