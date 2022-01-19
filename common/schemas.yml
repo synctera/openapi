@@ -69,12 +69,12 @@ components:
         content_type:
           type: string
           description: Describes the content-type encoding received from the vendor
-          enum: 
+          enum:
             - "application/json"
         json:
           type: object
           description: Data representation in JSON
-      required: 
+      required:
         - vendor
         - content_type
         - json
@@ -87,12 +87,26 @@ components:
         content_type:
           type: string
           description: Describes the content-type encoding received from the vendor
-          enum: 
+          enum:
             - "text/xml"
         xml:
           type: string
           description: Data representaion in XML
-      required: 
+      required:
         - vendor
         - content_type
         - xml
+
+    creation_time:
+      description: The date and time the resource was created.
+      type: string
+      format: date-time
+      readOnly: true
+      example: faker.date.past
+
+    last_updated_time:
+      description: The date and time the resource was last updated.
+      type: string
+      format: date-time
+      readOnly: true
+      example: faker.date.past
