@@ -18,7 +18,6 @@ go run . --output "${spec_dir}" \
 	--external externalaccounts \
 	--external internalaccounts \
 	--external kyc \
-	--external rdc \
 	--external reconciliations \
 	--external watchlist \
 	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
