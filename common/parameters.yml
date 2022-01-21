@@ -47,6 +47,5 @@ components:
           type: string
           format: uuid
           example: faker.random.uuid
-        uniqueItems: true
       style: form
       explode: false
