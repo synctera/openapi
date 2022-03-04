@@ -14,7 +14,12 @@ go run . --output "${spec_dir}" \
 	--external accounttemplates \
 	--external accountproducts \
 	--external customers \
+	--external persons \
+	--external businesses \
+	--external relationships \
 	--external disclosures \
+	--external disclosures_legacy \
+	--external verifications \
 	--external externalaccounts \
 	--external internalaccounts \
 	--external kyc \
