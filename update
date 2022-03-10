@@ -38,6 +38,7 @@ go run . --output "${spec_dir}" \
 	--project "payola:${PAYOLA_OPENAPI_BRANCH}" \
 	--external transactions \
 	--project "checkmate:${CHECKMATE_OPENAPI_BRANCH}" \
+	--external rdc
 
 cd "${spec_dir}"
 
