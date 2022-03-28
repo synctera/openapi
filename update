@@ -29,7 +29,8 @@ go run . --output "${spec_dir}" \
 	--external webhooks \
 	--project "cards:${CARDS_OPENAPI_BRANCH}" \
 	--external cards \
-	--external simulations \
+	--external transaction_simulations \
+	--external webhook_simulations \
 	--project "waitlist:${WAITLIST_OPENAPI_BRANCH}" \
 	--external waitlist \
 	--project "trisk:${TRISK_OPENAPI_BRANCH}" \
