@@ -21,6 +21,8 @@ spec:
       - external-api.yml
       - internal-api.json
       - external-api.json
+  tags:
+    - low-load
 
 go-external:
   stage: generate
@@ -32,6 +34,8 @@ go-external:
   artifacts:
     paths:
       - go-external.tar.gz
+  tags:
+    - low-load
 
 # this is outdated, see https://dev-staging.synctera.com/reference
 .docs:
@@ -49,7 +53,7 @@ go-external:
 
 # this is outdated, see https://gitlab.com/synctera/clients
 .go-internal:
-  when: never 
+  when: never
   stage: generate
   needs:
     - spec
@@ -59,7 +63,6 @@ go-external:
   artifacts:
     paths:
       - go-internal.tar.gz
-
 
 # this is outdated, typescript devs have their own code generation pipeline
 .typescript-axios-internal:
@@ -72,4 +75,3 @@ go-external:
   artifacts:
     paths:
       - typescript-axios-internal.tar.gz
-
