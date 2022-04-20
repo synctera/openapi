@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu
+
 if [ "$#" != 2 ]; then
   echo "Usage: $0 <internal/external> <generator-name>"
   exit 1
@@ -34,7 +36,7 @@ openapi-generator-cli generate --strict-spec true --generator-name "$2" \
   --git-repo-id "client-libraries-$2" \
   --config "${config_file}" 2>&1 | tee "${log_file}"
 
-bad_warnings=$(grep WARN "${log_file}" | grep -P --invert-match "Renamed to [Mm]odel_?[Ee]rror$")
+bad_warnings=$(grep WARN "${log_file}" | grep -P --invert-match "Renamed to " || true)
 if [ "${bad_warnings}" != "" ]; then
   echo
   echo openapi-generator-cli produced the following warnings:
