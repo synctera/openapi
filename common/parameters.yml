@@ -34,6 +34,17 @@ components:
         pattern: ^(\d{1,}|\*)_(\d{1,}|\*)$
         description: Only return resources owned by the specified tenant
         example: "2_3"
+    
+    tenant_id_path:
+      name: tenant_id
+      in: path
+      x-external: false
+      required: true
+      schema:
+        type: string
+        pattern: ^(\d{1,}|\*)_(\d{1,}|\*)$
+        description: Only return resources owned by the specified tenant
+        example: "2_3"
 
     id:
       name: id
