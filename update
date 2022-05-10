@@ -8,6 +8,7 @@ spec_dir=$(mktemp --directory --suffix .spec)
 cp --recursive common/ "${spec_dir}"
 
 cd "${start_dir}/cmd/gather_openapi_specs"
+
 go run . --output "${spec_dir}" \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
 	--external accounts \
@@ -41,7 +42,9 @@ go run . --output "${spec_dir}" \
 	--project "checkmate:${CHECKMATE_OPENAPI_BRANCH}" \
 	--external rdc \
 	--project "stately:${STATELY_OPENAPI_BRANCH}" \
-	--external statements
+	--external statements \
+	--project "cronut:${CRONUT_OPENAPI_BRANCH}" \
+	--external payment_schedules
 
 cd "${spec_dir}"
 
