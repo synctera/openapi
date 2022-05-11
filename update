@@ -44,7 +44,9 @@ go run . --output "${spec_dir}" \
 	--project "stately:${STATELY_OPENAPI_BRANCH}" \
 	--external statements \
 	--project "cronut:${CRONUT_OPENAPI_BRANCH}" \
-	--external payment_schedules
+	--external payment_schedules \
+	--project "payback:${PAYBACK_OPENAPI_BRANCH}" \
+	--external applications
 
 cd "${spec_dir}"
 
