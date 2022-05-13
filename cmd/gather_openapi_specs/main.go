@@ -6,19 +6,25 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/go-git/go-billy/v5"
-	"github.com/go-git/go-billy/v5/memfs"
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/storage/memory"
 	"io"
 	"log"
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/go-git/go-billy/v5"
+	"github.com/go-git/go-billy/v5/memfs"
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/storage/memory"
+)
+
+const (
+	openapiDirName = "openapi"
 )
 
 type multiStringFlag []string
@@ -36,10 +42,17 @@ func main() {
 	outputBasePath := flag.String("output", "", "Base output path for OpenAPI specification files")
 	var projects multiStringFlag
 	var externalApis multiStringFlag
+	var skipDir multiStringFlag
 
 	flag.Var(&projects, "project", "project name and optional reference, use this multiple times for multiple projects, format repo[:branch] (eg mainapi:my_branch)")
 	flag.Var(&externalApis, "external", "API endpoint name to be considered external or public (eg customers)")
+	flag.Var(&skipDir, "skip", "List of directory that should be skipped in the merge on each repositories")
 	flag.Parse()
+
+	skipDirMap := make(map[string]bool)
+	for _, d := range skipDir {
+		skipDirMap[filepath.Join(openapiDirName, d)] = true
+	}
 
 	if outputBasePath == nil || len(*outputBasePath) == 0 {
 		log.Fatalln("Must specify \"output\" parameter.")
@@ -62,7 +75,6 @@ func main() {
 		return true
 	}
 
-	const openapiDirName = "openapi"
 	outputFileName := func(inputFileName string) string {
 		return path.Join(*outputBasePath, strings.TrimPrefix(inputFileName, openapiDirName))
 	}
@@ -100,7 +112,7 @@ func main() {
 			log.Fatalf("Error getting working tree: %s", err)
 		}
 
-		projectSpecFiles := findSpecs(tree.Filesystem, openapiDirName)
+		projectSpecFiles := findSpecs(tree.Filesystem, openapiDirName, skipDirMap)
 		log.Printf("Found %d root API files (%d individual files)", len(projectSpecFiles.apiRoots), len(projectSpecFiles.all))
 
 		for specFileName := range projectSpecFiles.all {
@@ -190,7 +202,7 @@ func (r *specSearchResults) join(other specSearchResults) {
 	}
 }
 
-func findSpecs(fileSystem billy.Filesystem, dirPath string) specSearchResults {
+func findSpecs(fileSystem billy.Filesystem, dirPath string, skipDirMap map[string]bool) specSearchResults {
 	results := specSearchResults{
 		all: make(map[string]struct{}),
 	}
@@ -203,12 +215,15 @@ func findSpecs(fileSystem billy.Filesystem, dirPath string) specSearchResults {
 	for _, dirEntry := range dirEntries {
 		name := dirEntry.Name()
 		fullPath := fileSystem.Join(dirPath, name)
+		if skipDirMap[fullPath] {
+			continue
+		}
 		if dirEntry.Mode().IsDir() {
 			// recursive traversal unless name is "gen" (indicating the dir contains generated/bundled spec files)
 			if dirEntry.Name() == "gen" {
 				continue
 			}
-			results.join(findSpecs(fileSystem, fullPath))
+			results.join(findSpecs(fileSystem, fullPath, skipDirMap))
 		} else if dirEntry.Mode().IsRegular() {
 			// append full path to results if name ends with .yml or .yaml and name is not openapi.yml
 			if !strings.HasSuffix(name, ".yml") && !strings.HasSuffix(name, ".yaml") {

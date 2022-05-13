@@ -17,9 +17,9 @@ spec:
     - make --file=ci.makefile internal-api.yml external-api.yml internal-api.json external-api.json
   artifacts:
     paths:
-      - internal-api.yml
+      # TODO: if nobody complain the missing internal-api spec for a while since this comment, we
+      # should refactor to remove the internal-api generation code
       - external-api.yml
-      - internal-api.json
       - external-api.json
   tags:
     - low-load
