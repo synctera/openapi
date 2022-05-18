@@ -69,12 +69,12 @@ components:
         content_type:
           type: string
           description: Describes the content-type encoding received from the vendor
-          enum: 
+          enum:
             - "application/json"
         json:
           type: object
           description: Data representation in JSON
-      required: 
+      required:
         - vendor
         - content_type
         - json
@@ -87,12 +87,12 @@ components:
         content_type:
           type: string
           description: Describes the content-type encoding received from the vendor
-          enum: 
+          enum:
             - "text/xml"
         xml:
           type: string
           description: Data representaion in XML
-      required: 
+      required:
         - vendor
         - content_type
         - xml
@@ -102,3 +102,46 @@ components:
         Optional field to store additional information about the resource.
         Intended to be used by the integrator to store non-sensitive data.
       type: object
+
+    tenant:
+      title: Tenant
+      type: object
+      properties:
+        bank_id:
+          description: Bank ID
+          type: integer
+          example: 6
+        partner_id:
+          description: Partner ID
+          type: integer
+          example: 6
+      required:
+        - bank_id
+        - partner_id
+
+    workspace_resources_post:
+      title: Request for creating workspace resources
+      type: object
+      properties:
+        tenant:
+          $ref: '#/components/schemas/tenant'
+        is_tminus10:
+          description: |
+            Flag which indicates if the workspace is a t-minus10 workspace.
+            Some services may create different resources depending on this flag.
+          type: boolean
+        bank_self_partner_tenant:
+          $ref: '#/components/schemas/tenant'
+      required:
+        - tenant
+        - is_tminus10
+        - bank_self_partner_tenant
+
+    sample_resources_post:
+      title: Request for creating sample resources
+      type: object
+      properties:
+        tenant:
+          $ref: '#/components/schemas/tenant'
+      required:
+        - tenant
