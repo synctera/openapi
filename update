@@ -47,7 +47,9 @@ go run . --output "${spec_dir}" \
 	--project "cronut:${CRONUT_OPENAPI_BRANCH}" \
 	--external payment_schedules \
 	--project "payback:${PAYBACK_OPENAPI_BRANCH}" \
-	--external applications
+	--external applications \
+	--project "haywire:${HAYWIRE_OPENAPI_BRANCH}" \
+	--external wires
 
 cd "${spec_dir}"
 
