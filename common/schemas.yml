@@ -145,3 +145,12 @@ components:
           $ref: '#/components/schemas/tenant'
       required:
         - tenant
+
+    workspace_wipe_post:
+      title: Request for wiping a workspace
+      type: object
+      properties:
+        tenant:
+          $ref: '#/components/schemas/tenant'
+      required:
+        - tenant
