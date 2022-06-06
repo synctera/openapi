@@ -11,6 +11,7 @@ cd "${start_dir}/cmd/gather_openapi_specs"
 
 go run . --output "${spec_dir}" \
 	--skip wipe \
+	--skip quickstart \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
 	--external accounts \
 	--external accounttemplates \
