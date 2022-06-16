@@ -21,6 +21,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
+	"gopkg.in/yaml.v3"
 )
 
 const (
@@ -28,6 +29,10 @@ const (
 )
 
 type multiStringFlag []string
+
+type cicdConfig struct {
+	ExternalAreas []string `yaml:"external_areas"`
+}
 
 func (flag multiStringFlag) String() string {
 	return strings.Join(flag, ",")
@@ -49,11 +54,6 @@ func main() {
 	flag.Var(&skipDir, "skip", "List of directory that should be skipped in the merge on each repositories")
 	flag.Parse()
 
-	skipDirMap := make(map[string]bool)
-	for _, d := range skipDir {
-		skipDirMap[filepath.Join(openapiDirName, d)] = true
-	}
-
 	if outputBasePath == nil || len(*outputBasePath) == 0 {
 		log.Fatalln("Must specify \"output\" parameter.")
 	}
@@ -65,9 +65,32 @@ func main() {
 		return path.Base(path.Dir(apiRootSpec))
 	}
 
-	isInternal := func(apiRootSpec string) bool {
+	isInternal := func(apiRootSpec, cicdConfigFile string) bool {
+		// TODO we should drop the flag and let each repo to define the external areas
+		// this this check should be removed
 		entity := entityName(apiRootSpec)
 		for _, externalApi := range externalApis {
+			if externalApi == entity {
+				return false
+			}
+		}
+
+		config := cicdConfig{}
+		content, err := os.ReadFile(cicdConfigFile)
+		if err != nil {
+			if !os.IsNotExist(err) {
+				log.Fatalln("failed to read cicd config " + cicdConfigFile)
+			}
+			return true
+		}
+		err = yaml.Unmarshal(content, &config)
+		if err != nil {
+			log.Fatalf("bad cicd config json %s: %v", cicdConfigFile, err)
+		}
+		if config.ExternalAreas == nil {
+			return true
+		}
+		for _, externalApi := range config.ExternalAreas {
 			if externalApi == entity {
 				return false
 			}
@@ -76,7 +99,7 @@ func main() {
 	}
 
 	outputFileName := func(inputFileName string) string {
-		return path.Join(*outputBasePath, strings.TrimPrefix(inputFileName, openapiDirName))
+		return filepath.Join(*outputBasePath, strings.TrimPrefix(inputFileName, openapiDirName))
 	}
 
 	gitUrlPrefix := "git@gitlab.com:synctera/"
@@ -87,9 +110,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
-	specFiles := specSearchResults{
-		all: make(map[string]struct{}),
-	}
+	specFiles := make(map[string]specSearchResults)
 	for _, project := range projects {
 		projectParts := strings.SplitN(project, ":", 2)
 		repoName := projectParts[0]
@@ -112,72 +133,141 @@ func main() {
 			log.Fatalf("Error getting working tree: %s", err)
 		}
 
-		projectSpecFiles := findSpecs(tree.Filesystem, openapiDirName, skipDirMap)
-		log.Printf("Found %d root API files (%d individual files)", len(projectSpecFiles.apiRoots), len(projectSpecFiles.all))
+		versionRoots := findVersionRoots(tree.Filesystem, openapiDirName)
 
-		for specFileName := range projectSpecFiles.all {
-			inputFile, err := tree.Filesystem.Open(specFileName)
-			if err != nil {
-				log.Fatalf("Error opening %s: %s", specFileName, err)
-			}
-
-			output := outputFileName(specFileName)
-			if err := os.MkdirAll(path.Dir(output), os.ModePerm); err != nil {
-				log.Fatalf("Error creating directory for %s: %s", output, err)
-			}
-			outputFile, err := os.OpenFile(output, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
-			if err != nil {
-				log.Fatalf("Error creating %s: %s", output, err)
-			}
-
-			if _, err := io.Copy(outputFile, inputFile); err != nil {
-				log.Fatalf("Error copying from %s to %s: %s", specFileName, output, err)
-			}
+		// TODO: if both root and v0 are defined to have spec, we use v0 to override
+		// Once all repo moved to v0/, then we should change this code
+		if versionRoots[openapiDirName] && versionRoots[filepath.Join(openapiDirName, "v0")] {
+			log.Printf("WARNING: ignoring spec under openapi root directory since v0/ defined")
+			delete(versionRoots, openapiDirName)
 		}
 
-		specFiles.join(projectSpecFiles)
+		for versionRoot := range versionRoots {
+			skipDirMap := make(map[string]bool)
+			for _, d := range skipDir {
+				skipDirMap[filepath.Join(versionRoot, d)] = true
+			}
+
+			projectSpecFiles := findSpecs(tree.Filesystem, versionRoot, versionRoots, skipDirMap)
+
+			// TODO- remove once we drop root spec
+			// Root spec will be downloaded to v0/ instead
+			if versionRoot == openapiDirName {
+				projectSpecFiles.handleRootSpec()
+			}
+
+			log.Printf("Found %d root API files (%d individual files) for project %s dir %s",
+				len(projectSpecFiles.apiRoots), len(projectSpecFiles.all), project, versionRoot)
+
+			for specFileName := range projectSpecFiles.all {
+				// TODO - this is super annoying
+				// Remove once we drop root dir. if spec on openapi/, we need to make copy to a form openapi/v0/
+				inputFileName := specFileName
+				if versionRoot == openapiDirName {
+					p := strings.Split(specFileName, string(filepath.Separator))
+					pArr := []string{p[0]}
+					pArr = append(pArr, p[2:]...)
+					inputFileName = filepath.Join(pArr...)
+				}
+
+				inputFile, err := tree.Filesystem.Open(inputFileName)
+				if err != nil {
+					log.Fatalf("Error opening %s: %s", specFileName, err)
+				}
+
+				output := outputFileName(specFileName)
+				if err := os.MkdirAll(path.Dir(output), os.ModePerm); err != nil {
+					log.Fatalf("Error creating directory for %s: %s", output, err)
+				}
+				outputFile, err := os.OpenFile(output, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
+				if err != nil {
+					log.Fatalf("Error creating %s: %s", output, err)
+				}
+
+				if _, err := io.Copy(outputFile, inputFile); err != nil {
+					log.Fatalf("Error copying from %s to %s: %s", specFileName, output, err)
+				}
+			}
+
+			if v, ok := specFiles[versionRoot]; ok {
+				v.join(projectSpecFiles)
+				specFiles[versionRoot] = v
+			} else {
+				specFiles[versionRoot] = projectSpecFiles
+			}
+		}
 	}
 
-	log.Printf("TOTAL %d root API files (%d individual files)", len(specFiles.apiRoots), len(specFiles.all))
-
 	{
-		var externalApiRoots []string
-		var internalApiRoots []string
-		for _, apiRoot := range specFiles.apiRoots {
-			bundled := fmt.Sprintf("%s-api-bundled.yml", entityName(apiRoot))
-
-			internalApiRoots = append(internalApiRoots, bundled)
-			if isInternal(apiRoot) {
-				log.Println("-", apiRoot, "(internal only)")
-			} else {
-				log.Println("-", apiRoot)
-				externalApiRoots = append(externalApiRoots, bundled)
+		for versionRoot, curFiles := range specFiles {
+			version := filepath.Base(versionRoot)
+			if version == openapiDirName {
+				version = "v0"
 			}
+			runCmd([]string{"cp", "-r", "common", filepath.Join(filepath.Join(*outputBasePath), version)})
+
+			var externalApiRoots []string
+			var internalApiRoots []string
+			for _, apiRoot := range curFiles.apiRoots {
+				bundled := fmt.Sprintf("%s-api-bundled.yml", entityName(apiRoot))
+
+				internalApiRoots = append(internalApiRoots, bundled)
+				if isInternal(apiRoot, filepath.Join(*outputBasePath, version, "cicd-config.yml")) {
+					log.Printf("internal only for %s %s", version, apiRoot)
+				} else {
+					log.Printf("external spec for %s %s", version, apiRoot)
+					externalApiRoots = append(externalApiRoots, bundled)
+				}
+			}
+
+			// write JSON config file for openapi-merge-cli to create combined internal and external specs
+			// NB: openapi-merge-cli assumes relative paths so don't include outputBasePath
+			writeMergeConfig(internalApiRoots, "internal-api-merged-bundled.yml", path.Join(*outputBasePath, version, "merge-internal-apis.json"))
+
+			// write JSON config file for openapi-merge-cli to create combined external spec
+			writeMergeConfig(externalApiRoots, "external-api-merged-bundled.yml", path.Join(*outputBasePath, version, "merge-external-apis.json"))
 		}
-
-		// write JSON config file for openapi-merge-cli to create combined internal and external specs
-		// NB: openapi-merge-cli assumes relative paths so don't include outputBasePath
-		writeMergeConfig(internalApiRoots, "internal-api-merged-bundled.yml", path.Join(*outputBasePath, "merge-internal-apis.json"))
-
-		// write JSON config file for openapi-merge-cli to create combined external spec
-		writeMergeConfig(externalApiRoots, "external-api-merged-bundled.yml", path.Join(*outputBasePath, "merge-external-apis.json"))
 	}
 
 	// bundle all API roots so they are self-contained and can be merged to the combined specs
-	for _, apiRoot := range specFiles.apiRoots {
-		input := outputFileName(apiRoot)
-		bundledOutput := path.Join(*outputBasePath, fmt.Sprintf("%s-api-bundled.yml", entityName(apiRoot)))
+	for versionRoot, curFiles := range specFiles {
+		version := filepath.Base(versionRoot)
+		if version == openapiDirName {
+			version = "v0"
+		}
+		for _, apiRoot := range curFiles.apiRoots {
+			input := outputFileName(apiRoot)
+			bundledOutput := path.Join(*outputBasePath, version, fmt.Sprintf("%s-api-bundled.yml", entityName(apiRoot)))
 
-		log.Println("bundling", input, "->", bundledOutput)
-		command := exec.Command("openapi", "bundle", input, "--ext", "yml", "--output", bundledOutput)
-		var bundleLog bytes.Buffer
-		command.Stderr = &bundleLog
-		command.Stdout = &bundleLog
-		if err := command.Run(); err != nil {
-			log.Print(bundleLog.String())
-			log.Fatalf("Error bundling %s: %s", input, err)
+			log.Println("bundling", input, "->", bundledOutput)
+			runCmd([]string{"openapi", "bundle", input, "--ext", "yml", "--output", bundledOutput})
 		}
 	}
+}
+
+func findVersionRoots(fileSystem billy.Filesystem, dirPath string) map[string]bool {
+	dirEntries, err := fileSystem.ReadDir(dirPath)
+	if err != nil {
+		log.Fatalf("Failed to read directory %s: %s", dirPath, err)
+	}
+
+	res := map[string]bool{}
+	for _, dirEntry := range dirEntries {
+		name := dirEntry.Name()
+		fullPath := fileSystem.Join(dirPath, name)
+		if dirEntry.Mode().IsDir() {
+			// recursive traversal unless name is "gen" (indicating the dir contains generated/bundled spec files)
+			if dirEntry.Name() == "gen" {
+				continue
+			}
+			for p := range findVersionRoots(fileSystem, fullPath) {
+				res[p] = true
+			}
+		} else if dirEntry.Mode().IsRegular() && name == "openapi.yml" {
+			res[dirPath] = true
+		}
+	}
+	return res
 }
 
 type specSearchResults struct {
@@ -185,7 +275,32 @@ type specSearchResults struct {
 	apiRoots []string
 }
 
+// TODO - can be removed when we drop root dir spec
+// This function handles our old fashion the spec is in root, not versione directory
+// It considered as v0/ when we copy over
+func (r *specSearchResults) handleRootSpec() {
+	insertV0 := func(in string) string {
+		p := strings.Split(in, string(filepath.Separator))
+		newP := make([]string, 0, len(p)+1)
+		newP = append(newP, p[0])
+		newP = append(newP, "v0")
+		newP = append(newP, p[1:]...)
+		return filepath.Join(newP...)
+	}
+	newAll := make(map[string]struct{})
+	for k := range r.all {
+		newAll[insertV0(k)] = struct{}{}
+	}
+	r.all = newAll
+	for i := range r.apiRoots {
+		r.apiRoots[i] = insertV0(r.apiRoots[i])
+	}
+}
+
 func (r *specSearchResults) add(specPath string) {
+	if r.all == nil {
+		r.all = make(map[string]struct{})
+	}
 	if _, exists := r.all[specPath]; exists {
 		log.Fatalf("File %s already exists!", specPath)
 	}
@@ -202,9 +317,10 @@ func (r *specSearchResults) join(other specSearchResults) {
 	}
 }
 
-func findSpecs(fileSystem billy.Filesystem, dirPath string, skipDirMap map[string]bool) specSearchResults {
+func findSpecs(fileSystem billy.Filesystem, dirPath string, versionRoots, skipDirMap map[string]bool) specSearchResults {
 	results := specSearchResults{
-		all: make(map[string]struct{}),
+		all:      make(map[string]struct{}),
+		apiRoots: []string{},
 	}
 
 	dirEntries, err := fileSystem.ReadDir(dirPath)
@@ -219,11 +335,16 @@ func findSpecs(fileSystem billy.Filesystem, dirPath string, skipDirMap map[strin
 			continue
 		}
 		if dirEntry.Mode().IsDir() {
+			// openapi root search that contains v0, v1 etc should be skipped
+			if versionRoots[fullPath] {
+				continue
+			}
+
 			// recursive traversal unless name is "gen" (indicating the dir contains generated/bundled spec files)
 			if dirEntry.Name() == "gen" {
 				continue
 			}
-			results.join(findSpecs(fileSystem, fullPath, skipDirMap))
+			results.join(findSpecs(fileSystem, fullPath, versionRoots, skipDirMap))
 		} else if dirEntry.Mode().IsRegular() {
 			// append full path to results if name ends with .yml or .yaml and name is not openapi.yml
 			if !strings.HasSuffix(name, ".yml") && !strings.HasSuffix(name, ".yaml") {
@@ -266,5 +387,15 @@ func writeMergeConfig(inputs []string, output string, config string) {
 	encoder.SetIndent("", "  ")
 	if err := encoder.Encode(mergeConfig); err != nil {
 		log.Fatalf("Error encoding %s: %s", config, err)
+	}
+}
+
+func runCmd(cmd []string) {
+	command := exec.Command(cmd[0], cmd[1:]...)
+	var bundleLog bytes.Buffer
+	command.Stderr = &bundleLog
+	command.Stdout = &bundleLog
+	if err := command.Run(); err != nil {
+		log.Fatalf("cmd error %v: %s", cmd, bundleLog.String())
 	}
 }
