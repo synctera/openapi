@@ -14,13 +14,12 @@ spec:
   image: registry.gitlab.com/synctera/tools/build-tools:latest
   script:
     - ./update
-    - make --file=ci.makefile internal-api.yml external-api.yml internal-api.json external-api.json
+    - for wildcard in $(ls |grep api-merged-bundled.yml | cut -d- -f1 |uniq); do make --file=ci.makefile ${wildcard}-api.yml; done
+    - for wildcard in $(ls |grep api-merged-bundled.yml | cut -d- -f1 |uniq); do make --file=ci.makefile ${wildcard}-api.json; done
   artifacts:
     paths:
-      # TODO: if nobody complain the missing internal-api spec for a while since this comment, we
-      # should refactor to remove the internal-api generation code
-      - external-api.yml
-      - external-api.json
+      - "*external-api.yml"
+      - "*external-api.json"
   tags:
     - low-load
 
@@ -30,15 +29,16 @@ go-external:
     - spec
   image: registry.gitlab.com/synctera/tools/build-tools:latest
   script:
-    - make --file=ci.makefile go-external.tar.gz
+    - for wildcard in $(ls |grep 'external-api.yml' | cut -d. -f1 |uniq); do make --file=ci.makefile go-external.${wildcard}.tar.gz; done
   artifacts:
     paths:
-      - go-external.tar.gz
+      - go-external.*.tar.gz
   tags:
     - low-load
 
 # this is outdated, see https://dev-staging.synctera.com/reference
 .docs:
+  when: never
   stage: generate
   needs:
     - spec
@@ -66,6 +66,7 @@ go-external:
 
 # this is outdated, typescript devs have their own code generation pipeline
 .typescript-axios-internal:
+  when: never
   stage: generate
   needs:
     - spec

@@ -10,14 +10,14 @@
 	redoc-cli bundle $<
 	mv redoc-static.html $@
 
-external-%-code: external-api.yml
-	./generate-code external $*
+external-%-code: %.external-api.yml
+	./generate-code external go $*
 
-internal-%-code: internal-api.yml
-	./generate-code internal $*
+internal-%-code: %.internal-api.yml
+	./generate-code internal go $*
 
-%-external.tar.gz: external-%-code
-	tar -C code/external/ --transform "s|^$*|synctera|" -czf $@ --exclude-from code/external/$*/.tar.ignore $*/
+go-external.%.tar.gz: external-%-code
+	tar -C code/external/go/ --transform "s|^$*|synctera|" -czf $@ --exclude-from code/external/go/$*/.tar.ignore $*/
 
-%-internal.tar.gz: internal-%-code
-	tar -C code/internal/ --transform "s|^$*|synctera|" -czf $@ --exclude-from code/internal/$*/.tar.ignore $*/
+go-internal.%.tar.gz: internal-%-code
+	tar -C code/internal/go/ --transform "s|^$*|synctera|" -czf $@ --exclude-from code/internal/go/$*/.tar.ignore $*/

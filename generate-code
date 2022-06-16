@@ -2,17 +2,17 @@
 
 set -eu
 
-if [ "$#" != 2 ]; then
-  echo "Usage: $0 <internal/external> <generator-name>"
+if [ "$#" != 3 ]; then
+  echo "Usage: $0 <internal/external> <generator-name> <spec-version>"
   exit 1
 fi
 
 if [ "$1" != internal ] && [ "$1" != external ]; then
-  echo "Usage: $0 <internal/external> <generator-name>"
+  echo "Usage: $0 <internal/external> <generator-name> <spec-version>"
   exit 1
 fi
 
-mkdir -p code/"$1"/"$2"/
+mkdir -p code/"$1"/"$2"/"$3"/
 
 config_file=code/"$2".config.json
 if [ ! -f "${config_file}" ]; then
@@ -20,7 +20,7 @@ if [ ! -f "${config_file}" ]; then
     echo {} > "${config_file}"
 fi
 
-tar_exclude_file=code/"$1"/"$2"/.tar.ignore
+tar_exclude_file=code/"$1"/"$2"/"$3"/.tar.ignore
 if [ ! -f "${tar_exclude_file}" ]; then
     echo "${tar_exclude_file}" not found, creating with defaults
     echo "api/*" >> "${tar_exclude_file}"
@@ -30,7 +30,7 @@ fi
 log_file=$(mktemp --suffix .openapi-generator-cli.log)
 
 openapi-generator-cli generate --strict-spec true --generator-name "$2" \
-  --input-spec ./"$1"-api.yml --output code/"$1"/"$2"/ \
+  --input-spec ./"$3"."$1"-api.yml --output code/"$1"/"$2"/"$3" \
   --git-host "github.com" \
   --git-user-id "synctera" \
   --git-repo-id "client-libraries-$2" \

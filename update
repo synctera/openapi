@@ -5,9 +5,11 @@ set -e
 start_dir=$(pwd)
 spec_dir=$(mktemp --directory --suffix .spec)
 
-cp --recursive common/ "${spec_dir}"
-
 cd "${start_dir}/cmd/gather_openapi_specs"
+
+echo "fetching common openapi defs"
+sc git cp openapi "common/*.yml" common/ || exit 1
+sc git cp openapi "common/paths/*.yml" common/paths || exit 1
 
 go run . --output "${spec_dir}" \
 	--skip wipe \
@@ -54,25 +56,31 @@ go run . --output "${spec_dir}" \
 
 cd "${spec_dir}"
 
-openapi-merge-cli --config merge-internal-apis.json
-openapi-merge-cli --config merge-external-apis.json
+versions=($(ls))
+for v in ${versions[@]}; do
+	cur_spec_dir="${spec_dir}/${v}"
+	cd "${cur_spec_dir}"
+	openapi-merge-cli --config merge-internal-apis.json
+	openapi-merge-cli --config merge-external-apis.json
 
-cd "${start_dir}/cmd/externalfilter"
-go run . -v "${spec_dir}/external-api-merged-bundled.yml"
+	cd "${start_dir}/cmd/externalfilter"
+	go run . -v "${cur_spec_dir}/external-api-merged-bundled.yml"
 
-cd "${spec_dir}"
+	cd "${cur_spec_dir}"
 
-# override each spec with header.yml to ensure they all match openapi version, our version and our servers
-for spec in *-api-bundled.yml; do
-  for field in openapi info servers; do
-    yq eval-all "select(fileIndex==0).${field} = select(fileIndex==1).${field} | select(fileIndex==0)" "${spec}" "${start_dir}/header.yml" > ".tmp.${spec}"
-    mv ".tmp.${spec}" "${spec}"
-  done
+	# override each spec with header.yml to ensure they all match openapi version, our version and our servers
+	for spec in *-api-bundled.yml; do
+	  for field in openapi info servers; do
+	    yq eval-all "select(fileIndex==0).${field} = select(fileIndex==1).${field} | select(fileIndex==0)" "${spec}" "${start_dir}/header.yml" > ".tmp.${spec}"
+	    mv ".tmp.${spec}" "${spec}"
+	  done
+	done
+
+	for spec in **/api.yml *-api-merged-bundled.yml; do
+	  swagger-cli validate "$spec"
+	  openapi lint "$spec"
+	done
+
+	cp ./internal-api-merged-bundled.yml "${start_dir}/${v}.internal-api-merged-bundled.yml"
+	cp ./external-api-merged-bundled.yml "${start_dir}/${v}.external-api-merged-bundled.yml"
 done
-
-for spec in **/api.yml *-api-merged-bundled.yml; do
-  swagger-cli validate "$spec"
-  openapi lint "$spec"
-done
-
-cp ./*-api-merged-bundled.yml "${start_dir}"
