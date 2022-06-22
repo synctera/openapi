@@ -52,7 +52,8 @@ go run . --output "${spec_dir}" \
 	--project "payback:${PAYBACK_OPENAPI_BRANCH}" \
 	--external applications \
 	--project "haywire:${HAYWIRE_OPENAPI_BRANCH}" \
-	--external wires
+	--external wires \
+	--external workspaces
 
 cd "${spec_dir}"
 
