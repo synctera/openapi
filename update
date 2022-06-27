@@ -57,14 +57,19 @@ go run . --output "${spec_dir}" \
 	--external workspaces
 
 cd "${spec_dir}"
-
 versions=($(ls))
+echo "versions found: ${versions[@]}"
 for v in ${versions[@]}; do
+	echo "running for version ${v}"
 	cur_spec_dir="${spec_dir}/${v}"
 	cd "${cur_spec_dir}"
+
+	echo "calling merge cli to merge"
+	cat merge-external-apis.json
 	openapi-merge-cli --config merge-internal-apis.json
 	openapi-merge-cli --config merge-external-apis.json
 
+	echo "filtering for the external"
 	cd "${start_dir}/cmd/externalfilter"
 	go run . -v "${cur_spec_dir}/external-api-merged-bundled.yml"
 
@@ -83,6 +88,7 @@ for v in ${versions[@]}; do
 	  openapi lint "$spec"
 	done
 
+	echo "Copying the generated file for archiving"
 	cp ./internal-api-merged-bundled.yml "${start_dir}/${v}.internal-api-merged-bundled.yml"
 	cp ./external-api-merged-bundled.yml "${start_dir}/${v}.external-api-merged-bundled.yml"
 done

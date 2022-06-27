@@ -189,6 +189,9 @@ func main() {
 				}
 			}
 
+			if versionRoot == openapiDirName {
+				versionRoot = filepath.Join(openapiDirName, "v0")
+			}
 			if v, ok := specFiles[versionRoot]; ok {
 				v.join(projectSpecFiles)
 				specFiles[versionRoot] = v
@@ -201,9 +204,6 @@ func main() {
 	{
 		for versionRoot, curFiles := range specFiles {
 			version := filepath.Base(versionRoot)
-			if version == openapiDirName {
-				version = "v0"
-			}
 			runCmd([]string{"cp", "-r", "common", filepath.Join(filepath.Join(*outputBasePath), version)})
 
 			var externalApiRoots []string
@@ -232,9 +232,6 @@ func main() {
 	// bundle all API roots so they are self-contained and can be merged to the combined specs
 	for versionRoot, curFiles := range specFiles {
 		version := filepath.Base(versionRoot)
-		if version == openapiDirName {
-			version = "v0"
-		}
 		for _, apiRoot := range curFiles.apiRoots {
 			input := outputFileName(apiRoot)
 			bundledOutput := path.Join(*outputBasePath, version, fmt.Sprintf("%s-api-bundled.yml", entityName(apiRoot)))
