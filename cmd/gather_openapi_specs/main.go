@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -18,20 +19,42 @@ import (
 
 	"github.com/go-git/go-billy/v5"
 	"github.com/go-git/go-billy/v5/memfs"
-	"github.com/go-git/go-git/v5"
+	git "github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"gopkg.in/yaml.v3"
 )
 
 const (
-	openapiDirName = "openapi"
+	openapiDirName     = "openapi"
+	cicdConfigFilename = "cicd-config.yml"
 )
 
 type multiStringFlag []string
 
 type cicdConfig struct {
 	ExternalAreas []string `yaml:"external_areas"`
+}
+
+func (c *cicdConfig) append(fileSystem billy.Filesystem, filename string) {
+	f, err := fileSystem.Open(filename)
+	if err != nil {
+		log.Fatalln("failed to open cicd config " + filename)
+	}
+
+	content, err := ioutil.ReadAll(f)
+	if err != nil {
+		log.Fatalln("failed to read cicd config " + filename)
+	}
+	config := cicdConfig{}
+	err = yaml.Unmarshal(content, &config)
+	if err != nil {
+		log.Fatalf("bad cicd config yaml %s: %v", filename, err)
+	}
+	if config.ExternalAreas == nil {
+		return
+	}
+	c.ExternalAreas = append(c.ExternalAreas, config.ExternalAreas...)
 }
 
 func (flag multiStringFlag) String() string {
@@ -65,7 +88,7 @@ func main() {
 		return path.Base(path.Dir(apiRootSpec))
 	}
 
-	isInternal := func(apiRootSpec, cicdConfigFile string) bool {
+	isInternal := func(versionCICDConfig cicdConfig, apiRootSpec string) bool {
 		// TODO we should drop the flag and let each repo to define the external areas
 		// this this check should be removed
 		entity := entityName(apiRootSpec)
@@ -75,22 +98,7 @@ func main() {
 			}
 		}
 
-		config := cicdConfig{}
-		content, err := os.ReadFile(cicdConfigFile)
-		if err != nil {
-			if !os.IsNotExist(err) {
-				log.Fatalln("failed to read cicd config " + cicdConfigFile)
-			}
-			return true
-		}
-		err = yaml.Unmarshal(content, &config)
-		if err != nil {
-			log.Fatalf("bad cicd config json %s: %v", cicdConfigFile, err)
-		}
-		if config.ExternalAreas == nil {
-			return true
-		}
-		for _, externalApi := range config.ExternalAreas {
+		for _, externalApi := range versionCICDConfig.ExternalAreas {
 			if externalApi == entity {
 				return false
 			}
@@ -212,7 +220,7 @@ func main() {
 				bundled := fmt.Sprintf("%s-api-bundled.yml", entityName(apiRoot))
 
 				internalApiRoots = append(internalApiRoots, bundled)
-				if isInternal(apiRoot, filepath.Join(*outputBasePath, version, "cicd-config.yml")) {
+				if isInternal(curFiles.cicdConfig, apiRoot) {
 					log.Printf("internal only for %s %s", version, apiRoot)
 				} else {
 					log.Printf("external spec for %s %s", version, apiRoot)
@@ -268,8 +276,9 @@ func findVersionRoots(fileSystem billy.Filesystem, dirPath string) map[string]bo
 }
 
 type specSearchResults struct {
-	all      map[string]struct{}
-	apiRoots []string
+	all        map[string]struct{}
+	apiRoots   []string
+	cicdConfig cicdConfig
 }
 
 // TODO - can be removed when we drop root dir spec
@@ -316,8 +325,9 @@ func (r *specSearchResults) join(other specSearchResults) {
 
 func findSpecs(fileSystem billy.Filesystem, dirPath string, versionRoots, skipDirMap map[string]bool) specSearchResults {
 	results := specSearchResults{
-		all:      make(map[string]struct{}),
-		apiRoots: []string{},
+		all:        make(map[string]struct{}),
+		apiRoots:   []string{},
+		cicdConfig: cicdConfig{ExternalAreas: []string{}},
 	}
 
 	dirEntries, err := fileSystem.ReadDir(dirPath)
@@ -349,6 +359,12 @@ func findSpecs(fileSystem billy.Filesystem, dirPath string, versionRoots, skipDi
 			}
 			if name == "openapi.yml" {
 				continue // top level openapi.yml is a generated file of all specs combined (for kin router ingestion)
+			}
+			// We cannot keep it in results.all because of the file name conflict, since all services have the same
+			// file names. So, we need to load and aggregate from each file and keep the content, not the file name.
+			if name == cicdConfigFilename {
+				results.cicdConfig.append(fileSystem, fullPath)
+				continue
 			}
 			results.add(fullPath)
 		}
