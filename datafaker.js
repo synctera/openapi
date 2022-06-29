@@ -28,7 +28,7 @@ fs.readFile(inputFile, 'utf8', (err, data) => {
             let fakerGenerated = faker.fake('{{' + fakerContent[1]+ '}}');
             if (!seenFakeRequests.has(fakerContent[1])) {
               seenFakeRequests.add(fakerContent[1]);
-              faker.seed(Date.now());
+              faker.seed(123);
             }
             console.log('In line: ' + lines[line].trim() + '\n replacing '
                 + fakerContent[1] + ' with ' + fakerGenerated);
