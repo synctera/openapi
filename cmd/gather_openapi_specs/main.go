@@ -33,7 +33,7 @@ const (
 type multiStringFlag []string
 
 type cicdConfig struct {
-	ExternalAreas []string `yaml:"external_areas"`
+	ExternalAreas []string `yaml:"external_domains"`
 }
 
 func (c *cicdConfig) append(fileSystem billy.Filesystem, filename string) {
@@ -89,7 +89,7 @@ func main() {
 	}
 
 	isInternal := func(versionCICDConfig cicdConfig, apiRootSpec string) bool {
-		// TODO we should drop the flag and let each repo to define the external areas
+		// TODO we should drop the flag and let each repo to define the external domains
 		// this this check should be removed
 		entity := entityName(apiRootSpec)
 		for _, externalApi := range externalApis {
