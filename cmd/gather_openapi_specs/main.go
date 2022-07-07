@@ -33,7 +33,7 @@ const (
 type multiStringFlag []string
 
 type cicdConfig struct {
-	ExternalAreas []string `yaml:"external_domains"`
+	ExternalDomains []string `yaml:"external_domains"`
 }
 
 func (c *cicdConfig) append(fileSystem billy.Filesystem, filename string) {
@@ -51,10 +51,10 @@ func (c *cicdConfig) append(fileSystem billy.Filesystem, filename string) {
 	if err != nil {
 		log.Fatalf("bad cicd config yaml %s: %v", filename, err)
 	}
-	if config.ExternalAreas == nil {
+	if config.ExternalDomains == nil {
 		return
 	}
-	c.ExternalAreas = append(c.ExternalAreas, config.ExternalAreas...)
+	c.ExternalDomains = append(c.ExternalDomains, config.ExternalDomains...)
 }
 
 func (flag multiStringFlag) String() string {
@@ -98,7 +98,7 @@ func main() {
 			}
 		}
 
-		for _, externalApi := range versionCICDConfig.ExternalAreas {
+		for _, externalApi := range versionCICDConfig.ExternalDomains {
 			if externalApi == entity {
 				return false
 			}
@@ -321,13 +321,14 @@ func (r *specSearchResults) join(other specSearchResults) {
 	for spec := range other.all {
 		r.add(spec)
 	}
+	r.cicdConfig.ExternalDomains = append(r.cicdConfig.ExternalDomains, other.cicdConfig.ExternalDomains...)
 }
 
 func findSpecs(fileSystem billy.Filesystem, dirPath string, versionRoots, skipDirMap map[string]bool) specSearchResults {
 	results := specSearchResults{
 		all:        make(map[string]struct{}),
 		apiRoots:   []string{},
-		cicdConfig: cicdConfig{ExternalAreas: []string{}},
+		cicdConfig: cicdConfig{ExternalDomains: []string{}},
 	}
 
 	dirEntries, err := fileSystem.ReadDir(dirPath)
