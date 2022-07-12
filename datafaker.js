@@ -7,6 +7,10 @@ const fs = require('fs');
  * Example:
  * node ./scripts/datafaker.js ./openapi/kyc.yml ./openapi/kyc_faker.yml
  * */
+
+// Initialize faker with constant seed
+faker.seed(4321);
+
 var inputFile = process.argv[2];
 var outputFile = process.argv[3];
 console.log('Parsing ' + inputFile + ' for faker references');
@@ -28,7 +32,6 @@ fs.readFile(inputFile, 'utf8', (err, data) => {
             let fakerGenerated = faker.fake('{{' + fakerContent[1]+ '}}');
             if (!seenFakeRequests.has(fakerContent[1])) {
               seenFakeRequests.add(fakerContent[1]);
-              faker.seed(123);
             }
             console.log('In line: ' + lines[line].trim() + '\n replacing '
                 + fakerContent[1] + ' with ' + fakerGenerated);
