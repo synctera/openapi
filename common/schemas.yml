@@ -154,3 +154,13 @@ components:
           $ref: '#/components/schemas/tenant'
       required:
         - tenant
+             
+  vendor_status:
+    type: string
+    description: Status of vendor configuration
+    enum:
+      - NOT_CONTRACTED
+      - NOT_CONFIGURED
+      - MISCONFIGURED
+      - OK
+ 
