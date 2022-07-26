@@ -155,12 +155,12 @@ components:
       required:
         - tenant
              
-  vendor_status:
-    type: string
-    description: Status of vendor configuration
-    enum:
-      - NOT_CONTRACTED
-      - NOT_CONFIGURED
-      - MISCONFIGURED
-      - OK
+    vendor_config_status:
+      type: string
+      description: Status of vendor configuration
+      enum:
+        - NOT_CONTRACTED
+        - NOT_CONFIGURED
+        - MISCONFIGURED
+        - OK
  
