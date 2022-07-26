@@ -57,7 +57,8 @@ error_codes:
   # not available, it's implemented and tested and works ... but it's not
   # available to this client right now.
   - code: FEATURE_NOT_AVAILABLE
-    status: 409
+    status: 400
+    error_type: bad-request
     markdown_doc: |
       You attempted to access some feature of the Synctera platform that is not available to you.
       There are various possible reasons for this:
