@@ -17,6 +17,7 @@ go run . --output "${spec_dir}" \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
 	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
 	--external webhooks \
+	--project "egress-gateway:${EGRESS_GATEWAY_OPENAPI_BRANCH}" \
 	--project "cards:${CARDS_OPENAPI_BRANCH}" \
 	--external cards \
 	--external transaction_simulations \
@@ -45,9 +46,8 @@ for v in ${versions[@]}; do
 	cur_spec_dir="${spec_dir}/${v}"
 	cd "${cur_spec_dir}"
 
-	echo "calling merge cli to merge"
+	echo "calling merge cli to merge external spec"
 	cat merge-external-apis.json
-	openapi-merge-cli --config merge-internal-apis.json
 	openapi-merge-cli --config merge-external-apis.json
 
 	echo "filtering for the external"
@@ -70,6 +70,5 @@ for v in ${versions[@]}; do
 	done
 
 	echo "Copying the generated file for archiving"
-	cp ./internal-api-merged-bundled.yml "${start_dir}/${v}.internal-api-merged-bundled.yml"
 	cp ./external-api-merged-bundled.yml "${start_dir}/${v}.external-api-merged-bundled.yml"
 done
