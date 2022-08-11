@@ -132,10 +132,13 @@ components:
           type: boolean
         bank_self_partner_tenant:
           $ref: '#/components/schemas/tenant'
+        partner_type:
+          $ref: '#/components/schemas/partner_type'
       required:
         - tenant
         - is_tminus10
         - bank_self_partner_tenant
+        - partner_type
 
     sample_resources_post:
       title: Request for creating sample resources
@@ -154,7 +157,7 @@ components:
           $ref: '#/components/schemas/tenant'
       required:
         - tenant
-             
+
     vendor_config_status:
       type: string
       description: Status of vendor configuration
@@ -163,4 +166,15 @@ components:
         - NOT_CONFIGURED
         - MISCONFIGURED
         - OK
- 
+
+    partner_type:
+      description: Type of partner
+      type: string
+      enum:
+        - BANK_SELF_PARTNER
+        - FINTECH
+        - VENDOR
+      x-enumDescriptions:
+        - BANK_SELF_PARTNER: The partner aspect of a bank tenant.
+        - FINTECH: A fintech partnered with a bank.
+        - VENDOR: A vendor providing services to the Synctera platform.
