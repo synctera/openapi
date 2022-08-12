@@ -168,13 +168,13 @@ components:
         - OK
 
     partner_type:
-      description: Type of partner
       type: string
       enum:
         - BANK_SELF_PARTNER
         - FINTECH
         - VENDOR
-      x-enumDescriptions:
-        - BANK_SELF_PARTNER: The partner aspect of a bank tenant.
-        - FINTECH: A fintech partnered with a bank.
-        - VENDOR: A vendor providing services to the Synctera platform.
+      description: |
+        Type of partner. One of the following:
+        * `BANK_SELF_PARTNER` - The partner aspect of a bank tenant.
+        * `FINTECH` - A fintech partnered with a bank.
+        * `VENDOR` - A vendor providing services to the Synctera platform.
