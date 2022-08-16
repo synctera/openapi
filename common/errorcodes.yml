@@ -150,6 +150,21 @@ error_codes:
       You attempted to access a resource that you do not have permission to read,
       or you attempted an operation that you do not have permission to do.
 
+  - code: TOO_MANY_REQUESTS
+    status: 429
+    error_type: too-many-requests
+    markdown_doc: |
+      You have exceeded a rate limit --
+      that is, you have made too many requests for some time period.
+      This limit might have been imposed by Synctera
+      or by a third-party vendor.
+    extra_fields:
+      retry_after:
+        type: integer
+        description: |
+          Recommended delay, in seconds, that you should wait before retrying your request.
+          This field is _not_ guaranteed to be present in every TOO_MANY_REQUESTS error response.
+
   - code: INTERNAL_ERROR
     status: 500
     error_type: internal-server-error
