@@ -11,6 +11,14 @@ components:
 
     error:
       title: Standard error response (RFC 7807 problem report)
+      description: >-
+        Synctera error responses in API v0 follow [RFC 7807](https://datatracker.ietf.org/doc/html/rfc7807).
+        Following that standard, the field for a machine-readable "error code" in API v0 is `type`.
+
+        In our future API v1, we are phasing out RFC 7807 and adopting a custom error format.
+        That format will be documented in our API v1 spec.
+        But you may see some v0 error responses with a machine-readable `code` field
+        while we are making the transition from v0 to v1.
       type: object
       # When all of our error responses use this format, then we can specify
       # the required fields here. Until then, it would just cause test failures
@@ -18,7 +26,13 @@ components:
       properties:
         type:
           type: string
-          description: a URI that identifies this general category of error
+          description: >
+            A machine-readable string that identifies the error for programmatic use.
+            This is a URI, i.e. a globally unique identifier.
+            It is _not_ necessarily a URL, so do not expect it to resolve to a web page.
+            You can use this whole string as an error code, or just everything after the last slash.
+
+            This field will be removed in API v1.
           example: "https://dev.synctera.com/errors/bad-request-body"
         status:
           type: integer
@@ -26,12 +40,26 @@ components:
           example: 400
         title:
           type: string
-          description: a human-readable string for this general category of error
+          description: >
+            A human-readable string for this general category of error, which corresponds
+            1-to-1 with error types (`title` is the human-readable version of `type`).
+            There can be multiple distinct titles for the same HTTP status code, and
+            the same `title` can result in many different `detail` strings.
+
+            This field will be removed in API v1.
           example: "Bad Request Body"
         detail:
           type: string
-          description: a human-readable string explaining this particular error
+          description: >
+            A human-readable string explaining this particular error.
           example: "missing required fields: first_name, dob"
+        code:
+          type: string
+          description: >-
+            An optional “sneak preview” of our future API v1 error responses.
+            This is provided to give integrators a chance to work with our future error codes.
+            Error codes for the same error may change between v0 and v1.
+          example: BAD_REQUEST_BODY
 
     delete_response:
       title:  Deleted Object
