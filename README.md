@@ -49,3 +49,9 @@ openapi:
     project: synctera/openapi
     strategy: depend
 ```
+Or, if your `.gitlab-ci.yml` includes from `synctera/modular-ci`:
+```yaml
+openapi:
+  variables:
+    FOO_OPENAPI_BRANCH: ${CI_COMMIT_REF_NAME}
+```

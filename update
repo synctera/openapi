@@ -15,6 +15,7 @@ go run . --output "${spec_dir}" \
 	--skip wipe \
 	--skip quickstart \
 	--project "mainapi:${MAINAPI_OPENAPI_BRANCH}" \
+	--project "banner:${BANNER_OPENAPI_BRANCH}" \
 	--project "webhook:${WEBHOOK_OPENAPI_BRANCH}" \
 	--external webhooks \
 	--project "egress-gateway:${EGRESS_GATEWAY_OPENAPI_BRANCH}" \
