@@ -150,6 +150,18 @@ error_codes:
       You attempted to access a resource that you do not have permission to read,
       or you attempted an operation that you do not have permission to do.
 
+  - code: BAD_CONFIGURATION
+    status: 422
+    markdown_doc: |
+      Synctera's backend is incorrectly configured for your request.
+      Please contact Synctera customer success.
+  - code: INSUFFICIENT_FUNDS
+    status: 422
+    markdown_doc: |
+      You have requested a financial transaction on an account that does not have enough money in it,
+      so your request cannot be fulfilled.
+      You (or your customer) will need to fund this account before you can do this.
+
   - code: TOO_MANY_REQUESTS
     status: 429
     error_type: too-many-requests
