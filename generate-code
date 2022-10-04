@@ -44,3 +44,12 @@ if [ "${bad_warnings}" != "" ]; then
   echo "${bad_warnings}"
   exit 1
 fi
+
+pushd "code/${1}/${2}/${3}"
+
+# Ensure the resulting client compiles successfully
+goimports -w .
+go mod tidy
+go build .
+
+popd
