@@ -113,6 +113,8 @@ func main() {
 	gitUrlPrefix := "git@gitlab.com:synctera/"
 	if ciToken := os.Getenv("CI_JOB_TOKEN"); len(ciToken) > 0 {
 		gitUrlPrefix = fmt.Sprintf("https://gitlab-ci-token:%s@gitlab.com/synctera/", ciToken)
+	} else if ciToken := os.Getenv("GITLAB_TOKEN"); len(ciToken) > 0 {
+		gitUrlPrefix = fmt.Sprintf("https://gitlab-ci-token:%s@gitlab.com/synctera/", ciToken)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
