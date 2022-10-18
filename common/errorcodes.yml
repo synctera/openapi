@@ -32,6 +32,17 @@ markdown_doc: |
   Any API endpoint can return these errors.
 
 error_codes:
+  - code: BAD_REQUEST
+    status: 400
+    error_type: bad-request
+    markdown_doc: |
+      There is a generic, unspecified problem with your request.
+      See the `detail` field for more information.
+      This is typically a problem with the URL or the request headers.
+      This usually indicates a problem with your client implementation.
+
+  # Try to avoid BAD_REQUEST_BODY if possible. Prefer INVALID_BODY, because it
+  # has a nice way to express _why_ the body is invalid.
   - code: BAD_REQUEST_BODY
     status: 400
     error_type: bad-request-body
