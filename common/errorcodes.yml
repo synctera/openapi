@@ -64,6 +64,13 @@ error_codes:
       or a missing query parameter.
       See the `detail` string for a complete explanation.
 
+  - code: DUPLICATE_RESOURCE
+    status: 409
+    error_type: duplicate
+    title: Duplicate Resource
+    markdown_doc: |
+      Your request would result in a duplicate resource, which is not allowed.
+
   # Do not confuse FEATURE_NOT_AVAILABLE with NOT_IMPLEMENTED. If a feature is
   # not available, it's implemented and tested and works ... but it's not
   # available to this client right now.
