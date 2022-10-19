@@ -7,7 +7,7 @@ components:
         next_page_token:
           type: string
           description: If returned, use the next_page_token to query for the next page of results. Not returned if there are no more rows.
-          example: faker.random.alphaNumeric(10)
+          example: a8937a0d
 
     error:
       title: Standard error response (RFC 7807 problem report)
@@ -146,6 +146,15 @@ components:
       required:
         - bank_id
         - partner_id
+
+    tenant_id:
+      description: |
+        The id tenant containing the resource.
+        Tenancy is represented as <bank_id>_<partner_id>.
+        This attribute is included on all responses.
+        In requests, it is optional for clients with access to only a single tenant.
+      type: string
+      example: 'abcdef_ghijkl'
 
     workspace_resources_post:
       title: Request for creating workspace resources
