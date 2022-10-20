@@ -32,8 +32,11 @@ go run . --output "${spec_dir}" \
 	--project "checkmate:${CHECKMATE_OPENAPI_BRANCH}" \
 	--external rdc \
 	--project "stately:${STATELY_OPENAPI_BRANCH}" \
+	--external statements \
 	--project "cronut:${CRONUT_OPENAPI_BRANCH}" \
 	--project "payback:${PAYBACK_OPENAPI_BRANCH}" \
+	--project "cashier:${CASHIER_OPENAPI_BRANCH}" \
+	--external cash_pickups \
 	--project "haywire:${HAYWIRE_OPENAPI_BRANCH}" \
 	--external wires \
 	--project "quickstart:${QUICKSTART_OPENAPI_BRANCH}" \
