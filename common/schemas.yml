@@ -210,10 +210,8 @@ components:
         - BANK_SELF_PARTNER
         - FINTECH
         - VENDOR
-        - BILLING
       description: |
         Type of partner. One of the following:
         * `BANK_SELF_PARTNER` - The partner aspect of a bank tenant.
         * `FINTECH` - A fintech partnered with a bank.
         * `VENDOR` - A vendor providing services to the Synctera platform.
-        * `BILLING` - An internal implementation detail for Synctera's use only.
