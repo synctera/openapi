@@ -29,6 +29,7 @@ go run . --output "${spec_dir}" \
 	--external ach \
 	--external ach_transaction_simulations \
 	--project "payola:${PAYOLA_OPENAPI_BRANCH}" \
+	--external spend_controls \
 	--external transactions \
 	--project "checkmate:${CHECKMATE_OPENAPI_BRANCH}" \
 	--external rdc \
