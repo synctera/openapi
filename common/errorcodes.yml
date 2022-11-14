@@ -84,6 +84,13 @@ error_codes:
         - A third-party vendor does not support this functionality.
       See the `detail` string for a complete explanation.
 
+  - code: WIPE_NOT_ENABLED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You attempted to wipe one or more resources from the system but Wipe is not enabled 
+      in this environment.
+
   - code: INVALID_BODY
     status: 400
     error_type: bad-request-body
