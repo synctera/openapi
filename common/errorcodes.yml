@@ -149,6 +149,19 @@ error_codes:
       You made a POST/PUT/PATCH request whose request body refers to an account,
       but the specified account does not exist.
 
+  - code: CUSTOMER_NOT_VERIFIED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You are trying to do an operation with a customer who has not yet passed KYC,
+      i.e. has not been verified.
+  - code: BUSINESS_NOT_VERIFIED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You are trying to do an operation with a business which has not yet passed KYB,
+      i.e. has not been verified.
+
   - code: UNAUTHENTICATED
     status: 401
     error_type: unauthenticated
