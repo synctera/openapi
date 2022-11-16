@@ -183,7 +183,6 @@ components:
           $ref: '#/components/schemas/partner_type'
       required:
         - tenant
-        - parent_tenant
         - is_tminus10
         - partner_type
 
