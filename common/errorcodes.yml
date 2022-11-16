@@ -25,6 +25,13 @@
 #
 # * generate source code with error code constants (and other info)
 # * generate documentation of all our error codes
+#
+# This file is ordered by HTTP status code, then alphabetically by error code.
+# For example:
+#   400 ALL_IS_NOT_WELL
+#   400 BAD_THINGS_HAPPENED
+#   401 AUTHENTICATION_ERROR
+#   401 YOU_ARE_NOT_WELCOME
 
 tag: Global Error Codes
 markdown_doc: |
@@ -64,13 +71,6 @@ error_codes:
       or a missing query parameter.
       See the `detail` string for a complete explanation.
 
-  - code: DUPLICATE_RESOURCE
-    status: 409
-    error_type: duplicate
-    title: Duplicate Resource
-    markdown_doc: |
-      Your request would result in a duplicate resource, which is not allowed.
-
   # Do not confuse FEATURE_NOT_AVAILABLE with NOT_IMPLEMENTED. If a feature is
   # not available, it's implemented and tested and works ... but it's not
   # available to this client right now.
@@ -83,13 +83,6 @@ error_codes:
         - Your contract does not include this functionality.
         - A third-party vendor does not support this functionality.
       See the `detail` string for a complete explanation.
-
-  - code: WIPE_NOT_ENABLED
-    status: 422
-    error_type: rule-violation
-    markdown_doc: |
-      You attempted to wipe one or more resources from the system but Wipe is not enabled 
-      in this environment.
 
   - code: INVALID_BODY
     status: 400
@@ -121,17 +114,6 @@ error_codes:
         description: |
           Mapping from field name to error message that explains why that field is invalid.
 
-  # The generic RESOURCE_NOT_FOUND is the only way we should return 404 errors:
-  # a GET /v0/<thing>/<uuid> request will return (404, RESOURCE_NOT_FOUND) if
-  # there is no <thing> with the specified <uuid>.
-  - code: RESOURCE_NOT_FOUND
-    status: 404
-    error_type: not-found
-    markdown_doc: |
-      You made an explicit GET request for a particular type of API resource by ID
-      (e.g. customer, account, transaction),
-      but the requested resource does not exist.
-
   # The resource-specific THING_NOT_FOUND codes are for cases where a request
   # refers to another resource: trying to create an account for a non-existent
   # customer, or a card for a non-existent account, etc. Ultimately, there will be
@@ -156,19 +138,6 @@ error_codes:
       You made a POST/PUT/PATCH request whose request body refers to an account,
       but the specified account does not exist.
 
-  - code: CUSTOMER_NOT_VERIFIED
-    status: 422
-    error_type: rule-violation
-    markdown_doc: |
-      You are trying to do an operation with a customer who has not yet passed KYC,
-      i.e. has not been verified.
-  - code: BUSINESS_NOT_VERIFIED
-    status: 422
-    error_type: rule-violation
-    markdown_doc: |
-      You are trying to do an operation with a business which has not yet passed KYB,
-      i.e. has not been verified.
-
   - code: UNAUTHENTICATED
     status: 401
     error_type: unauthenticated
@@ -188,17 +157,57 @@ error_codes:
       You attempted to access a resource that you do not have permission to read,
       or you attempted an operation that you do not have permission to do.
 
+  # The generic RESOURCE_NOT_FOUND is the only way we should return 404 errors:
+  # a GET /v0/<thing>/<uuid> request will return (404, RESOURCE_NOT_FOUND) if
+  # there is no <thing> with the specified <uuid>.
+  - code: RESOURCE_NOT_FOUND
+    status: 404
+    error_type: not-found
+    markdown_doc: |
+      You made an explicit GET request for a particular type of API resource by ID
+      (e.g. customer, account, transaction),
+      but the requested resource does not exist.
+
+  - code: DUPLICATE_RESOURCE
+    status: 409
+    error_type: duplicate
+    title: Duplicate Resource
+    markdown_doc: |
+      Your request would result in a duplicate resource, which is not allowed.
+
   - code: BAD_CONFIGURATION
     status: 422
     markdown_doc: |
       Synctera's backend is incorrectly configured for your request.
       Please contact Synctera customer success.
+
+  - code: BUSINESS_NOT_VERIFIED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You are trying to do an operation with a business which has not yet passed KYB,
+      i.e. has not been verified.
+
+  - code: CUSTOMER_NOT_VERIFIED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You are trying to do an operation with a customer who has not yet passed KYC,
+      i.e. has not been verified.
+
   - code: INSUFFICIENT_FUNDS
     status: 422
     markdown_doc: |
       You have requested a financial transaction on an account that does not have enough money in it,
       so your request cannot be fulfilled.
       You (or your customer) will need to fund this account before you can do this.
+
+  - code: WIPE_NOT_ENABLED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You attempted to wipe one or more resources from the system but Wipe is not enabled 
+      in this environment.
 
   - code: TOO_MANY_REQUESTS
     status: 429
