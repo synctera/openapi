@@ -212,8 +212,8 @@ error_codes:
     status: 422
     error_type: rule-violation
     markdown_doc: |
-      You attempted to wipe one or more resources from the system but Wipe is not enabled 
-      in this environment.
+      You attempted to wipe one or more resources from the system but this feature is not
+      enabled in this environment.
 
   - code: TOO_MANY_REQUESTS
     status: 429
