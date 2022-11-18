@@ -149,10 +149,7 @@ components:
 
     tenant_id:
       description: |
-        The id tenant containing the resource.
-        Tenancy is represented as <bank_id>_<partner_id>.
-        This attribute is included on all responses.
-        In requests, it is optional for clients with access to only a single tenant.
+        The id of the tenant containing the resource.
       type: string
       example: 'abcdef_ghijkl'
 
