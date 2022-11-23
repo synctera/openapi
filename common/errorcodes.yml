@@ -150,15 +150,11 @@ error_codes:
         items:
           type: string
       invalid:
-        type: array
-        description: |
-          List of field names that are present, but with invalid values.
-        items:
-          type: string
-      reason_invalid:
         type: object
         description: |
           Mapping from field name to error message that explains why that field is invalid.
+          The error messages are English-only and are intended to explain to an API integrator,
+          not an end user, why this value is invalid.
 
   - code: UNAUTHENTICATED
     status: 401
