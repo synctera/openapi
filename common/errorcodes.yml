@@ -3,13 +3,26 @@
 # But it is definitely part of our API, and will be used to generate both
 # docs and code.
 #
-# The most important member of this file is error_codes, an array of objects.
+# The top-level members of an error spec file are: `tag`, `markdown_doc`, `error_codes`.
+#
+# `tag` should match a tag used in our OpenAPI spec. If you are working on
+# things/errorcodes.yml, which corresponds to openapi/vX/things, then
+# just use the same tag in the error spec as you use in openapi/vX/things.
+#
+# `markdown_doc` is an optional chunk of text used to explain this block of error codes.
+# What is special about this API domain that it needs these particular error codes?
+# If in doubt, leave it out.
+#
+# The bulk of the file is `error_codes`, an array of objects.
 # Each one describes one error that can be emitted by at least one Synctera API
 # endpoint. Required fields for each error object:
 #
-#   code: machine-readable representation of this error
-#   status: HTTP status that will always be returned with this error
-#   markdown_doc: fragment of Markdown that will be assembled into documentation
+#   code:
+#     machine-readable representation of this error
+#   status:
+#     HTTP status that will always be returned with this error
+#   markdown_doc:
+#     fragment of Markdown that will be assembled into documentation
 #
 # Optional fields:
 #
