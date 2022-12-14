@@ -2,7 +2,6 @@ summary: Wipe
 post:
   summary: Delete customer and account associated data.
   operationId: wipe
-  x-external: false
   description: |
     Delete the customer and account related data, leaving other configuration data intact. This enables use cases such as bulk data deletion between tests.
     Data associated with below resources will be deleted:

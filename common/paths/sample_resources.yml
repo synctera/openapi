@@ -2,7 +2,6 @@ summary: Create sample resources
 post:
   summary: Create sample resources to expose functionality in sandbox and staging.
   operationId: sampleResources
-  x-external: false
   description: |
     Create sample resources, the purpose of which is two-fold:
     1. Demonstrates a range of platform capabilities
