@@ -2,6 +2,7 @@ summary: Create workspace resources
 post:
   summary: Create workspace resources to initialise (or re-initialise) a workspace
   operationId: workspaceResources
+  x-external: false
   description: |
     Create workspace resources, those resources without which the workspace (tenant) is not considered initialised.
     This endpoint is idempotent and can be called at any time after creation to bring a workspace to the current standard.
