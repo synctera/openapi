@@ -10,48 +10,48 @@ components:
     unauthorized:
       description: Unauthorized
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: "schemas.yml#/components/schemas/error"
 
     not_found:
       description: Resource not found
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: "schemas.yml#/components/schemas/error"
 
     internal_server_error:
       description: Internal server error
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: "schemas.yml#/components/schemas/error"
 
     already_exists:
-      description: Resource already exists error
+      description: Resource already exists
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: "schemas.yml#/components/schemas/error"
 
     bad_request:
-      description: BadRequest
+      description: Bad request
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: "schemas.yml#/components/schemas/error"
 
     forbidden:
-      description: Forbidden error
+      description: Forbidden
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: "schemas.yml#/components/schemas/error"
 
     unprocessable_entity:
-      description: Unprocessable entity request response
+      description: Unprocessable entity
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: "schemas.yml#/components/schemas/error"
