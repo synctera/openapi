@@ -1,7 +1,7 @@
 # NB: this Makefile is intended to be used by CI *after* the ./update script has run successfully
 
 %-api.yml: %-api-merged-bundled.yml
-	NODE_PATH=$(shell npm root -g) node ./datafaker.js $< $@
+	cp $< $@
 
 %-api.json: %-api.yml
 	openapi bundle $< --ext json --output $@
