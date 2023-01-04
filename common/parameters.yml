@@ -31,7 +31,7 @@ components:
         type: string
         description: Only return resources owned by the specified tenant
         example: abcdef_ghijlk
-    
+
     tenant_id_path:
       name: tenant_id
       in: path
