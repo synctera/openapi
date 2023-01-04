@@ -1,0 +1,259 @@
+---
+# This file is NOT part of our OpenAPI spec -- it's a custom Synctera thing.
+# But it is definitely part of our API, and will be used to generate both
+# docs and code.
+#
+# The top-level members of an error spec file are: `tag`, `markdown_doc`, `error_codes`.
+#
+# `tag` should match a tag used in our OpenAPI spec. If you are working on
+# things/errorcodes.yml, which corresponds to openapi/vX/things, then
+# just use the same tag in the error spec as you use in openapi/vX/things.
+#
+# `markdown_doc` is an optional chunk of text used to explain this block of error codes.
+# What is special about this API domain that it needs these particular error codes?
+# If in doubt, leave it out.
+#
+# The bulk of the file is `error_codes`, an array of objects.
+# Each one describes one error that can be emitted by at least one Synctera API
+# endpoint. Required fields for each error object:
+#
+#   code:
+#     machine-readable representation of this error
+#   status:
+#     HTTP status that will always be returned with this error
+#   markdown_doc:
+#     fragment of Markdown that will be assembled into documentation
+#
+# Optional fields:
+#
+#   error_type:
+#     used to build a 'type' field to avoid breaking API v0 error responses
+#   title:
+#     used as the 'title' field for v0 responses (if absent, will be derived
+#     from error_type)
+#   extra_fields:
+#     specifies which additional fields may be included with these errors
+#
+# Initially, errorcodes.yml files will have two purposes:
+#
+# * generate source code with error code constants (and other info)
+# * generate documentation of all our error codes
+#
+# This file is ordered by HTTP status code, then alphabetically by error code.
+# For example:
+#   400 ALL_IS_NOT_WELL
+#   400 BAD_THINGS_HAPPENED
+#   401 AUTHENTICATION_ERROR
+#   401 YOU_ARE_NOT_WELCOME
+
+# A note on "not found" errors: the generic RESOURCE_NOT_FOUND is the only way
+# we should return 404 errors: a GET /v0/<thing>/<uuid> request will return
+# (404, RESOURCE_NOT_FOUND) if there is no <thing> with the specified <uuid>.
+# More broadly, if the URL is bad, we should return 404 RESOURCE_NOT_FOUND.
+# If there is nothing wrong with the URL, then we should NOT return 404.
+# (Unfortunately, lots of v0 code gets this wrong. We should fix it in v1.)
+#
+# The resource-specific THING_NOT_FOUND codes are for cases where a request
+# refers to another resource: trying to create an account for a non-existent
+# customer, or a card for a non-existent account, etc. Ultimately, there will be
+# one THING_NOT_FOUND for every resource in our API.
+
+tag: Global Error Codes
+markdown_doc: |
+  Several error codes are applicable across Synctera's platform.
+  Any API endpoint can return these errors.
+
+error_codes:
+  - code: ACCOUNT_NOT_FOUND
+    status: 400
+    error_type: not-found
+    markdown_doc: |
+      You made a POST/PUT/PATCH request whose request body refers to an account,
+      but the specified account does not exist.
+
+  # hmmmm: mainapi's clients/plaid package returns BAD_REQUEST_QUERY; probably
+  # need a hack in that package to switch the error code between v0 and v1
+  - code: BAD_QUERY_PARAMETER
+    status: 400
+    error_type: bad-request-query
+    title: Bad Request Query Parameter
+    markdown_doc: |
+      Your request had a problem with its query parameters.
+      Most commonly, this is due to an invalid value for one query parameter,
+      but it could also be caused by an invalid combination of query parameters,
+      or a missing query parameter.
+      See the `detail` string for a complete explanation.
+
+  - code: BAD_REQUEST
+    status: 400
+    error_type: bad-request
+    markdown_doc: |
+      There is a generic, unspecified problem with your request.
+      See the `detail` field for more information.
+      This is typically a problem with the URL or the request headers.
+      This usually indicates a problem with your client implementation.
+
+  - code: BAD_REQUEST_BODY
+    status: 400
+    error_type: bad-request-body
+    markdown_doc: |
+      You sent a POST/PUT/PATCH request with a JSON request body, but the body is not valid.
+      There are many possible reasons for this:
+        * Some required fields might be missing
+        * Some fields might have invalid types or values
+        * Something else that is more complex than simply missing/invalid fields
+
+      Missing or invalid request fields will be described by two extra fields
+      of this error response: `missing` and `invalid`.
+    extra_fields:
+      missing:
+        type: array
+        description: |
+          List of required field names that are not present in the request.
+        items:
+          type: string
+      invalid:
+        type: object
+        description: |
+          Mapping from field name to error message that explains why that field is invalid.
+          The error messages are English-only and are intended to explain to an API integrator,
+          not an end user, why this value is invalid.
+
+  - code: BUSINESS_NOT_FOUND
+    status: 400
+    error_type: not-found
+    markdown_doc: |
+      You made a POST/PUT/PATCH request whose request body refers to a business,
+      but the specified business does not exist.
+
+  - code: CUSTOMER_NOT_FOUND
+    status: 400
+    error_type: not-found
+    markdown_doc: |
+      You made a POST/PUT/PATCH request whose request body refers to a customer,
+      but the specified customer does not exist.
+
+  # Do not confuse FEATURE_NOT_AVAILABLE with NOT_IMPLEMENTED. If a feature is
+  # not available, it's implemented and tested and works ... but it's not
+  # available to this client right now.
+  - code: FEATURE_NOT_AVAILABLE
+    status: 400
+    error_type: bad-request
+    markdown_doc: |
+      You attempted to access some feature of the Synctera platform that is not available to you.
+      There are various possible reasons for this:
+        - Your contract does not include this functionality.
+        - A third-party vendor does not support this functionality.
+      See the `detail` string for a complete explanation.
+
+  - code: UNAUTHENTICATED
+    status: 401
+    error_type: unauthenticated
+    markdown_doc: |
+      You made a request with invalid, incomplete, or missing authentication credentials.
+      The standard way to authenticate to Synctera's API is with an API key passed as a bearer token.
+      For example, you should include an HTTP request header like
+
+          Authorization: Bearer 533a9bd0-8dd2-4e13-8d7c-73d9c1b4b9b6
+
+      (with your actual API key, of course).
+
+  - code: FORBIDDEN
+    status: 403
+    error_type: forbidden
+    markdown_doc: |
+      You attempted to access a resource that you do not have permission to read,
+      or you attempted an operation that you do not have permission to do.
+
+  - code: RESOURCE_NOT_FOUND
+    status: 404
+    error_type: not-found
+    markdown_doc: |
+      You made an explicit GET request for a particular type of API resource by ID
+      (e.g. customer, account, transaction),
+      but the requested resource does not exist.
+
+  - code: DUPLICATE_RESOURCE
+    status: 409
+    error_type: duplicate
+    title: Duplicate Resource
+    markdown_doc: |
+      Your request would result in a duplicate resource, which is not allowed.
+
+  - code: BAD_CONFIGURATION
+    status: 422
+    markdown_doc: |
+      Synctera's backend is incorrectly configured for your request.
+      Please contact Synctera customer success.
+
+  - code: BUSINESS_NOT_VERIFIED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You are trying to do an operation with a business which has not yet passed KYB,
+      i.e. has not been verified.
+
+  - code: CUSTOMER_NOT_VERIFIED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You are trying to do an operation with a customer who has not yet passed KYC,
+      i.e. has not been verified.
+
+  - code: INSUFFICIENT_FUNDS
+    status: 422
+    markdown_doc: |
+      You have requested a financial transaction on an account that does not have enough money in it,
+      so your request cannot be fulfilled.
+      You (or your customer) will need to fund this account before you can do this.
+
+  - code: WIPE_NOT_ENABLED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You attempted to wipe one or more resources from the system but this feature is not
+      enabled in this environment.
+
+  - code: TOO_MANY_REQUESTS
+    status: 429
+    error_type: too-many-requests
+    markdown_doc: |
+      You have exceeded a rate limit --
+      that is, you have made too many requests for some time period.
+      This limit might have been imposed by Synctera
+      or by a third-party vendor.
+    extra_fields:
+      retry_after:
+        type: integer
+        description: |
+          Recommended delay, in seconds, that you should wait before retrying your request.
+          This field is _not_ guaranteed to be present in every TOO_MANY_REQUESTS error response.
+
+  - code: INTERNAL_ERROR
+    status: 500
+    error_type: internal-server-error
+    markdown_doc: |
+      Something went wrong inside Synctera's platform.
+      Please report the problem to Synctera's customer support team.
+      We'll need to know as much of the following as possible:
+        - what API endpoint you called
+        - the time the error happened (including timezone)
+        - what HTTP request body you sent
+        - what HTTP response body you received
+
+  # Do not confuse NOT_IMPLEMENTED with FEATURE_NOT_AVAILABLE. NOT_IMPLEMENTED
+  # means we haven't written the code yet -- e.g. we have added this request to
+  # our OpenAPI schema, but haven't actually implemented it.
+  - code: NOT_IMPLEMENTED
+    status: 501
+    error_type: not-implemented
+    markdown_doc: |
+      You have attempted an operation that is planned, but not yet implemented.
+      Contact Synctera support if you need more information.
+
+  - code: VENDOR_TIMEOUT
+    status: 504
+    title: Gateway Timeout
+    markdown_doc: |
+      You made a request that relies on a third-party vendor,
+      but Synctera's request to the vendor timed out.
