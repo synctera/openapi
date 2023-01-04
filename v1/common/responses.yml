@@ -1,0 +1,57 @@
+components:
+  responses:
+    delete_response:
+      description: Resource has been deleted
+      content:
+        application/json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/delete_response"
+
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/error"
+
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/error"
+
+    internal_server_error:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/error"
+
+    already_exists:
+      description: Resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/error"
+
+    bad_request:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/error"
+
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/error"
+
+    unprocessable_entity:
+      description: Unprocessable entity
+      content:
+        application/json:
+          schema:
+            $ref: "schemas.yml#/components/schemas/error"
