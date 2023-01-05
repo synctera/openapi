@@ -9,29 +9,17 @@ variables:
 before_script:
   - echo "${_NETRC}" > ~/.netrc
 
-spec:
+external-spec:
   stage: update
   image: registry.gitlab.com/synctera/tools/build-tools:latest
   script:
-    - ./update
-    - for wildcard in $(ls |grep api-merged-bundled.yml | cut -d- -f1 |uniq); do make --file=ci.makefile ${wildcard}-api.yml; done
-    - for wildcard in $(ls |grep api-merged-bundled.yml | cut -d- -f1 |uniq); do make --file=ci.makefile ${wildcard}-api.json; done
+    - sc --debug openapi generate-merged-spec --working-dir wkdir --version v0 --output v0-external-api.yml
+    - sc --debug openapi generate-merged-spec --working-dir wkdir --version v1 --output v1-external-api.yml
+    - yq --tojson -I=0 eval v0-external-api.yml > v0-external-api.json
+    - yq --tojson -I=0 eval v1-external-api.yml > v1-external-api.json
   artifacts:
     paths:
       - "*external-api.yml"
       - "*external-api.json"
-  tags:
-    - low-load
-
-go-external:
-  stage: generate
-  needs:
-    - spec
-  image: registry.gitlab.com/synctera/tools/build-tools:latest
-  script:
-    - for wildcard in $(ls |grep 'external-api.yml' | cut -d. -f1 |uniq); do make --file=ci.makefile go-external.${wildcard}.tar.gz; done
-  artifacts:
-    paths:
-      - go-external.*.tar.gz
   tags:
     - low-load
