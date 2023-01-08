@@ -13,10 +13,11 @@ external-spec:
   stage: update
   image: registry.gitlab.com/synctera/tools/build-tools:latest
   script:
-    - sc --debug openapi generate-merged-spec --working-dir wkdir --version v0 --output v0-external-api.yml
-    - sc --debug openapi generate-merged-spec --working-dir wkdir --version v1 --output v1-external-api.yml
-    - yq --tojson -I=0 eval v0-external-api.yml > v0-external-api.json
-    - yq --tojson -I=0 eval v1-external-api.yml > v1-external-api.json
+    - sc --debug openapi generate-merged-spec --working-dir wkdir --version v0 --output v0.external-api.yml
+    - sc --debug openapi generate-merged-spec --working-dir wkdir --version v1 --output v1.external-api.yml
+    - yq --tojson eval v0.external-api.yml > v0.external-api.json
+    - yq --tojson eval v1.external-api.yml > v1.external-api.json
+    - for spec in *.external-api.json; do echo "ensure standard header $spec"; jq --slurpfile header header.json '(. | .info = $header[0].info | .openapi = $header[0].openapi | .servers = $header[0].servers)' < "$spec" > tmp.json; cp tmp.json "$spec"; rm tmp.json; done;
   artifacts:
     paths:
       - "*external-api.yml"
