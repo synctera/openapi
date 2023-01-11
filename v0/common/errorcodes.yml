@@ -71,6 +71,13 @@ error_codes:
       You made a POST/PUT/PATCH request whose request body refers to an account,
       but the specified account does not exist.
 
+  - code: APPLICATION_NOT_FOUND
+    status: 400
+    error_type: not-found
+    markdown_doc: |
+      You made a POST/PUT/PATCH request whose request body refers to an application,
+      but the specified application does not exist.
+
   # hmmmm: mainapi's clients/plaid package returns BAD_REQUEST_QUERY; probably
   # need a hack in that package to switch the error code between v0 and v1
   - code: BAD_QUERY_PARAMETER
