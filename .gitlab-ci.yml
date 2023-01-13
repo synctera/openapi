@@ -19,4 +19,4 @@ external-spec:
     paths:
       - "*external-api.json"
   tags:
-    - low-load
+    - high-load
