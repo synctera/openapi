@@ -20,3 +20,4 @@ external-spec:
       - "*external-api.json"
   tags:
     - high-load
+  retry: 2
