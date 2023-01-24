@@ -153,6 +153,13 @@ components:
       type: string
       example: 'abcdef_ghijkl'
 
+    tenant_id_internal:
+      x-external: false
+      description: |
+        The id of the tenant containing the resource. Not included in external documentation.
+      type: string
+      example: 'abcdef_ghijkl'
+
     workspace_resources_post:
       title: Request for creating workspace resources
       type: object
