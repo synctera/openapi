@@ -15,6 +15,11 @@ external-spec:
   script:
     - sc --debug openapi generate-merged-spec --working-dir wkdir --version v0 --output v0.external-api.json
     - sc --debug openapi generate-merged-spec --working-dir wkdir --version v1 --output v1.external-api.json
+    - jq -S . v0.external-api.json > v0.external-api.json.tmp 
+    - mv v0.external-api.json.tmp v0.external-api.json
+    - jq -S . v1.external-api.json > v1.external-api.json.tmp 
+    - mv v1.external-api.json.tmp v1.external-api.json
+
   artifacts:
     paths:
       - "*external-api.json"
