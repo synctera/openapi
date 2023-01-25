@@ -108,10 +108,12 @@ error_codes:
       There are many possible reasons for this:
         * Some required fields might be missing
         * Some fields might have invalid types or values
+        * Some fields might be immutable
         * Something else that is more complex than simply missing/invalid fields
 
-      Missing or invalid request fields will be described by two extra fields
-      of this error response: `missing` and `invalid`.
+      Missing, invalid, or immutable request fields will be described by extra fields
+      of this error response: `missing`, `invalid`, and `immutable`.
+
     extra_fields:
       missing:
         type: array
@@ -125,6 +127,12 @@ error_codes:
           Mapping from field name to error message that explains why that field is invalid.
           The error messages are English-only and are intended to explain to an API integrator,
           not an end user, why this value is invalid.
+      immutable:
+        type: array
+        description: |
+          List of field names that are not allowed to be modified.
+        items:
+          type: string
 
   - code: BUSINESS_NOT_FOUND
     status: 400
