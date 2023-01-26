@@ -221,6 +221,19 @@ error_codes:
       so your request cannot be fulfilled.
       You (or your customer) will need to fund this account before you can do this.
 
+  - code: INVALID_STATUS
+    status: 422
+    markdown_doc: |
+      You have attempted to create or update a resource with a status that
+      is not allowed at this point in the resource's lifecycle.
+    extra_fields:
+      valid_status:
+        type: array
+        description: |
+          Array of status values that would be accepted here.
+        items:
+          type: string
+
   - code: WIPE_NOT_ENABLED
     status: 422
     error_type: rule-violation
