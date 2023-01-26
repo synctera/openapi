@@ -271,3 +271,25 @@ error_codes:
     markdown_doc: |
       You made a request that relies on a third-party vendor,
       but Synctera's request to the vendor timed out.
+
+  - code: SUSPECTED_FRAUD
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction but the transaction is considered suspicious according to our fraud
+      detection system. The transaction was blocked.
+
+  - code: BALANCE_VIOLATION
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction but one of the accounts involved has a balance floor or balance ceiling
+      which would be violated by the transaction so the transaction has been blocked.
+
+  - code: SPEND_CONTROL_VIOLATION
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction but one of the accounts involved has a spend control which would be
+      violated by the transaction so the transaction has been blocked. The transaction may succeed in the future
+      according to the specific spend control rules.
