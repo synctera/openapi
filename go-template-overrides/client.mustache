@@ -424,6 +424,11 @@ func (c *APIClient) decode(v interface{}, b []byte, contentType string) (err err
 		_, err = (*f).Seek(0, io.SeekStart)
 		return
 	}
+	if f, ok := v.(*io.Reader); ok {
+		r := bytes.NewReader(b)
+		*f = r
+		return
+	}
 	if xmlCheck.MatchString(contentType) {
 		if err = xml.Unmarshal(b, v); err != nil {
 			return err

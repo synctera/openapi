@@ -264,8 +264,6 @@ func (a *{{{classname}}}Service) {{nickname}}Execute(r {{#structPrefix}}{{&class
 	if localVarFile != nil {
 		fbs, _ := _ioutil.ReadAll(localVarFile)
 		localVarFileBytes = fbs
-		localVarFileName = localVarFile.Name()
-		localVarFile.Close()
 	}
 {{/isFile}}
 {{^isFile}}
