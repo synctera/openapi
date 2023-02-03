@@ -252,6 +252,14 @@ func (a *{{{classname}}}Service) {{nickname}}Execute(r {{#structPrefix}}{{&class
 {{#formParams}}
 {{#isFile}}
 	localVarFormFileName = "{{baseName}}"
+	// (shiqi): this is essentially a hack to get around multipart form needing to deal with
+	// an actual file (with a file name). We swapped this os.File construct for an io.Reader
+	// to avoid memory leak / other problems when wrangling files. Having a generic filename
+	// here is okay because the filename field is optional & supplemental, it is used to
+	// populate the header Content-Disposition for this form part. Our file finagling application
+	// docstore does not consume that header during an upload, it takes file name from the
+	// corresponding form part
+	localVarFileName = "data"
 {{#required}}
 	localVarFile := *r.{{paramName}}
 {{/required}}
