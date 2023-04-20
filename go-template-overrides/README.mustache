@@ -56,7 +56,7 @@ func NewMainAPIClient() *MainAPIClient {
 	client := httpclient.Default(baseURL)
 	mainAPIURL, err := url.Parse(baseURL)
 	if err != nil {
-		log.Fatal().AnErr("MAINAPI_URL", err)
+		log.Fatal().Err(err).Msg("failed to parse mainapi URL")
 	}
 
 	openAPIConf := mainapi.NewConfiguration()
