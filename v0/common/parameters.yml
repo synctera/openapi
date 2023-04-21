@@ -57,6 +57,16 @@ components:
       style: form
       explode: false
 
+    id_path:
+      name: id
+      description: The unique resource identifier
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 7d943c51-e4ff-4e57-9558-08cab6b963c7
+
     idempotency_key:
       name: Idempotency-Key
       in: header
