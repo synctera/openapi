@@ -166,18 +166,21 @@ components:
       properties:
         tenant:
           description: The tenant whose resources are being created as part of this quickstart request.
-          $ref: '#/components/schemas/tenant'
+          allOf:
+            - $ref: '#/components/schemas/tenant'
         parent_tenant:
           description: >
             If `tenant` is a fintech, this is the sponsor bank's self-partner tenant.
             If `tenant` is a bank, this is Synctera (1_1).
-          $ref: '#/components/schemas/tenant'
+          allOf:
+            - $ref: '#/components/schemas/tenant'
         bank_self_partner_tenant:
           description: >
             If `tenant` is a fintech, this is the sponsor bank's self-partner tenant.
             If `tenant` is a bank, this is the same as `tenant`.
           deprecated: true
-          $ref: '#/components/schemas/tenant'
+          allOf:
+            - $ref: '#/components/schemas/tenant'
         is_tminus10:
           description: |
             Flag which indicates if the workspace is a t-minus10 workspace.
