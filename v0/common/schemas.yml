@@ -149,7 +149,7 @@ components:
 
     tenant_id:
       description: |
-        The id of the tenant containing the resource.
+        The id of the tenant containing the resource. This is relevant for Fintechs that have multiple workspaces.
       type: string
       example: 'abcdef_ghijkl'
 
