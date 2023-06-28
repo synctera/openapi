@@ -5,6 +5,16 @@ stages:
 
 variables:
   GOPRIVATE: gitlab.com/synctera
+  KUBERNETES_CPU_REQUEST: "2"
+  KUBERNETES_CPU_LIMIT: "2"
+  KUBERNETES_MEMORY_REQUEST: "6Gi"
+  KUBERNETES_MEMORY_LIMIT: "6Gi"
+  KUBERNETES_HELPER_CPU_REQUEST: "250m"
+  KUBERNETES_HELPER_CPU_LIMIT: "250m"
+  KUBERNETES_SERVICE_CPU_REQUEST: "1"
+  KUBERNETES_SERVICE_CPU_LIMIT: "1"
+  KUBERNETES_SERVICE_MEMORY_REQUEST: "2Gi"
+  KUBERNETES_SERVICE_MEMORY_LIMIT: "4Gi"
 
 before_script:
   - echo "${_NETRC}" > ~/.netrc
@@ -24,5 +34,5 @@ external-spec:
     paths:
       - "*external-api.json"
   tags:
-    - high-load
+    - gke-gitlab-runner
   retry: 2
