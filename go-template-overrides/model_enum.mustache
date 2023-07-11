@@ -21,6 +21,17 @@ var allowed{{{classname}}}EnumValues = []{{{classname}}}{
 	{{/allowableValues}}
 }
 
+var Full{{{classname}}}EnumValues = []{{{classname}}}{
+	{{#allowableValues}}
+	{{#enumVars}}
+	{{^-first}}
+	{{/-first}}
+	{{#enumClassPrefix}}{{{classname.toUpperCase}}}_{{/enumClassPrefix}}{{name}},
+	{{/enumVars}}
+	{{/allowableValues}}
+	{{{classname.toUpperCase}}}_UNKNOWN,
+}
+
 func (v *{{{classname}}}) UnmarshalJSON(src []byte) error {
 	var value {{{format}}}{{^format}}{{dataType}}{{/format}}
 	err := json.Unmarshal(src, &value)
