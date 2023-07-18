@@ -344,8 +344,8 @@ error_codes:
     status: 422
     error_type: unprocessable-entity
     markdown_doc: |
-      This operation is idempotent and it requires correct usage of Idempotency-Key.
-      Idempotency-Key MUST not be reused across different payloads of this operation.
+      The request included an Idempotency-Key header which was already used for a different request.
+      An Idempotency-Key must not be reused across different paths, methods or request payloads.
 
   - code: IDEMPOTENCY_CONCURRENT_USE
     status: 422

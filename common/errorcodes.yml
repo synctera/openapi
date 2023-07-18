@@ -200,6 +200,13 @@ error_codes:
       Synctera's backend is incorrectly configured for your request.
       Please contact Synctera customer success.
 
+  - code: PARTNER_NOT_VERIFIED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      Your organization has not finished onboarding with Synctera's platform --
+      specifically, you have not passed the KYB verification that is necessary to move money.
+
   - code: BUSINESS_NOT_VERIFIED
     status: 422
     error_type: rule-violation
@@ -234,12 +241,38 @@ error_codes:
         items:
           type: string
 
+  - code: IMPROPER_CUSTOMER_STATUS
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You made a request that references a customer who is not allowed to transact due to the customer's state.
+
+  - code: IMPROPER_ACCOUNT_STATUS
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction on an account that is not allowed to transact due to the account's state.
+      For an account to be able to transact it must be in a good state and not frozen.
+
+  - code: IMPROPER_ACCOUNT_CUSTOMER_RELATIONSHIP
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction that references an account and a customer,
+      but the customer is not authorized to access this account.
+
   - code: WIPE_NOT_ENABLED
     status: 422
     error_type: rule-violation
     markdown_doc: |
       You attempted to wipe one or more resources from the system but this feature is not
       enabled in this environment.
+
+  - code: INVALID_TENANCY
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      Your request included tenancy information that is not valid.
 
   - code: TOO_MANY_REQUESTS
     status: 429
@@ -311,8 +344,8 @@ error_codes:
     status: 422
     error_type: unprocessable-entity
     markdown_doc: |
-      This operation is idempotent and it requires correct usage of Idempotency-Key.
-      Idempotency-Key MUST not be reused across different payloads of this operation.
+      The request included an Idempotency-Key header which was already used for a different request.
+      An Idempotency-Key must not be reused across different paths, methods or request payloads.
 
   - code: IDEMPOTENCY_CONCURRENT_USE
     status: 422
