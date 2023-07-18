@@ -16,6 +16,17 @@ variables:
 before_script:
   - echo "${_NETRC}" > ~/.netrc
 
+errorcodes:
+  stage: update
+  image: registry.gitlab.com/synctera/tools/build-tools:latest
+  script:
+    # Hopefully this is temporary. Once we remove the versioned copies of errorcodes.yml,
+    # we can drop this check.
+    - 'diff -u v0/common/errorcodes.yml common/errorcodes.yml || (echo "error: errorcodes.yml files must be kept in sync"; exit 1)'
+    - 'diff -u v1/common/errorcodes.yml common/errorcodes.yml || (echo "error: errorcodes.yml files must be kept in sync"; exit 1)'
+  tags:
+    - gke-gitlab-runner
+
 external-spec:
   stage: update
   image: registry.gitlab.com/synctera/tools/build-tools:latest
