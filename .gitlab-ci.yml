@@ -42,5 +42,5 @@ external-spec:
     paths:
       - "*external-api.json"
   tags:
-    - gke-gitlab-runner
+    - gke-gitlab-runner-spot
   retry: 2
