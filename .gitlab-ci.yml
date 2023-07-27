@@ -25,7 +25,7 @@ errorcodes:
     - 'diff -u v0/common/errorcodes.yml common/errorcodes.yml || (echo "error: errorcodes.yml files must be kept in sync"; exit 1)'
     - 'diff -u v1/common/errorcodes.yml common/errorcodes.yml || (echo "error: errorcodes.yml files must be kept in sync"; exit 1)'
   tags:
-    - gke-gitlab-runner
+    - gke-gitlab-runner-spot
 
 external-spec:
   stage: update
