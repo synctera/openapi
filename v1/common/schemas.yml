@@ -14,7 +14,6 @@ components:
       description: >-
         Synctera error responses in API v1 implement a custom error schema.
       type: object
-
       # None of these properties can be marked required because of legacy
       # errors returned by api-gateway and mainapi. Once those are
       # fixed, these should all be required.
@@ -35,7 +34,7 @@ components:
           example: "Missing required fields: first_name, dob"
 
     delete_response:
-      title:  Deleted Object
+      title: Deleted Object
       type: object
       description: Deleted object information
       properties:
@@ -48,7 +47,7 @@ components:
           description: The resource name
 
     vendor_info:
-      title:  Vendor Info
+      title: Vendor Info
       type: object
       description: >
         The information provided to Synctera from the vendor.
@@ -120,18 +119,30 @@ components:
         - bank_id
         - partner_id
 
+    partner:
+      title: Partner
+      type: object
+      properties:
+        partner_country:
+          description: The country for this partner, a 2 character ISO 3166 string
+          type: string
+          enum:
+            - US
+            - CA
+      required:
+        - partner_country
     tenant_id:
       description: |
         The id of the tenant containing the resource.
       type: string
-      example: 'abcdef_ghijkl'
+      example: "abcdef_ghijkl"
 
     tenant_id_internal:
       x-external: false
       description: |
         The id of the tenant containing the resource. Not included in external documentation.
       type: string
-      example: 'abcdef_ghijkl'
+      example: "abcdef_ghijkl"
 
     workspace_resources_post:
       title: Request for creating workspace resources
@@ -140,39 +151,49 @@ components:
         tenant:
           description: The tenant whose resources are being created as part of this quickstart request.
           allOf:
-            - $ref: '#/components/schemas/tenant'
+            - $ref: "#/components/schemas/tenant"
         parent_tenant:
           description: >
             If `tenant` is a fintech, this is the sponsor bank's self-partner tenant.
             If `tenant` is a bank, this is Synctera (1_1).
           allOf:
-            - $ref: '#/components/schemas/tenant'
+            - $ref: "#/components/schemas/tenant"
         bank_self_partner_tenant:
           description: >
             If `tenant` is a fintech, this is the sponsor bank's self-partner tenant.
             If `tenant` is a bank, this is the same as `tenant`.
           deprecated: true
           allOf:
-            - $ref: '#/components/schemas/tenant'
+            - $ref: "#/components/schemas/tenant"
         is_tminus10:
           description: |
             Flag which indicates if the workspace is a t-minus10 workspace.
             Some services may create different resources depending on this flag.
           type: boolean
         partner_type:
-          $ref: '#/components/schemas/partner_type'
+          $ref: "#/components/schemas/partner_type"
+        partner:
+          description: The partner object.
+          allOf:
+            - $ref: "#/components/schemas/partner"
       required:
         - tenant
         - is_tminus10
         - partner_type
+        - partner
 
     sample_resources_post:
       title: Request for creating sample resources
       type: object
       properties:
         tenant:
-          $ref: '#/components/schemas/tenant'
+          $ref: "#/components/schemas/tenant"
+        partner:
+          description: The partner object.
+          allOf:
+            - $ref: "#/components/schemas/partner"
       required:
+        - partner
         - tenant
 
     workspace_wipe_post:
@@ -180,7 +201,7 @@ components:
       type: object
       properties:
         tenant:
-          $ref: '#/components/schemas/tenant'
+          $ref: "#/components/schemas/tenant"
       required:
         - tenant
 
