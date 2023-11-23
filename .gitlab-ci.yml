@@ -30,7 +30,6 @@ errorcodes:
     max: 2
     when:
       - runner_system_failure
-      - unknown_failure
 
 external-spec:
   stage: update
@@ -48,4 +47,7 @@ external-spec:
       - "*external-api.json"
   tags:
     - gke-gitlab-runner-spot
-  retry: 2
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
