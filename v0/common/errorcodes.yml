@@ -261,6 +261,18 @@ error_codes:
       You have requested a financial transaction that references an account and a customer,
       but the customer is not authorized to access this account.
 
+  - code: PAYMENT_RAIL_NOT_ENABLED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction for a payment rail that is not enabled for your fintech.
+
+  - code: PAYMENT_RAIL_COUNTRY_NOT_SUPPORTED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction for a payment rail that is not supported for your country.
+
   - code: WIPE_NOT_ENABLED
     status: 422
     error_type: rule-violation
