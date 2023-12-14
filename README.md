@@ -1,14 +1,6 @@
 # OpenAPI
 
-This repository contains shared OpenAPI schemas (as well as our standard errorcodes configuration) and it defines a CICD pipeline that merges our service specific specs into the externally published monolithic OpenAPI v3.0 specification (1 single file per Synctera API version).
-
-In order for merged service MRs to trigger the above mentioned pipeline add this snippet to `.gitlab.yml`
-
-```yaml
-openapi:
-  variables:
-    FOO_OPENAPI_BRANCH: ${CI_COMMIT_REF_NAME}
-```
+This repository contains shared OpenAPI schemas (as well as our standard errorcodes configuration).
 
 A recent survey found that 6/10 people find this diagram helpful:
 
