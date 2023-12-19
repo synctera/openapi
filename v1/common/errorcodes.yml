@@ -64,6 +64,13 @@ markdown_doc: |
   Any API endpoint can return these errors.
 
 error_codes:
+  - code: ACCOUNT_CLOSED
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction on an account that is closed.
+      For an account to be able to transact it must be in a good state and not frozen.
+
   - code: ACCOUNT_NOT_FOUND
     status: 400
     error_type: not-found
