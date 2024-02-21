@@ -26,24 +26,3 @@ errorcodes:
     max: 2
     when:
       - runner_system_failure
-
-external-spec:
-  stage: update
-  image: registry.gitlab.com/synctera/tools/build-tools:latest
-  script:
-    - sc --debug openapi generate-merged-spec --working-dir wkdir --version v0 --output v0.external-api.json
-    - sc --debug openapi generate-merged-spec --working-dir wkdir --version v1 --output v1.external-api.json
-    - jq -S . v0.external-api.json > v0.external-api.json.tmp 
-    - mv v0.external-api.json.tmp v0.external-api.json
-    - jq -S . v1.external-api.json > v1.external-api.json.tmp 
-    - mv v1.external-api.json.tmp v1.external-api.json
-
-  artifacts:
-    paths:
-      - "*external-api.json"
-  tags:
-    - gke-gitlab-runner-spot
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
