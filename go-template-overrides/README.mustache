@@ -52,7 +52,10 @@ type MainAPIClient struct {
 }
 
 func NewMainAPIClient() *MainAPIClient {
-	baseURL := os.Getenv("MAINAPI_URL")
+	baseURL, err := serviceurls.GetURLForService("mainapi")
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to get mainapi URL")
+	}
 	client := httpclient.Default(baseURL)
 	mainAPIURL, err := url.Parse(baseURL)
 	if err != nil {
