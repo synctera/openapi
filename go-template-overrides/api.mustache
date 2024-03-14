@@ -54,6 +54,7 @@ type {{classname}}Service service
 
 type {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Request struct {
 	ctx _context.Context
+	extraHeaders map[string]string
 	ApiService {{#generateInterfaces}}{{classname}}{{/generateInterfaces}}{{^generateInterfaces}}*{{classname}}Service{{/generateInterfaces}}
 {{#allParams}}
 	{{paramName}} {{^isPathParam}}*{{/isPathParam}}{{{dataType}}}
@@ -70,6 +71,11 @@ func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Reques
 	r.{{paramName}} = &{{paramName}}
 	return r
 }{{/isPathParam}}{{/allParams}}
+
+func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Request) ExtraHeaders(h map[string]string) {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Request {
+	r.extraHeaders = h
+	return r
+}
 
 func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Request) Execute() ({{#returnType}}{{{.}}}, {{/returnType}}*_nethttp.Response, error) {
 	return r.ApiService.{{nickname}}Execute(r)
@@ -336,6 +342,10 @@ func (a *{{{classname}}}Service) {{nickname}}Execute(r {{#structPrefix}}{{&class
 {{/isKeyInCookie}}
 {{/isApiKey}}
 {{/authMethods}}
+	for k, v := range r.extraHeaders {
+		localVarHeaderParams[k] = v
+	}
+
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return {{#returnType}}localVarReturnValue, {{/returnType}}nil, err
