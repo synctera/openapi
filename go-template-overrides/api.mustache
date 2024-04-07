@@ -55,6 +55,11 @@ type {{classname}}Service service
 type {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Request struct {
 	ctx _context.Context
 	extraHeaders map[string]string
+	{{#formParams}}
+	{{#isFile}}
+	formFileName *string
+	{{/isFile}}
+	{{/formParams}}
 	ApiService {{#generateInterfaces}}{{classname}}{{/generateInterfaces}}{{^generateInterfaces}}*{{classname}}Service{{/generateInterfaces}}
 {{#allParams}}
 	{{paramName}} {{^isPathParam}}*{{/isPathParam}}{{{dataType}}}
@@ -76,6 +81,15 @@ func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Reques
 	r.extraHeaders = h
 	return r
 }
+
+{{#formParams}}
+{{#isFile}}
+func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Request) FormFileName(name string) {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Request {
+	r.formFileName = &name
+	return r
+}
+{{/isFile}}
+{{/formParams}}
 
 func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{operationId}}Request) Execute() ({{#returnType}}{{{.}}}, {{/returnType}}*_nethttp.Response, error) {
 	return r.ApiService.{{nickname}}Execute(r)
@@ -258,14 +272,11 @@ func (a *{{{classname}}}Service) {{nickname}}Execute(r {{#structPrefix}}{{&class
 {{#formParams}}
 {{#isFile}}
 	localVarFormFileName = "{{baseName}}"
-	// (shiqi): this is essentially a hack to get around multipart form needing to deal with
-	// an actual file (with a file name). We swapped this os.File construct for an io.Reader
-	// to avoid memory leak / other problems when wrangling files. Having a generic filename
-	// here is okay because the filename field is optional & supplemental, it is used to
-	// populate the header Content-Disposition for this form part. Our file finagling application
-	// docstore does not consume that header during an upload, it takes file name from the
-	// corresponding form part
+	// see https://gitlab.com/synctera/openapi/-/issues/35 and https://gitlab.com/synctera/openapi/-/issues/44
 	localVarFileName = "data"
+	if r.formFileName != nil {
+		localVarFileName = *r.formFileName
+	}
 {{#required}}
 	localVarFile := *r.{{paramName}}
 {{/required}}
