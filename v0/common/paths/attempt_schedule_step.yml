@@ -1,0 +1,31 @@
+summary: Attempt schedule step
+post:
+  summary: Attempt a schedule step belonging to this service.
+  operationId: attemptScheduleStep
+  description: |
+    Initiate a Punchout schedule step that this service is responsible for. If the step key is
+    registered to this endpoint, the service will respond in one of two ways:
+
+      1. Return 200 OK with details about the attempt result, if the step was completed
+      synchronously.
+
+      2. Return 202 Accepted without details, if the attempt must be done asynchronously. The
+      service will call Punchout back later once the step is complete, with details.
+  requestBody:
+    description: Details about the attempt.
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas.yml#/components/schemas/schedule_attempt_request'
+  responses:
+    '200':
+      description: Details about the step attempted.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yml#/components/schemas/schedule_attempt_outcome'
+    '202':
+      description: Step attempt queued for processing.
+    '500':
+      $ref: '../responses.yml#/components/responses/internal_server_error'
