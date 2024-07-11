@@ -22,6 +22,15 @@ components:
         description: Optional pagination token to be provided to retrieve subsequent pages, returned from previous get
         example: a8937a0d
 
+    sort_by:
+      name: sort_by
+      in: query
+      required: false
+      schema:
+        type: string
+        description: Optional sort by query parameter. The direction is delimited by ':' and multiple sort fields are delimited by ','
+        example: account_id:desc,name:asc
+
     tenant:
       name: tenant
       in: query
