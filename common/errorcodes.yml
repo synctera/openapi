@@ -259,7 +259,28 @@ error_codes:
     error_type: rule-violation
     markdown_doc: |
       You have requested a financial transaction on an account that is not allowed to transact due to the account's state.
-      For an account to be able to transact it must be in a good state and not frozen.
+      For an account to be able to transact it must be in a good state.
+
+  - code: IMPROPER_ACCOUNT_ACCESS_STATUS
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction on an account that is not allowed to transact due to the account's
+      access status. For an account to be able to transact it must note be frozen.
+
+  - code: IMPROPER_ANCESTOR_ACCOUNT_STATUS
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction on an account that is not allowed to transact due to the state of one
+      of the account's ancestors. For an account to be able to transact all of its ancestors must be in a good state.
+
+  - code: IMPROPER_ANCESTOR_ACCOUNT_ACCESS_STATUS
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction on an account that is not allowed to transact due to the access status
+      of one of the account's ancestors. For an account to be able to transact none of its ancestors may be frozen.
 
   - code: IMPROPER_ACCOUNT_CUSTOMER_RELATIONSHIP
     status: 422
