@@ -225,3 +225,27 @@ components:
         * `BANK_SELF_PARTNER` - The partner aspect of a bank tenant.
         * `FINTECH` - A fintech partnered with a bank.
         * `VENDOR` - A vendor providing services to the Synctera platform.
+
+    customer_device:
+      type: object
+      required:
+        - customer_id
+        - ip_address
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the customer making the authorized request.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        ip_address:
+          type: string
+          description: The internet-facing IP address assigned by your customer’s ISP. Supports either IPv4 or IPv6 formats.
+          example: "203.0.113.195"
+        device_type:
+          type: string
+          description: The name or operating system of the authorized device.
+          example: "iOS"
+        user_agent:
+          type: string
+          description: The user agent of the end-customer’s browser on the authorized device.
+          example: "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
