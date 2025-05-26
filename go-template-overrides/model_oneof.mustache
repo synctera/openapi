@@ -51,53 +51,55 @@ func (dst *{{classname}}) UnmarshalJSON(data []byte) error {
 	return nil
 	{{/discriminator}}
 	{{^discriminator}}
-        match := 0
-        oneOfCount := 0
-        unknownCount := 0
-        {{#oneOf}}
-        // try to unmarshal data into {{{.}}}
-        err = json.Unmarshal(data, &dst.{{{.}}})
-        if err == nil {
-                json{{{.}}}, _ := json.Marshal(dst.{{{.}}})
-                if string(json{{{.}}}) == "{}" { // empty struct
-                        dst.{{{.}}} = nil
-                } else {
-                        // Special handling for oneOf Enum values. If this is the Synctera reserved "UNKNOWN" enum value
-                        // on oneOf, then it is safely assume this is not the match, and it should not be set.
-                        if string(json{{{.}}}) != `"UNKNOWN"` {
-                                match++
-                        } else {
-                                unknownCount++
-                                dst.{{{.}}} = nil
-                        }
-                }
-        } else {
-                dst.{{{.}}} = nil
-        }
-        oneOfCount++
+		match := 0
+		oneOfCount := 0
+		unknownCount := 0
+		{{#oneOf}}
+		// try to unmarshal data into {{{.}}}
+		err = json.Unmarshal(data, &dst.{{{.}}})
+		if err == nil {
+				json{{{.}}}, _ := json.Marshal(dst.{{{.}}})
+				if string(json{{{.}}}) == "{}" { // empty struct
+						dst.{{{.}}} = nil
+				} else {
+						// Special handling for oneOf Enum values.
+						if validator, ok := (interface{})(dst.{{{.}}}).(interface {
+							IsValid() bool
+						}); ok && !validator.IsValid() {
+							unknownCount++
+						} else {
+							match++
+						}
+				}
+		} else {
+				dst.{{{.}}} = nil
+		}
+		oneOfCount++
 
-        {{/oneOf}}
-        if match > 1 { // more than 1 match
-                // reset to nil
-                {{#oneOf}}
-                dst.{{{.}}} = nil
-                {{/oneOf}}
+		{{/oneOf}}
+		if match > 1 { // more than 1 match
+				// reset to nil
+				{{#oneOf}}
+				dst.{{{.}}} = nil
+				{{/oneOf}}
 
-                return fmt.Errorf("Data matches more than one schema in oneOf({{classname}})")
-        } else if match == 1 {
-                return nil // exactly one match
-        } else if match == 0 && unknownCount == oneOfCount {
-                // This is special case when oneOf enum has no matched, we still return UNKNOWN
-                {{#oneOf}}
-                err = json.Unmarshal([]byte(`"UNKNOWN"`), &dst.{{{.}}})
-                if err != nil {
-                        dst.{{{.}}} = nil
-                }
-                {{/oneOf}}
-                return nil
-        } else { // no match
-                return fmt.Errorf("Data failed to match schemas in oneOf({{classname}})")
-        }
+				return fmt.Errorf("Data matches more than one schema in oneOf({{classname}})")
+		} else if match == 1 {
+				// need to unset what isn't valid here if we have a legitimate match (shiqi)
+				{{#oneOf}}
+				if validator, ok := (interface{})(dst.{{{.}}}).(interface {
+					IsValid() bool
+				}); ok && !validator.IsValid() {
+					dst.{{{.}}} = nil
+				}
+				{{/oneOf}}
+
+				return nil // exactly one match
+		} else if match == 0 && unknownCount == oneOfCount {
+				return nil
+		} else { // no match
+				return fmt.Errorf("Data failed to match schemas in oneOf({{classname}})")
+		}
 	{{/discriminator}}
 	{{/useOneOfDiscriminatorLookup}}
 	{{^useOneOfDiscriminatorLookup}}
