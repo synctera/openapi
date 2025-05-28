@@ -289,6 +289,12 @@ error_codes:
       You have requested a financial transaction that references an account and a customer,
       but the customer is not authorized to access this account.
 
+  - code: UNABLE_TO_TRANSACT
+    status: 422
+    error_type: rule-violation
+    markdown_doc: |
+      You have requested a financial transaction on an account that is not allowed to transact.
+
   - code: PAYMENT_RAIL_NOT_ENABLED
     status: 422
     error_type: rule-violation
