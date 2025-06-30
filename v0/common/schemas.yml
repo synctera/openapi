@@ -362,13 +362,22 @@ components:
     customer_device:
       type: object
       required:
-        - customer_id
+        - is_system_call
         - ip_address
       properties:
+        is_system_call:
+          type: boolean
+          description: Indicates if the request is made by a system call.
+          example: false
         customer_id:
           type: string
           format: uuid
-          description: The unique identifier of the customer making the authorized request.
+          description: |
+            The unique identifier of the customer making the authorized request.
+            
+            Validation:
+              - If `is_system_call` is true, `customer_id` must be null.
+              - If `is_system_call` is false, `customer_id` must not be null.
           example: "123e4567-e89b-12d3-a456-426614174000"
         ip_address:
           type: string
