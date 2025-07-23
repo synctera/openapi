@@ -228,9 +228,6 @@ components:
 
     customer_device:
       type: object
-      required:
-        - is_system_call
-        - ip_address
       properties:
         is_system_call:
           type: boolean
@@ -258,3 +255,21 @@ components:
           type: string
           description: The user agent of the end-customer’s browser on the authorized device.
           example: "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
+        vendor:
+          type: string
+          description: The third party device risk vendor.
+          example: "Socure"
+        session_token:
+          type: string
+          description: The risk vendor session token for the device risk assessment.
+          example: "abc123xyz456"
+        device_id:
+          type: string
+          description: If created by the vendor, send the ID associated with the end user’s last session.
+          example: "device-12345"
+        metadata:
+          description: >
+            Optional field to store additional information about the device.
+            It supports collecting the complete JSON response from the third party vendor and flexible based on vendor’s output format.
+          type: string
+          example: "{\"risk_score\": 85, \"location\": \"USA\", \"session_ids\": [\"session-123\", \"session-456\"]}"
