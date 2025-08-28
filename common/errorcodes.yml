@@ -398,3 +398,9 @@ error_codes:
     error_type: conflict
     markdown_doc: |
       A request with the same Idempotency-Key for the same operation is being processed or is outstanding.
+
+  - code: REQUEST_CANCELED
+    status: 499
+    error_type: client-closed-request
+    markdown_doc: |
+      The client closed the request before it was completed.
