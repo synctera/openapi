@@ -404,3 +404,9 @@ error_codes:
     error_type: client-closed-request
     markdown_doc: |
       The client closed the request before it was completed.
+
+  - code: GATEWAY_TIMEOUT
+    status: 504
+    error_type: gateway-timeout
+    markdown_doc: |
+      The server timed out before the request was completed.
