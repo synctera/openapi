@@ -3574,9 +3574,10 @@
                 "$ref": "#/components/schemas/card_metadata"
               },
               "reissue_reason": {
-                "description": "This is the reason the card needs to be reissued, if any. The reason determines several behaviours:\n  - whether or not the new card will use the same PAN as the original card\n  - the old card will be terminated and if so, when it will be terminated\n\nReason                 | Same PAN | Terminate Old Card\n---------------------- | -------- | ------------------\nEXPIRATION             | yes      | on activation\nLOST                   | no       | immediately\nSTOLEN                 | no       | immediately\nDAMAGED                | yes      | on activation\nPRODUCT_CHANGE         | yes      | on activation\nAPPEARANCE             | yes      | on activation\nPROGRAM_CHANGE         | yes      | on activation\n\nFor all reasons, the new card will use the same PIN as the original card and digital wallet tokens will\nreassigned to the new card\n",
+                "description": "This is the reason the card needs to be reissued, if any. The reason determines several behaviours:\n  - whether or not the new card will use the same PAN as the original card\n  - the old card will be terminated and if so, when it will be terminated\n\nReason                 | Same PAN | Terminate Old Card\n---------------------- | -------- | ------------------\nAPPEARANCE             | yes      | on activation\nBANK_MIGRATION         | yes      | on activation\nDAMAGED                | yes      | on activation\nEXPIRATION             | yes      | on activation\nLOST                   | no       | immediately\nPRODUCT_CHANGE         | yes      | on activation\nPROGRAM_CHANGE         | yes      | on activation\nSTOLEN                 | no       | immediately\n\nFor all reasons, the new card will use the same PIN as the original card and digital wallet tokens will\nreassigned to the new card\n",
                 "enum": [
                   "APPEARANCE",
+                  "BANK_MIGRATION",
                   "DAMAGED",
                   "EXPIRATION",
                   "LOST",
@@ -15859,7 +15860,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Synctera API",
-    "version": "1.142.0"
+    "version": "1.145.0"
   },
   "openapi": "3.0.3",
   "paths": {
@@ -17085,7 +17086,7 @@
                 }
               }
             },
-            "description": "List of Digital Wallet Tokens of a card <br>NB: Digital wallet tokens cannot be created outside of production</br>\n"
+            "description": "List of Digital Wallet Tokens of a card\n\nNB: Digital wallet tokens cannot be created outside of production.\n"
           },
           "400": {
             "$ref": "#/components/responses/bad_request"
@@ -17116,7 +17117,7 @@
     "/cards/digital_wallet_tokens/{digital_wallet_token_id}": {
       "description": "The Digital Wallet token object represents your card's digital wallet token(s).\n",
       "get": {
-        "description": "Get the details about the digital wallet token of a card\n<br>NB: Digital wallet tokens cannot be created outside of production</br>\n",
+        "description": "Get the details about the digital wallet token of a card\n\nNB: Digital wallet tokens cannot be created outside of production.\n",
         "operationId": "getDigitalWalletToken",
         "parameters": [
           {
@@ -17157,7 +17158,7 @@
         "x-external": true
       },
       "patch": {
-        "description": "The status of a digital wallet token can be updated as, ACTIVE to SUSPENDED, SUSPENDED to ACTIVE, ACTIVE to TERMINATED or SUSPENDED to TERMINATED.\n<br>NB: Digital wallet tokens cannot be created outside of production</br>\n",
+        "description": "The status of a digital wallet token can be updated as, ACTIVE to SUSPENDED, SUSPENDED to ACTIVE, ACTIVE to TERMINATED or SUSPENDED to TERMINATED.\n\nNB: Digital wallet tokens cannot be created outside of production.\n",
         "operationId": "updateDigitalWalletTokenStatus",
         "parameters": [
           {
@@ -18002,7 +18003,7 @@
     },
     "/cards/transaction_simulations/authorization": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nSimulate an `authorization` type transaction by including the `card_token` and other authorization details in your request.\n",
+        "description": "Simulate an `authorization` type transaction by including the `card_token` and other authorization details in your request.\n",
         "operationId": "simulateAuthorization",
         "requestBody": {
           "content": {
@@ -18040,7 +18041,7 @@
         },
         "summary": "Simulate authorization",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18048,7 +18049,7 @@
     },
     "/cards/transaction_simulations/authorization/advice": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nAn authorization advice allows an amount to be decreased after the authorization. This endpoint allows you to simulate post-swipe adjustments.\n\nSimulate an `authorization.advice` type transaction by including the `original_transaction_token` and other authorization details in your request.\n",
+        "description": "An authorization advice allows an amount to be decreased after the authorization. This endpoint allows you to simulate post-swipe adjustments.\n\nSimulate an `authorization.advice` type transaction by including the `original_transaction_token` and other authorization details in your request.\n",
         "operationId": "simulateAuthorizationAdvice",
         "requestBody": {
           "content": {
@@ -18086,7 +18087,7 @@
         },
         "summary": "Simulate authorization advice",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18094,7 +18095,7 @@
     },
     "/cards/transaction_simulations/clearing": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nSimulate an `authorization.clearing` type transaction by including the `original_transaction_token` and `amount` in your request. To simulate a refund type transaction, set the `is_refund` field to true.\n",
+        "description": "Simulate an `authorization.clearing` type transaction by including the `original_transaction_token` and `amount` in your request. To simulate a refund type transaction, set the `is_refund` field to true.\n",
         "operationId": "simulateClearing",
         "requestBody": {
           "content": {
@@ -18132,7 +18133,7 @@
         },
         "summary": "Simulate clearing or refund",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18179,7 +18180,7 @@
         },
         "summary": "Simulate L2l3",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18187,7 +18188,7 @@
     },
     "/cards/transaction_simulations/financial": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nA \"financial\" is a transaction message class that includes ATM transactions, PIN-debit transactions, and balance inquiries.\n\nSimulate a `pindebit` type transaction by including the `card_token` and `amount` in your request.\n",
+        "description": "A \"financial\" is a transaction message class that includes ATM transactions, PIN-debit transactions, and balance inquiries.\n\nSimulate a `pindebit` type transaction by including the `card_token` and `amount` in your request.\n",
         "operationId": "simulateFinancial",
         "requestBody": {
           "content": {
@@ -18226,7 +18227,7 @@
         },
         "summary": "Simulate financial",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18234,7 +18235,7 @@
     },
     "/cards/transaction_simulations/financial/advice": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nSimulate a financial advice by including the `original_transaction_token` and other authorization details in JSON format in the body of the request.\n",
+        "description": "Simulate a financial advice by including the `original_transaction_token` and other authorization details in JSON format in the body of the request.\n",
         "operationId": "simulateFinancialAdvice",
         "requestBody": {
           "content": {
@@ -18273,7 +18274,7 @@
         },
         "summary": "Simulate financial advice",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18281,7 +18282,7 @@
     },
     "/cards/transaction_simulations/financial/balance_inquiry": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nSimulate a `pindebit.balanceinquiry` type transaction by sending a POST request to the `/simulate/financial/balanceinquiry` endpoint.\n",
+        "description": "Simulate a `pindebit.balanceinquiry` type transaction by sending a POST request to the `/simulate/financial/balanceinquiry` endpoint.\n",
         "operationId": "simulateBalanceInquiry",
         "requestBody": {
           "content": {
@@ -18320,7 +18321,7 @@
         },
         "summary": "Simulate balance inquiry",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18328,7 +18329,7 @@
     },
     "/cards/transaction_simulations/financial/original_credit": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nThis Original Credit Transaction (OCT) enables the cardholder to receive funds on the specified card from an external source via the card network. Use this endpoint to simulate a transaction that is similar to a wire transfer and not linked to any purchase.\n\nSimulate an OCT by including the `card_token`, `amount`, `mid`, and `type` in your request.\n",
+        "description": "This Original Credit Transaction (OCT) enables the cardholder to receive funds on the specified card from an external source via the card network. Use this endpoint to simulate a transaction that is similar to a wire transfer and not linked to any purchase.\n\nSimulate an OCT by including the `card_token`, `amount`, `mid`, and `type` in your request.\n",
         "operationId": "simulateOriginalCredit",
         "requestBody": {
           "content": {
@@ -18367,7 +18368,7 @@
         },
         "summary": "Simulate OCT",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18375,7 +18376,7 @@
     },
     "/cards/transaction_simulations/financial/withdrawal": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nSimulate a `pindebit.atm.withdrawal` type transaction by including the `card_token` and `amount` in your request.\n",
+        "description": "Simulate a `pindebit.atm.withdrawal` type transaction by including the `card_token` and `amount` in your request.\n",
         "operationId": "simulateWithdrawal",
         "requestBody": {
           "content": {
@@ -18414,7 +18415,7 @@
         },
         "summary": "Simulate ATM withdrawal",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18422,7 +18423,7 @@
     },
     "/cards/transaction_simulations/reversal": {
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nA reversal releases the hold that was placed on account funds by an authorization, thus returning the funds to the account.\n\nSimulate an `authorization.reversal` type transaction by including the `original_transaction_token` and `amount` in your request.\n",
+        "description": "A reversal releases the hold that was placed on account funds by an authorization, thus returning the funds to the account.\n\nSimulate an `authorization.reversal` type transaction by including the `original_transaction_token` and `amount` in your request.\n",
         "operationId": "simulateReversal",
         "requestBody": {
           "content": {
@@ -18461,7 +18462,7 @@
         },
         "summary": "Simulate reversal",
         "tags": [
-          "Card Transaction Simulations (beta)"
+          "Card Transaction Simulations"
         ],
         "x-external": true
       },
@@ -18687,7 +18688,7 @@
               }
             }
           },
-          "description": "Request to provision digital wallet card data to pass to Apple Pay digital wallet.\n> ⚠️ Cannot be used outside of production.\n",
+          "description": "Request to provision digital wallet card data to pass to Apple Pay digital wallet.\n\nNB: Cannot be used outside of production.\n",
           "required": true
         },
         "responses": {
@@ -18743,7 +18744,7 @@
               }
             }
           },
-          "description": "Request to provision digital wallet card data to pass to Google Pay digital wallet.\n> ⚠️ Cannot be used outside of production.\n",
+          "description": "Request to provision digital wallet card data to pass to Google Pay digital wallet.\n\nNB: Cannot be used outside of production.\n",
           "required": true
         },
         "responses": {
@@ -18885,7 +18886,7 @@
     "/cards/{card_id}/webhook_simulations/fulfillment": {
       "description": "Simulate card fulfillment event\n",
       "post": {
-        "description": "> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. We may make breaking changes to this endpoint.\n\nThis endpoint is for testing environment only to trigger a simulated change in card fulfillment status event\n",
+        "description": "This endpoint is for testing environment only to trigger a simulated change in card fulfillment status event\n",
         "operationId": "simulateCardFulfillmentEvent",
         "parameters": [
           {
@@ -18932,7 +18933,7 @@
         },
         "summary": "Simulate Card Fulfillment Event",
         "tags": [
-          "Card Webhook Simulations (beta)"
+          "Card Webhook Simulations"
         ],
         "x-external": true
       },
@@ -24184,6 +24185,10 @@
       "name": "Rewards (beta)"
     },
     {
+      "description": "Requests to generate simulated webhooks",
+      "name": "Card Webhook Simulations"
+    },
+    {
       "description": "Create and manage spending controls",
       "name": "Spend Controls (beta)"
     },
@@ -24210,10 +24215,6 @@
     {
       "description": "Create and manage disputes",
       "name": "Disputes"
-    },
-    {
-      "description": "Requests to generate simulated webhooks",
-      "name": "Card Webhook Simulations (beta)"
     },
     {
       "description": "Apple Pay APIs",
@@ -24260,10 +24261,6 @@
       "name": "Card Disputes"
     },
     {
-      "description": "Requests to generate simulated transactions",
-      "name": "Card Transaction Simulations (beta)"
-    },
-    {
       "description": "Bulk card issuance",
       "name": "Bulk Issuance"
     },
@@ -24278,6 +24275,10 @@
     {
       "description": "Create a credit application.",
       "name": "Applications (beta)"
+    },
+    {
+      "description": "Requests to generate simulated transactions",
+      "name": "Card Transaction Simulations"
     },
     {
       "description": "Billing period summaries",
