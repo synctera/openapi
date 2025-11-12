@@ -623,11 +623,26 @@
           "type": "string"
         }
       },
+      "external_card_id_query": {
+        "in": "query",
+        "name": "external_card_id",
+        "schema": {
+          "$ref": "#/components/schemas/external_card_id"
+        }
+      },
       "external_card_status_query": {
         "in": "query",
         "name": "status",
         "schema": {
           "$ref": "#/components/schemas/external_card_status"
+        }
+      },
+      "external_card_widget_type_query": {
+        "in": "query",
+        "name": "widget_type",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/external_card_widget_type"
         }
       },
       "fdx_token_id": {
@@ -1951,9 +1966,11 @@
           "payment_rail",
           "state"
         ],
+        "title": "ACH Action",
         "type": "object"
       },
       "ach_dispute_action_response": {
+        "description": "Response for an ACH dispute action.",
         "properties": {
           "action": {
             "$ref": "#/components/schemas/ach_action"
@@ -2004,6 +2021,7 @@
           "status",
           "tenant"
         ],
+        "title": "ACH Action",
         "type": "object"
       },
       "ach_dispute_action_status": {
@@ -2032,7 +2050,9 @@
           {
             "$ref": "#/components/schemas/dispute_request_details"
           }
-        ]
+        ],
+        "description": "Create a dispute against an ACH transaction.",
+        "title": "ACH Dispute"
       },
       "ach_dispute_response": {
         "allOf": [
@@ -2070,7 +2090,9 @@
           {
             "$ref": "#/components/schemas/dispute_response_details"
           }
-        ]
+        ],
+        "description": "Response for an ACH dispute.",
+        "title": "ACH Dispute"
       },
       "ach_dispute_return_codes": {
         "description": "This field is required for dispute action ACH_RETURN. Upon successful dispute resolution this return code will be used when sending the outgoing return.\n",
@@ -2116,7 +2138,8 @@
           {
             "$ref": "#/components/schemas/base_transaction"
           }
-        ]
+        ],
+        "title": "ACH Transaction"
       },
       "ach_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `ACH`",
@@ -2824,6 +2847,7 @@
         "discriminator": {
           "mapping": {
             "CREDIT": "#/components/schemas/credit_application",
+            "LOC": "#/components/schemas/loc_application",
             "RESTRICTED_ACCOUNT": "#/components/schemas/restricted_application"
           },
           "propertyName": "type"
@@ -2831,6 +2855,9 @@
         "oneOf": [
           {
             "$ref": "#/components/schemas/credit_application"
+          },
+          {
+            "$ref": "#/components/schemas/loc_application"
           },
           {
             "$ref": "#/components/schemas/restricted_application"
@@ -2882,6 +2909,9 @@
           },
           {
             "$ref": "#/components/schemas/restricted_application_patch"
+          },
+          {
+            "$ref": "#/components/schemas/loc_application_patch"
           }
         ],
         "type": "object"
@@ -2890,11 +2920,15 @@
         "discriminator": {
           "mapping": {
             "CREDIT": "#/components/schemas/credit_application_response",
+            "LOC": "#/components/schemas/loc_application_response",
             "RESTRICTED_ACCOUNT": "#/components/schemas/restricted_application_response"
           },
           "propertyName": "type"
         },
         "oneOf": [
+          {
+            "$ref": "#/components/schemas/loc_application_response"
+          },
           {
             "$ref": "#/components/schemas/restricted_application_response"
           },
@@ -2907,6 +2941,7 @@
         "description": "Type of Application",
         "enum": [
           "CREDIT",
+          "LOC",
           "RESTRICTED_ACCOUNT"
         ],
         "example": "CREDIT",
@@ -2914,6 +2949,7 @@
         "type": "string",
         "x-enumDescriptions": {
           "CREDIT": "Credit application type",
+          "LOC": "Line of Credit application type",
           "RESTRICTED_ACCOUNT": "Restricted account application type"
         }
       },
@@ -4604,6 +4640,11 @@
           "action": {
             "$ref": "#/components/schemas/card_action"
           },
+          "amount": {
+            "description": "Optional amount for the action in cents. If not provided, defaults to the dispute amount. Amount is only applicable when creating actions (state: `CREATE`) and is only supported for specific action types (see table below); amounts provided for other action types or states will be ignored.\n\n| Action Type          | Maximum Allowed Amount                  |\n| -------------------- | --------------------------------------- |\n| `CHARGEBACK`         | Eligible chargeback amount from network |\n| `PROVISIONAL_CREDIT` | Dispute amount                          |\n| `WRITE_OFF`          | Dispute amount                          |\n",
+            "minimum": 1,
+            "type": "integer"
+          },
           "memo": {
             "description": "Memo text related to card dispute action\n* Required for PRE_ARBITRATION, ARBITRATION, PRE_COMPLIANCE, COMPLIANCE\n",
             "maxLength": 1000,
@@ -4649,12 +4690,19 @@
           "payment_rail",
           "state"
         ],
+        "title": "Card Action",
         "type": "object"
       },
       "card_dispute_action_response": {
+        "description": "Response for a card dispute action.",
         "properties": {
           "action": {
             "$ref": "#/components/schemas/card_action"
+          },
+          "amount": {
+            "description": "The amount of the action in cents.",
+            "minimum": 1,
+            "type": "integer"
           },
           "creation_time": {
             "description": "The timestamp representing when the object was created",
@@ -4728,6 +4776,7 @@
           "status",
           "tenant"
         ],
+        "title": "Card Action",
         "type": "object"
       },
       "card_dispute_action_status": {
@@ -4752,7 +4801,7 @@
         "type": "string"
       },
       "card_dispute_reason_codes": {
-        "description": "| Reason Code                      | Status     | Category                   | Description                                                                                                                                                                                                                            |\n| -------------------------------- | ---------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| NO_CARDHOLDER_AUTHORIZATION      | Active     | Fraud                      | A fraudulent transaction was made without the cardholder's consent.                                                                                                                                                                    |\n| QUESTIONABLE_MERCHANT_ACTIVITY   | Active     | Fraud                      | The merchant is suspected of being involved in fraudulent activities or violating Mastercard rules.                                                                                                                                    |\n| CHIP_LIABILITY_SHIFT             | Active     | Fraud                      | A counterfeit card was used at a non-EMV-compliant terminal, and the merchant is held liable for the fraudulent transaction.                                                                                                           |\n| CHIP_PIN_LIABILITY_SHIFT         | Active     | Fraud                      | A lost or stolen chip card was used without PIN verification at a terminal that supports PIN, resulting in merchant liability for the fraudulent transaction.                                                                          |\n| AUTHORIZATION_RELATED_CHARGEBACK | Active     | Authorization              | A transaction was processed without obtaining proper authorization.                                                                                                                                                                    |\n| POINT_OF_INTERACTION_ERROR       | Active     | Point-of-Interaction Error | Processing errors such as ATM withdrawal discrepancies, duplicate transactions, late presentments, and amount discrepancies.                                                                                                           |\n| CARD_HOLDER_DISPUTE              | Active     | Cardholder Dispute         | Claims for goods and services not received, counterfeit products, recurring transactions, incomplete transactions, hotel no-show charges, and more.                                                                                    |\n| ATM_CASH_DISPUTE                 | Deprecated | N/A                        | Some or all funds debited from the cardholder's account as the result of an ATM withdrawal were not dispensed.                                                                                                                         |\n| CARD_LOST_STOLEN_NEVER_RECEIVED  | Deprecated | N/A                        | The cardholder did not authorize the transaction and the card is no longer, or had never been, in the possession of the cardholder.                                                                                                    |\n| COUNTERFEIT_GOODS                | Deprecated | N/A                        | The cardholder claims that the goods were purported to be genuine, but were counterfeit.                                                                                                                                               |\n| CREDIT_NOT_RECEIVED              | Deprecated | N/A                        | The cardholder's account was not credited for a refund from a merchant or was inaccurately debited instead of credited.                                                                                                                |\n| DEFECTIVE_GOODS_OR_SERVICES      | Deprecated | N/A                        | Goods or services were either not as described or defective, including shipped merchandise was received damaged or not suitable for its intended purpose as well as the merchant didn't honour the terms and conditions of a contract. |\n| DISPUTE_OF_RECURRING_TRANSACTION | Deprecated | N/A                        | The cardholder notified the merchant to cancel the recurring transaction and the merchant continued to bill the cardholder or the cardholder was not aware they were agreeing to a recurring transaction.                              |\n| DUPLICATE_TRANSACTION            | Deprecated | N/A                        | The same transaction has been processed more than once, resulting in duplicate charges.                                                                                                                                                |\n| FRAUDULENT_PROCESSING            | Deprecated | N/A                        | The cardholder is in possession and control of all valid cards, processed at least one legitimate face-to-face transaction, and denies making one or more additional face-to-face transactions at the same merchant location.          |\n| GOODS_OR_SERVICES_NOT_PROVIDED   | Deprecated | N/A                        | The cardholder has been debited for goods or services that were to be shipped, delivered or otherwise provided and were not received by the expected delivery date.                                                                    |\n| LATE_PRESENTMENT                 | Deprecated | N/A                        | The transaction was authorized offline by the chip and submitted for clearing more than 7 calendar days after the transaction date.                                                                                                    |\n| PAID_BY_OTHER_MEANS              | Deprecated | N/A                        | The cardholder used a different form of payment for this specific transaction. (Mastercard pre-compliance/compliance only)                                                                                                             |\n| TRANSACTION_AMOUNT_DIFFERS       | Deprecated | N/A                        | The amount of the transaction does not match the agreed-upon or expected amount.                                                                                                                                                       |\n| TRANSACTION_DID_NOT_COMPLETE     | Deprecated | N/A                        | The cardholder engaged in the transaction and claims it did not complete. Goods or services were not provided.                                                                                                                         |\n| TRANSACTION_NOT_RECOGNIZED       | Deprecated | N/A                        | The account holder does not recognize the transaction, possibly due to mistake or fraud.                                                                                                                                               |\n| UNAUTHORIZED_TRANSACTION         | Deprecated | N/A                        | The transaction was not authorized by the account holder.                                                                                                                                                                              |\n",
+        "description": "* NOTE: deprecated reason codes are accepted for backwards compatibility but will be mapped to their active equivalent reason codes by the API.\n\n| Reason Code                      | Status     | Category                   | Mastercard Code | Description                                                                                                                                                                                                                            |\n| -------------------------------- | ---------- | -------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| NO_CARDHOLDER_AUTHORIZATION      | Active     | Fraud                      | 4837            | A fraudulent transaction was made without the cardholder's consent.                                                                                                                                                                    |\n| QUESTIONABLE_MERCHANT_ACTIVITY   | Active     | Fraud                      | 4849            | The merchant is suspected of being involved in fraudulent activities or violating Mastercard rules.                                                                                                                                    |\n| CHIP_LIABILITY_SHIFT             | Active     | Fraud                      | 4870            | A counterfeit card was used at a non-EMV-compliant terminal, and the merchant is held liable for the fraudulent transaction.                                                                                                           |\n| CHIP_PIN_LIABILITY_SHIFT         | Active     | Fraud                      | 4871            | A lost or stolen chip card was used without PIN verification at a terminal that supports PIN, resulting in merchant liability for the fraudulent transaction.                                                                          |\n| AUTHORIZATION_RELATED_CHARGEBACK | Active     | Authorization              | 4808            | A transaction was processed without obtaining proper authorization.                                                                                                                                                                    |\n| POINT_OF_INTERACTION_ERROR       | Active     | Point-of-Interaction Error | 4834            | Processing errors such as ATM withdrawal discrepancies, duplicate transactions, late presentments, and amount discrepancies.                                                                                                           |\n| CARD_HOLDER_DISPUTE              | Active     | Cardholder Dispute         | 4853            | Claims for goods and services not received, counterfeit products, recurring transactions, incomplete transactions, hotel no-show charges, and more.                                                                                    |\n| ATM_CASH_DISPUTE                 | Deprecated | N/A                        | N/A             | Some or all funds debited from the cardholder's account as the result of an ATM withdrawal were not dispensed.                                                                                                                         |\n| CARD_LOST_STOLEN_NEVER_RECEIVED  | Deprecated | N/A                        | N/A             | The cardholder did not authorize the transaction and the card is no longer, or had never been, in the possession of the cardholder.                                                                                                    |\n| COUNTERFEIT_GOODS                | Deprecated | N/A                        | N/A             | The cardholder claims that the goods were purported to be genuine, but were counterfeit.                                                                                                                                               |\n| CREDIT_NOT_RECEIVED              | Deprecated | N/A                        | N/A             | The cardholder's account was not credited for a refund from a merchant or was inaccurately debited instead of credited.                                                                                                                |\n| DEFECTIVE_GOODS_OR_SERVICES      | Deprecated | N/A                        | N/A             | Goods or services were either not as described or defective, including shipped merchandise was received damaged or not suitable for its intended purpose as well as the merchant didn't honour the terms and conditions of a contract. |\n| DISPUTE_OF_RECURRING_TRANSACTION | Deprecated | N/A                        | N/A             | The cardholder notified the merchant to cancel the recurring transaction and the merchant continued to bill the cardholder or the cardholder was not aware they were agreeing to a recurring transaction.                              |\n| DUPLICATE_TRANSACTION            | Deprecated | N/A                        | N/A             | The same transaction has been processed more than once, resulting in duplicate charges.                                                                                                                                                |\n| FRAUDULENT_PROCESSING            | Deprecated | N/A                        | N/A             | The cardholder is in possession and control of all valid cards, processed at least one legitimate face-to-face transaction, and denies making one or more additional face-to-face transactions at the same merchant location.          |\n| GOODS_OR_SERVICES_NOT_PROVIDED   | Deprecated | N/A                        | N/A             | The cardholder has been debited for goods or services that were to be shipped, delivered or otherwise provided and were not received by the expected delivery date.                                                                    |\n| LATE_PRESENTMENT                 | Deprecated | N/A                        | N/A             | The transaction was authorized offline by the chip and submitted for clearing more than 7 calendar days after the transaction date.                                                                                                    |\n| PAID_BY_OTHER_MEANS              | Deprecated | N/A                        | N/A             | The cardholder used a different form of payment for this specific transaction. (Mastercard pre-compliance/compliance only)                                                                                                             |\n| TRANSACTION_AMOUNT_DIFFERS       | Deprecated | N/A                        | N/A             | The amount of the transaction does not match the agreed-upon or expected amount.                                                                                                                                                       |\n| TRANSACTION_DID_NOT_COMPLETE     | Deprecated | N/A                        | N/A             | The cardholder engaged in the transaction and claims it did not complete. Goods or services were not provided.                                                                                                                         |\n| TRANSACTION_NOT_RECOGNIZED       | Deprecated | N/A                        | N/A             | The account holder does not recognize the transaction, possibly due to mistake or fraud.                                                                                                                                               |\n| UNAUTHORIZED_TRANSACTION         | Deprecated | N/A                        | N/A             | The transaction was not authorized by the account holder.                                                                                                                                                                              |\n",
         "enum": [
           "ATM_CASH_DISPUTE",
           "AUTHORIZATION_RELATED_CHARGEBACK",
@@ -4820,12 +4869,18 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "description": "Create a dispute against a card transaction.",
+        "title": "Card Dispute"
       },
       "card_dispute_response": {
         "allOf": [
           {
             "properties": {
+              "acquirer_reference_number": {
+                "description": "The acquirer reference number of the original transaction associated with the dispute.",
+                "type": "string"
+              },
               "action_history": {
                 "description": "History of all the action filed for the dispute.",
                 "items": {
@@ -4854,6 +4909,10 @@
               },
               "reason_code": {
                 "$ref": "#/components/schemas/card_dispute_reason_codes"
+              },
+              "switch_serial_number": {
+                "description": "The switch serial number of the original transaction associated with the dispute.",
+                "type": "string"
               }
             },
             "required": [
@@ -4870,7 +4929,9 @@
           {
             "$ref": "#/components/schemas/dispute_response_details"
           }
-        ]
+        ],
+        "description": "Response for a card dispute.",
+        "title": "Card Dispute"
       },
       "card_edit_request": {
         "properties": {
@@ -5389,6 +5450,14 @@
         ],
         "type": "object"
       },
+      "card_response_vendor_data": {
+        "properties": {
+          "loan_pro": {
+            "$ref": "#/components/schemas/loan_pro_card_vendor_data"
+          }
+        },
+        "type": "object"
+      },
       "card_reveal_response": {
         "properties": {
           "ciphertext": {
@@ -5525,7 +5594,8 @@
           {
             "$ref": "#/components/schemas/base_transaction"
           }
-        ]
+        ],
+        "title": "Card Transaction"
       },
       "card_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `CARD`",
@@ -5780,7 +5850,8 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "title": "Cash Transaction"
       },
       "cash_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `CASH`",
@@ -5868,7 +5939,8 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "title": "Check Transaction"
       },
       "check_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `WIRE`",
@@ -6256,6 +6328,8 @@
             "$ref": "#/components/schemas/transfer_response_base"
           }
         ],
+        "description": "Pull funds from an External Card",
+        "title": "Pull Response",
         "type": "object"
       },
       "create_transfer_response_push": {
@@ -6282,6 +6356,8 @@
             "$ref": "#/components/schemas/transfer_response_base"
           }
         ],
+        "description": "Push funds to an External Card",
+        "title": "Push Response",
         "type": "object"
       },
       "create_transfer_type": {
@@ -6475,6 +6551,9 @@
           },
           "type": {
             "$ref": "#/components/schemas/card_type"
+          },
+          "vendor_data": {
+            "$ref": "#/components/schemas/card_response_vendor_data"
           }
         },
         "required": [
@@ -8263,9 +8342,11 @@
           "payment_rail",
           "state"
         ],
+        "title": "External Card Action",
         "type": "object"
       },
       "external_card_dispute_action_response": {
+        "description": "Response for an external card dispute action.",
         "properties": {
           "action": {
             "$ref": "#/components/schemas/external_card_action"
@@ -8309,6 +8390,7 @@
           "status",
           "tenant"
         ],
+        "title": "External Card Action",
         "type": "object"
       },
       "external_card_dispute_action_status": {
@@ -8388,7 +8470,9 @@
           {
             "$ref": "#/components/schemas/dispute_request_details"
           }
-        ]
+        ],
+        "description": "Create a dispute against an external card transaction.",
+        "title": "External Card Dispute"
       },
       "external_card_dispute_response": {
         "allOf": [
@@ -8438,7 +8522,9 @@
           {
             "$ref": "#/components/schemas/dispute_response_details"
           }
-        ]
+        ],
+        "description": "Response for an external card dispute.",
+        "title": "External Card"
       },
       "external_card_id": {
         "description": "The ID of the External Card associated with the operation",
@@ -8527,6 +8613,44 @@
         ],
         "type": "object"
       },
+      "external_card_request_pan": {
+        "properties": {
+          "billing_address": {
+            "$ref": "#/components/schemas/address"
+          },
+          "business_id": {
+            "$ref": "#/components/schemas/business_id1"
+          },
+          "customer_id": {
+            "$ref": "#/components/schemas/customer_id1"
+          },
+          "cvv": {
+            "type": "string"
+          },
+          "expiration_month": {
+            "pattern": "^(0[1-9]|1[0-2])$",
+            "type": "string"
+          },
+          "expiration_year": {
+            "pattern": "^\\d{2}$",
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/cardholder_name"
+          },
+          "pan": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id",
+          "expiration_month",
+          "expiration_year",
+          "name",
+          "pan"
+        ],
+        "type": "object"
+      },
       "external_card_response": {
         "properties": {
           "bin": {
@@ -8601,6 +8725,19 @@
         ],
         "type": "object"
       },
+      "external_card_reveal_response": {
+        "properties": {
+          "ciphertext": {
+            "description": "JWE compact serialization of the encrypted card data as defined in\n [RFC 7516 Section 7.1](https://datatracker.ietf.org/doc/html/rfc7516#section-7.1).\n\n Format: `header.encryptedKey.iv.ciphertext.authTag`\n\n All segments are base64url-encoded and concatenated with periods.\n\n - header: Contains algorithm information and key identifier\n   - \"alg\": \"ECDH-ES+A256KW\" - Key management algorithm\n   - \"enc\": \"A256GCM\" - Content encryption algorithm\n   - \"kid\": base64url-encoded JWK thumbprint. The thumbprint is calculated using the JWK as per [RFC 7638](https://datatracker.ietf.org/doc/html/rfc7638#section-3.1) and is used to identify the public key used for encryption.\n\n   The algorithm identifiers follow [RFC 7518](https://datatracker.ietf.org/doc/html/rfc7518)\n\n - encryptedKey: The content encryption key encrypted using ECDH-ES\n - iv: Initialization vector for AES-GCM\n - ciphertext: The actual encrypted data\n - authTag: Authentication tag for AES-GCM integrity verification\n\n When decrypted, the ciphertext contains a JSON object with the following structure:\n ```json\n {\n   \"pan\": \"5217866647558899\",\n   \"expiration_year\": \"25\",\n   \"expiration_month\": \"06\"\n }\n ```\n",
+            "example": "eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00iLCJraWQiOiJyZWNpcGllbnQta2V5LWlkIn0.AAAAAAAAAA.qcT0jHQJp5MI.0mxQptHnLbmpYmVF-HPzwg.iH2aDMwuCefM_iBPxuBbJA",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ciphertext"
+        ],
+        "type": "object"
+      },
       "external_card_status": {
         "description": "Status of an External Card",
         "enum": [
@@ -8629,7 +8766,8 @@
           {
             "$ref": "#/components/schemas/base_transaction"
           }
-        ]
+        ],
+        "title": "External Card Transaction"
       },
       "external_card_transaction_subtypes": {
         "description": "The set of valid EXTERNAL_CARD transaction subtypes",
@@ -8734,6 +8872,13 @@
           "push_enabled"
         ],
         "type": "object"
+      },
+      "external_card_widget_type": {
+        "enum": [
+          "REVEAL",
+          "TOKENIZE"
+        ],
+        "type": "string"
       },
       "external_cards_funds_availability": {
         "description": "Estimated timeframe of funds availability\n\nValue | Description\n--- | ---\nNOW | Within 30 minutes\nNEXT | Within the next business day\nFEW | Within a few business days\n",
@@ -9044,7 +9189,8 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "title": "FedNow Transaction"
       },
       "fednow_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `FEDNOW`",
@@ -9514,7 +9660,8 @@
           {
             "$ref": "#/components/schemas/base_transaction"
           }
-        ]
+        ],
+        "title": "Fee Transaction"
       },
       "fee_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `FEE`",
@@ -10803,6 +10950,10 @@
             "description": "User-supplied name for the configuration",
             "type": "string"
           },
+          "payer_must_be_payee": {
+            "description": "If true, transfers using this config must have the same payer and payee (\"me-to-me\") and peer-to-peer transfers can not use this configuration.",
+            "type": "boolean"
+          },
           "settlement_account_id": {
             "description": "Account used for settlement of all transfers that use this configuration.",
             "format": "uuid",
@@ -10827,6 +10978,7 @@
           "id",
           "last_updated_time",
           "name",
+          "payer_must_be_payee",
           "settlement_account_id",
           "settlement_account_owner_id",
           "tenant",
@@ -11095,7 +11247,8 @@
           {
             "$ref": "#/components/schemas/base_transaction"
           }
-        ]
+        ],
+        "title": "Internal Transfer Transaction"
       },
       "internal_transfer_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `INTERNAL_TRANSFER`",
@@ -11505,6 +11658,316 @@
         "description": "A statement for a line of credit account",
         "title": "Line of Credit Statement"
       },
+      "loan_pro_card_vendor_data": {
+        "properties": {
+          "card_id": {
+            "type": "integer"
+          },
+          "secure_payments_card_uuid": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "loc_applicant": {
+        "properties": {
+          "business": {
+            "$ref": "#/components/schemas/loc_business_applicant"
+          },
+          "personal": {
+            "$ref": "#/components/schemas/loc_personal_applicant"
+          },
+          "type": {
+            "$ref": "#/components/schemas/loc_applicant_type"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "loc_applicant_type": {
+        "description": "Type of applicant",
+        "enum": [
+          "business",
+          "personal"
+        ],
+        "type": "string"
+      },
+      "loc_application": {
+        "properties": {
+          "account_template_id": {
+            "description": "Mainapi account template ID to use for creating the LOC account",
+            "format": "uuid",
+            "type": "string"
+          },
+          "applicant": {
+            "$ref": "#/components/schemas/loc_applicant"
+          },
+          "application_workflow_id": {
+            "description": "ID of the workflow to use for processing",
+            "format": "uuid",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Raw JSON key-value pairs for flexible data",
+            "format": "rawjson",
+            "type": "object",
+            "x-go-type": "json.RawMessage"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/loc_application_metadata"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/loc_provider"
+          },
+          "requested_credit_limit": {
+            "description": "Requested credit limit in cents (e.g., 250000000 = $2,500,000)",
+            "type": "integer"
+          },
+          "tenant": {
+            "$ref": "#/components/schemas/tenant_id"
+          },
+          "type": {
+            "$ref": "#/components/schemas/application_type"
+          }
+        },
+        "required": [
+          "account_template_id",
+          "applicant",
+          "application_workflow_id",
+          "provider",
+          "tenant",
+          "type"
+        ],
+        "title": "Line of Credit application details",
+        "type": "object"
+      },
+      "loc_application_metadata": {
+        "properties": {
+          "entity_id": {
+            "type": "string"
+          },
+          "tenant": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "loc_application_patch": {
+        "properties": {
+          "credit_limit": {
+            "description": "Credit limit in cents (e.g., 250000000 = $2,500,000)",
+            "type": "integer"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/loc_decision"
+          },
+          "external_id": {
+            "description": "External identifier (e.g., Taktile decision_id)",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/loc_application_status"
+          }
+        },
+        "title": "Line of Credit application patch",
+        "type": "object"
+      },
+      "loc_application_response": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/loc_application"
+          },
+          {
+            "properties": {
+              "account_id": {
+                "description": "Account ID created for approved application",
+                "format": "uuid",
+                "type": "string"
+              },
+              "application_submitted_time": {
+                "description": "Application submitted timestamp in RFC3339 format",
+                "format": "date-time",
+                "type": "string"
+              },
+              "business_id": {
+                "description": "Business ID if customer_type is business",
+                "format": "uuid",
+                "type": "string"
+              },
+              "creation_time": {
+                "description": "Application creation timestamp in RFC3339 format",
+                "format": "date-time",
+                "type": "string"
+              },
+              "credit_limit": {
+                "description": "Credit limit in cents (e.g., 250000000 = $2,500,000)",
+                "type": "integer"
+              },
+              "credit_report": {
+                "description": "Credit report data object",
+                "format": "rawjson",
+                "type": "object",
+                "x-go-type": "json.RawMessage"
+              },
+              "customer_type": {
+                "$ref": "#/components/schemas/loc_applicant_type"
+              },
+              "decision": {
+                "$ref": "#/components/schemas/loc_decision"
+              },
+              "decision_time": {
+                "description": "Decision timestamp in RFC3339 format",
+                "format": "date-time",
+                "type": "string"
+              },
+              "external_id": {
+                "description": "External identifier (e.g., Taktile decision_id)",
+                "type": "string"
+              },
+              "id": {
+                "description": "Application ID",
+                "format": "uuid",
+                "type": "string"
+              },
+              "interest_rate": {
+                "description": "Interest rate in basis points (e.g., 1250 = 12.50%)",
+                "type": "integer"
+              },
+              "last_updated_time": {
+                "description": "Timestamp of the last application modification in RFC3339 format",
+                "format": "date-time",
+                "type": "string"
+              },
+              "person_id": {
+                "description": "Person ID if customer_type is personal",
+                "format": "uuid",
+                "type": "string"
+              },
+              "rejection_reasons": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "status": {
+                "$ref": "#/components/schemas/loc_application_status"
+              },
+              "vendor_response": {
+                "$ref": "#/components/schemas/loc_vendor_response"
+              }
+            },
+            "required": [
+              "creation_time",
+              "customer_type",
+              "id",
+              "last_updated_time",
+              "status"
+            ]
+          }
+        ],
+        "title": "Line of Credit application response",
+        "type": "object"
+      },
+      "loc_application_status": {
+        "description": "Status of the LOC application",
+        "enum": [
+          "completed",
+          "error",
+          "pending",
+          "processing"
+        ],
+        "type": "string"
+      },
+      "loc_business_applicant": {
+        "properties": {
+          "annual_revenue": {
+            "description": "Annual revenue in cents (e.g., 500000000 = $5,000,000)",
+            "type": "integer"
+          },
+          "business_id": {
+            "description": "Business ID for the applicant",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "business_id"
+        ],
+        "type": "object"
+      },
+      "loc_decision": {
+        "description": "Credit decision for LOC application",
+        "enum": [
+          "approved",
+          "declined",
+          "pending",
+          "review"
+        ],
+        "type": "string"
+      },
+      "loc_employment": {
+        "properties": {
+          "employer_name": {
+            "type": "string"
+          },
+          "employment_start_date": {
+            "format": "date",
+            "type": "string"
+          },
+          "income": {
+            "description": "Annual income in cents (e.g., 12000000 = $120,000)",
+            "type": "integer"
+          },
+          "position": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "loc_personal_applicant": {
+        "properties": {
+          "employment": {
+            "$ref": "#/components/schemas/loc_employment"
+          },
+          "person_id": {
+            "description": "Person ID for the applicant",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "person_id"
+        ],
+        "type": "object"
+      },
+      "loc_provider": {
+        "description": "Provider for LOC application",
+        "enum": [
+          "loanpro"
+        ],
+        "type": "string"
+      },
+      "loc_vendor_response": {
+        "properties": {
+          "execution_id": {
+            "type": "string"
+          },
+          "raw_response": {
+            "format": "rawjson",
+            "type": "object",
+            "x-go-type": "json.RawMessage"
+          },
+          "vendor": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "lookup_3ds_request": {
         "discriminator": {
           "mapping": {
@@ -11580,6 +12043,8 @@
             "$ref": "#/components/schemas/lookup_3ds_request_base"
           }
         ],
+        "description": "Details for an External Card Transfer 3-D Secure Authentication lookup request using a browser",
+        "title": "Browser",
         "type": "object"
       },
       "lookup_3ds_request_sdk": {
@@ -11588,6 +12053,8 @@
             "$ref": "#/components/schemas/lookup_3ds_request_base"
           }
         ],
+        "description": "Details for an External Card Transfer 3-D Secure Authentication lookup request using a SDK",
+        "title": "SDK",
         "type": "object"
       },
       "lookup_3ds_response": {
@@ -12108,12 +12575,14 @@
             "type": "object"
           }
         ],
+        "description": "A request to issue a physical card",
         "example": {
           "account_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "card_product_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "customer_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "form": "PHYSICAL"
-        }
+        },
+        "title": "Physical Card"
       },
       "physical_credit_card_response": {
         "allOf": [
@@ -12146,7 +12615,9 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "description": "A card that can spend against a credit account",
+        "title": "Physical Card"
       },
       "physical_debit_card_issuance_request": {
         "allOf": [
@@ -12162,12 +12633,14 @@
             "type": "object"
           }
         ],
+        "description": "A request to issue a physical card",
         "example": {
           "account_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "card_product_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "customer_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "form": "PHYSICAL"
-        }
+        },
+        "title": "Physical Card"
       },
       "physical_debit_card_response": {
         "allOf": [
@@ -12200,7 +12673,9 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "description": "A card that can spend against a deposit account",
+        "title": "Physical Card"
       },
       "physical_debit_card_response_status": {
         "allOf": [
@@ -13073,7 +13548,8 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "title": "Reward Transaction"
       },
       "reward_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `REWARD`",
@@ -13465,7 +13941,8 @@
         "required": [
           "days",
           "time_range_type"
-        ]
+        ],
+        "title": "Rolling Window Days"
       },
       "spend_control_single_transaction": {
         "properties": {
@@ -13475,7 +13952,8 @@
         },
         "required": [
           "time_range_type"
-        ]
+        ],
+        "title": "Single Transaction"
       },
       "spend_control_time_range": {
         "description": "The time range to which the spend control applies",
@@ -13669,7 +14147,7 @@
             "type": "integer"
           },
           "configuration_id": {
-            "description": "The ID of the Synctera Pay configuration that will be used to match the Synctera Pay transfer to the appropriate configuration. Only required if the transfer is not automatically matched to a configuration.\n",
+            "description": "The ID of the Outgoing Synctera Pay configuration that will be used to match the Synctera Pay transfer to the appropriate configuration. Only required if the transfer is not automatically matched to a configuration.\n",
             "example": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
             "format": "uuid",
             "type": "string"
@@ -13680,12 +14158,11 @@
             "type": "string"
           },
           "dc_sign": {
-            "description": "Debit or credit sign",
+            "description": "The debit/credit sign of the transfer. This is a legacy field for backward compatibility. For outgoing synctera pay, customer accounts are always debited. For incoming synctera pay, customer accounts are always credited. The direction of the transfer is determined by the API route that is used to create the transfer. For outgoing synctera pay, the dc_sign must be specified and it must always be 'CREDIT'.\n",
             "enum": [
-              "CREDIT",
-              "DEBIT"
+              "CREDIT"
             ],
-            "example": "DEBIT",
+            "example": "CREDIT",
             "type": "string"
           },
           "direction": {
@@ -13695,7 +14172,7 @@
             "$ref": "#/components/schemas/exchange_details"
           },
           "final_external_account_id": {
-            "description": "The ID of the final external account that will be the receiver of the Synctera Pay transfer. Required unless previously agreed with Synctera.\n",
+            "description": "The ID of the final external account that will be the receiver of the Outgoing Synctera Pay transfer. Required unless previously agreed with Synctera.\n",
             "format": "uuid",
             "type": "string"
           },
@@ -13727,7 +14204,7 @@
         "type": "object"
       },
       "synctera_pay_configuration": {
-        "description": "A Synctera Pay configuration is a configuration that is used when creating an outgoing Synctera Pay transfer.\n",
+        "description": "An Outgoing Synctera Pay configuration is a configuration that is used when creating an outgoing Synctera Pay transfer.\n",
         "properties": {
           "description": {
             "example": "This configuration is used for international remittance",
@@ -13737,11 +14214,11 @@
             "$ref": "#/components/schemas/synctera_pay_configuration_details"
           },
           "enabled": {
-            "description": "Whether or not the configuration is enabled. If the configuration is not enabled, it will not be used when creating a Synctera Pay transfer.\n",
+            "description": "Whether or not the configuration is enabled. If the configuration is not enabled, it will not be used when creating an Outgoing Synctera Pay transfer.\n",
             "type": "boolean"
           },
           "id": {
-            "description": "The ID of the Synctera Pay configuration\n",
+            "description": "The ID of the Outgoing Synctera Pay configuration\n",
             "format": "uuid",
             "readOnly": true,
             "type": "string"
@@ -13770,7 +14247,7 @@
         "description": "The details of an outgoing Synctera Pay configuration. This is used to match the Synctera Pay configuration to a Synctera Pay transfer.\n",
         "properties": {
           "currency": {
-            "description": "The currency that will be used to match the Synctera Pay transfer to the appropriate configuration.\n",
+            "description": "The currency that will be used to match the Outgoing Synctera Pay transfer to the appropriate configuration.\n",
             "type": "string"
           },
           "domestic": {
@@ -13786,12 +14263,12 @@
             "type": "string"
           },
           "settlement_account_id": {
-            "description": "The ID of the settlement account that will be used to match the Synctera Pay transfer to the appropriate configuration.\n",
+            "description": "The ID of the settlement account that will be used to match the Outgoing Synctera Pay transfer to the appropriate configuration.\n",
             "format": "uuid",
             "type": "string"
           },
           "settlement_account_type": {
-            "description": "The type of the settlement account that will be used to match the Synctera Pay transfer to the appropriate configuration.\n",
+            "description": "The type of the settlement account that will be used to match the Outgoing Synctera Pay transfer to the appropriate configuration.\n",
             "enum": [
               "ACCOUNT",
               "INTERNAL_ACCOUNT"
@@ -13799,7 +14276,7 @@
             "type": "string"
           },
           "subtypes": {
-            "description": "The subtypes that will be used to match the Synctera Pay transfer to the appropriate configuration.\n",
+            "description": "The subtypes that will be used to match the Outgoing Synctera Pay transfer to the appropriate configuration.\n",
             "items": {
               "$ref": "#/components/schemas/synctera_pay_subtype"
             },
@@ -13817,7 +14294,7 @@
         "type": "object"
       },
       "synctera_pay_configuration_required_details": {
-        "description": "The required details of a Synctera Pay configuration. This is used when processing a Synctera Pay transfer.\n",
+        "description": "The required details of an Outgoing Synctera Pay configuration. This is used when processing an Outgoing Synctera Pay transfer.\n",
         "enum": [
           "exchange_details",
           "final_external_account_id",
@@ -13836,7 +14313,7 @@
             "type": "boolean"
           },
           "hold_time": {
-            "description": "The number of minutes that the Synctera Pay transfer will be held before being processed.\n",
+            "description": "The number of minutes that the Outgoing Synctera Pay transfer will be held before being processed.\n",
             "type": "integer"
           },
           "payee_account_required": {
@@ -13867,13 +14344,12 @@
         "items": {
           "$ref": "#/components/schemas/synctera_pay_configuration"
         },
-        "title": "Synctera Pay Configurations",
+        "title": "Outgoing Synctera Pay Configurations",
         "type": "array"
       },
       "synctera_pay_direction": {
-        "description": "The direction of the transfer. This determines the origination and receiver of the transfer. In an outgoing transfer, the `customer_id` and `account_id` field will be the originator of the transfer. In an incoming transfer, the `customer_id` and `account_id` field will be the receiver of the transfer.\n",
+        "description": "The direction of the transfer. This is a legacy field for backward compatibility. The direction of the transfer is determined by the API route that is used to create the transfer. For outgoing synctera pay, the direction must be specified and it must always be 'OUTGOING'.\n",
         "enum": [
-          "INCOMING",
           "OUTGOING"
         ],
         "example": "OUTGOING",
@@ -13882,9 +14358,12 @@
       "synctera_pay_list": {
         "allOf": [
           {
+            "$ref": "#/components/schemas/paginated_response"
+          },
+          {
             "properties": {
               "transfers": {
-                "description": "Array of transfers.",
+                "description": "Array of Outgoing Synctera Pay transfers.",
                 "items": {
                   "$ref": "#/components/schemas/synctera_pay_response"
                 },
@@ -13895,9 +14374,6 @@
               "transfers"
             ],
             "type": "object"
-          },
-          {
-            "$ref": "#/components/schemas/paginated_response"
           }
         ]
       },
@@ -14164,7 +14640,8 @@
           {
             "$ref": "#/components/schemas/base_transaction"
           }
-        ]
+        ],
+        "title": "Synctera Pay Transaction"
       },
       "synctera_pay_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `SYNCTERA_PAY`",
@@ -15014,6 +15491,7 @@
           }
         ],
         "description": "Push/pull funds to/from an External Card",
+        "title": "Pull Request",
         "type": "object"
       },
       "transfer_request_push": {
@@ -15044,6 +15522,7 @@
           }
         ],
         "description": "Push/pull funds to/from an External Card",
+        "title": "Push Request",
         "type": "object"
       },
       "transfer_response": {
@@ -15165,6 +15644,8 @@
             "$ref": "#/components/schemas/transfer_response_base"
           }
         ],
+        "description": "Pull funds from an External Card",
+        "title": "Pull Response",
         "type": "object"
       },
       "transfer_response_push": {
@@ -15191,6 +15672,8 @@
             "type": "object"
           }
         ],
+        "description": "Push funds to an External Card",
+        "title": "Push Response",
         "type": "object"
       },
       "transfer_response_token": {
@@ -15214,6 +15697,7 @@
             "$ref": "#/components/schemas/transfer_response_base"
           }
         ],
+        "title": "Token Response",
         "type": "object"
       },
       "transfer_reversal_request": {
@@ -15414,12 +15898,14 @@
             "type": "object"
           }
         ],
+        "description": "A request to issue a virtual card",
         "example": {
           "account_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "card_product_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "customer_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "form": "VIRTUAL"
-        }
+        },
+        "title": "Virtual Card"
       },
       "virtual_credit_card_response": {
         "allOf": [
@@ -15450,7 +15936,9 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "description": "A card that can spend against a credit account",
+        "title": "Virtual Card"
       },
       "virtual_debit_card_issuance_request": {
         "allOf": [
@@ -15466,12 +15954,14 @@
             "type": "object"
           }
         ],
+        "description": "A request to issue a virtual card",
         "example": {
           "account_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "card_product_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "customer_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "form": "VIRTUAL"
-        }
+        },
+        "title": "Virtual Card"
       },
       "virtual_debit_card_response": {
         "allOf": [
@@ -15502,7 +15992,9 @@
             ],
             "type": "object"
           }
-        ]
+        ],
+        "description": "A card that can spend against a deposit account",
+        "title": "Virtual Card"
       },
       "virtual_debit_card_response_status": {
         "allOf": [
@@ -15735,7 +16227,8 @@
           {
             "$ref": "#/components/schemas/base_transaction"
           }
-        ]
+        ],
+        "title": "Wire Transaction"
       },
       "wire_transaction_data": {
         "description": "Transaction metadata specific to transactions with type `WIRE`",
@@ -15860,7 +16353,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Synctera API",
-    "version": "1.145.0"
+    "version": "1.153.0"
   },
   "openapi": "3.0.3",
   "paths": {
@@ -20241,6 +20734,58 @@
           "External Cards"
         ],
         "x-external": true
+      },
+      "post": {
+        "description": "> 🚧 Alpha\n> \n> This is an Alpha spec-only endpoint. Feedback from the community is welcome. We may make breaking changes.\n\n> 🚧 PCI Compliance \n> \n> This endpoint requires PCI compliance. If you are PCI compliant and want this endpoint enabled, please work with your Synctera representative.\n\nCreate an External Card\n",
+        "operationId": "createExternalCard",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idempotency_key"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/external_card_request_pan"
+              }
+            }
+          },
+          "description": "Details of the External Card to create",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/external_card_response"
+                }
+              }
+            },
+            "description": "External Card created"
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/unprocessable_entity"
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error"
+          }
+        },
+        "summary": "Create External Card",
+        "tags": [
+          "External Cards"
+        ],
+        "x-external": true
       }
     },
     "/external_cards/authenticate_3ds": {
@@ -20985,6 +21530,67 @@
         "x-external": true
       }
     },
+    "/external_cards/widget_token": {
+      "description": "Get an ephemeral token for use with Synctera external card widgets.\n",
+      "get": {
+        "description": "Create an ephemeral (short-term, limited-scope) access token for interacting with external cards via Synctera widgets.\n",
+        "operationId": "getExternalCardWidgetAccessToken",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/customer_id_query"
+          },
+          {
+            "$ref": "#/components/parameters/external_card_widget_type_query"
+          },
+          {
+            "$ref": "#/components/parameters/business_id_query"
+          },
+          {
+            "$ref": "#/components/parameters/idempotency_key"
+          },
+          {
+            "$ref": "#/components/parameters/external_card_id_query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/widget_token"
+                }
+              }
+            },
+            "description": "External card widget token"
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/unprocessable_entity"
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error"
+          }
+        },
+        "summary": "Get an external card widget access token",
+        "tags": [
+          "External Cards"
+        ],
+        "x-external": true,
+        "x-permissions": [
+          "customers:read",
+          "external_cards:read"
+        ]
+      },
+      "summary": "Get External Card Widget Access Token"
+    },
     "/external_cards/{external_card_id}": {
       "delete": {
         "description": "Delete an External Card \n",
@@ -21115,6 +21721,55 @@
         "x-external": true
       },
       "summary": "Get External Card"
+    },
+    "/external_cards/{external_card_id}/reveal": {
+      "get": {
+        "description": "> 🚧 Alpha\n> \n> This is an Alpha spec-only endpoint. Feedback from the community is welcome. We may make breaking changes.\n\n> 🚧 PCI Compliance \n> \n> This endpoint requires PCI compliance. If you are PCI compliant and want this endpoint enabled, please work with your Synctera representative.\n\nReveal external card details \n",
+        "operationId": "revealExternalCardDetails",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/external_card_id"
+          },
+          {
+            "$ref": "#/components/parameters/idempotency_key"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/external_card_reveal_response"
+                }
+              }
+            },
+            "description": "External Card details"
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "422": {
+            "$ref": "#/components/responses/unprocessable_entity"
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error"
+          }
+        },
+        "summary": "Reveal External Card Details",
+        "tags": [
+          "External Cards"
+        ],
+        "x-external": true
+      }
     },
     "/fdx_auth_requests": {
       "get": {
@@ -21591,6 +22246,11 @@
       "post": {
         "description": "Create a fee\n\n> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
         "operationId": "createFee",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idempotency_key"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -22001,6 +22661,11 @@
       "post": {
         "description": "Create a reward\n\n> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
         "operationId": "createReward",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idempotency_key"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -22510,7 +23175,7 @@
     "/synctera_pay": {
       "description": "The collection represents the endpioints that are used to create, update, and delete Synctera Pay transfers.\n",
       "get": {
-        "description": "Get all Synctera Pay transfers\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
+        "description": "Get all Outgoing Synctera Pay transfers\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
         "operationId": "getSyncteraPayTransfers",
         "parameters": [
           {
@@ -22589,7 +23254,7 @@
                 }
               }
             },
-            "description": "Retrieve all Synctera Pay transfers"
+            "description": "Retrieve all Outgoing Synctera Pay transfers"
           },
           "400": {
             "$ref": "#/components/responses/bad_request"
@@ -22601,14 +23266,14 @@
             "$ref": "#/components/responses/internal_server_error"
           }
         },
-        "summary": "Get Synctera Pay Transfers",
+        "summary": "Get Outgoing Synctera Pay Transfers",
         "tags": [
           "SyncteraPay (beta)"
         ],
         "x-external": true
       },
       "post": {
-        "description": "Create a Synctera Pay transfer\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
+        "description": "Create an Outgoing Synctera Pay transfer\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
         "operationId": "createSyncteraPayTransfer",
         "parameters": [
           {
@@ -22623,7 +23288,7 @@
               }
             }
           },
-          "description": "Attributes of the Synctera Pay transfer"
+          "description": "Attributes of the Outgoing Synctera Pay transfer"
         },
         "responses": {
           "201": {
@@ -22634,7 +23299,7 @@
                 }
               }
             },
-            "description": "Successful creation of a Synctera Pay transfer"
+            "description": "Successful creation of an Outgoing Synctera Pay transfer"
           },
           "400": {
             "$ref": "#/components/responses/bad_request"
@@ -22661,9 +23326,9 @@
       "summary": "Synctera Pay"
     },
     "/synctera_pay/configurations": {
-      "description": "The collection represents the configurations that are used to create, update, and delete Synctera Pay configurations.\n",
+      "description": "The collection represents the configurations that are used to create, update, and delete Outgoing Synctera Pay configurations.\n",
       "get": {
-        "description": "Get all Synctera Pay configuration\n",
+        "description": "Get all Outgoing Synctera Pay configurations\n",
         "operationId": "getSyncteraPayConfigurations",
         "responses": {
           "200": {
@@ -22674,7 +23339,7 @@
                 }
               }
             },
-            "description": "Retrieve all Synctera Pay configuration"
+            "description": "Retrieve all Outgoing Synctera Pay configurations"
           },
           "400": {
             "$ref": "#/components/responses/bad_request"
@@ -22686,7 +23351,7 @@
             "$ref": "#/components/responses/internal_server_error"
           }
         },
-        "summary": "Get Synctera Pay Configurations",
+        "summary": "Get Outgoing Synctera Pay Configurations",
         "tags": [
           "SyncteraPay (beta)"
         ],
@@ -22699,9 +23364,9 @@
       "summary": "Synctera Pay"
     },
     "/synctera_pay/configurations/{id}": {
-      "description": "The collection represents the configurations that are used to create, update, and delete Synctera Pay configurations.\n",
+      "description": "The collection represents the configurations that are used to create, update, and delete Outgoing Synctera Pay configurations.\n",
       "get": {
-        "description": "Get a Synctera Pay configuration\n",
+        "description": "Get an Outgoing Synctera Pay configuration\n",
         "operationId": "getSyncteraPayConfiguration",
         "parameters": [
           {
@@ -22732,7 +23397,7 @@
             "$ref": "#/components/responses/internal_server_error"
           }
         },
-        "summary": "Get Synctera Pay Configuration",
+        "summary": "Get Outgoing Synctera Pay Configuration",
         "tags": [
           "SyncteraPay (beta)"
         ],
@@ -22853,6 +23518,13 @@
             "schema": {
               "format": "date-time",
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "payer_must_be_payee",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -23295,7 +23967,7 @@
     },
     "/synctera_pay/vendors": {
       "get": {
-        "description": "Get paginated list of Synctera Pay vendors associated\n\n> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
+        "description": "Get paginated list of Outgoing Synctera Pay vendors associated\n\n> 🚧 Beta\n> This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
         "operationId": "getSyncteraPayVendors",
         "parameters": [
           {
@@ -23341,7 +24013,7 @@
             "$ref": "#/components/responses/internal_server_error"
           }
         },
-        "summary": "List Synctera Pay vendors",
+        "summary": "List Outgoing Synctera Pay vendors",
         "tags": [
           "SyncteraPay (beta)"
         ],
@@ -23382,7 +24054,7 @@
             "$ref": "#/components/responses/internal_server_error"
           }
         },
-        "summary": "Get a Synctera Pay vendor",
+        "summary": "Get an Outgoing Synctera Pay vendor",
         "tags": [
           "SyncteraPay (beta)"
         ],
@@ -23391,9 +24063,9 @@
       "summary": "vendor"
     },
     "/synctera_pay/{id}": {
-      "description": "The collection represents the endpioints that are used to create, update, and delete Synctera Pay transfers.\n",
+      "description": "The collection represents the endpoints that are used to create, update, and delete Outgoing Synctera Pay transfers.\n",
       "get": {
-        "description": "Get a Synctera Pay transfer\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
+        "description": "Get an Outgoing Synctera Pay transfer\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
         "operationId": "getSyncteraPayTransfer",
         "parameters": [
           {
@@ -23409,7 +24081,7 @@
                 }
               }
             },
-            "description": "Retrieve a Synctera Pay transfer"
+            "description": "Retrieve an Outgoing Synctera Pay transfer"
           },
           "400": {
             "$ref": "#/components/responses/bad_request"
@@ -23424,14 +24096,14 @@
             "$ref": "#/components/responses/internal_server_error"
           }
         },
-        "summary": "Get Synctera Pay Transfer",
+        "summary": "Get Outgoing Synctera Pay Transfer",
         "tags": [
           "SyncteraPay (beta)"
         ],
         "x-external": true
       },
       "patch": {
-        "description": "Update a Synctera Pay transfer\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
+        "description": "Update an Outgoing Synctera Pay transfer\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
         "operationId": "updateSyncteraPayTransfer",
         "parameters": [
           {
@@ -23449,7 +24121,7 @@
               }
             }
           },
-          "description": "Attributes of the Synctera Pay transfer"
+          "description": "Attributes of the Outgoing Synctera Pay transfer"
         },
         "responses": {
           "201": {
@@ -23460,7 +24132,7 @@
                 }
               }
             },
-            "description": "Successful update of a Synctera Pay transfer"
+            "description": "Successful update of an Outgoing Synctera Pay transfer"
           },
           "400": {
             "$ref": "#/components/responses/bad_request"
@@ -23478,7 +24150,7 @@
             "$ref": "#/components/responses/internal_server_error"
           }
         },
-        "summary": "Update Synctera Pay Transfer",
+        "summary": "Update an Outgoing Synctera Pay Transfer",
         "tags": [
           "SyncteraPay (beta)"
         ],
@@ -23489,7 +24161,7 @@
     "/synctera_pay/{id}/return": {
       "description": "The collection represents the endpioints that are used to create, update, and delete Synctera Pay transfers.\n",
       "post": {
-        "description": "Trigger a return upon an existing Synctera Pay transfer\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
+        "description": "Trigger a return upon an existing Outgoing Synctera Pay transfer\n> 🚧 Beta > This is a Beta endpoint. Feedback from the community is welcome. Any breaking changes to this endpoint will be pre-announced.\n",
         "operationId": "returnSyncteraPayTransfer",
         "parameters": [
           {
