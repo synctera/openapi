@@ -1049,6 +1049,20 @@
           "$ref": "#/components/schemas/digital_wallet_token_id"
         }
       },
+      "digital_wallet_token_id_query": {
+        "description": "Digital Wallet token ID(s). Multiple IDs can be provided as a comma-separated list.",
+        "explode": false,
+        "in": "query",
+        "name": "digital_wallet_token_id",
+        "schema": {
+          "example": "ba313a66-cbb6-4bc3-aa37-6548448ecb32,cadb3dd1-feb0-42c3-b545-afbbfa99eb7f",
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
       "digital_wallet_token_state_query": {
         "description": "The status of the Digital Wallet Token",
         "in": "query",
@@ -3612,7 +3626,7 @@
             "$ref": "#/components/schemas/tenant_id"
           },
           "vendor_info": {
-            "$ref": "#/components/schemas/vendor_info"
+            "$ref": "#/components/schemas/vendor_info_response"
           }
         },
         "type": "object"
@@ -3847,19 +3861,6 @@
                 "description": "The account template used to create this account (if any).\nOn creation, if not specified:\n    * `account_type` is *required*.\n    * If there is a single account template of the correct type,\n      that account template is automatically used.\n    * Otherwise, the request is an error.\n",
                 "format": "uuid",
                 "type": "string"
-              },
-              "balance_ceiling": {
-                "$ref": "#/components/schemas/balance_ceiling"
-              },
-              "balance_floor": {
-                "$ref": "#/components/schemas/balance_floor"
-              },
-              "credit_limit": {
-                "description": "The credit limit for this revolving credit secured account in cents. Minimum is 0.\n",
-                "example": 2500,
-                "format": "int64",
-                "minimum": 0,
-                "type": "integer"
               },
               "note": {
                 "description": "Add an optional note when creating or updating an account. A note is required when updating the status to or from SUSPENDED",
@@ -4597,8 +4598,15 @@
             "enum": [
               "DIRECTOR",
               "FOUNDER",
-              "OFFICER"
+              "OFFICER",
+              "OTHER"
             ],
+            "example": "OFFICER",
+            "type": "string"
+          },
+          "title_other": {
+            "description": "The specific title or professional role at the related organization (required if not one of: `DIRECTOR`, `OFFICER`, `FOUNDER`).",
+            "example": "Controller",
             "type": "string"
           }
         },
@@ -5874,6 +5882,40 @@
         },
         "type": "object"
       },
+      "base_loanpro_vendor_data": {
+        "properties": {
+          "cash_advance_bucket_id": {
+            "description": "LoanPro cash advance bucket ID",
+            "example": 67890,
+            "format": "int64",
+            "type": "integer"
+          },
+          "loc_id": {
+            "description": "LoanPro line of credit account ID",
+            "example": 12345,
+            "format": "int64",
+            "type": "integer"
+          },
+          "loc_product_id": {
+            "description": "LoanPro line of credit product ID",
+            "example": 67890,
+            "format": "int64",
+            "type": "integer"
+          },
+          "purchases_bucket_id": {
+            "description": "LoanPro purchases bucket ID",
+            "example": 12345,
+            "format": "int64",
+            "type": "integer"
+          },
+          "tenant_id": {
+            "description": "LoanPro tenant ID",
+            "example": "1",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "base_person": {
         "properties": {
           "ban_status": {
@@ -6225,6 +6267,7 @@
           }
         ],
         "description": "Denotes the relationship between specified businesses.",
+        "title": "Business Owner",
         "type": "object"
       },
       "business_id": {
@@ -6272,14 +6315,11 @@
       "business_list": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/paginated_response"
-          },
-          {
             "properties": {
               "businesses": {
                 "description": "Array of businesses.",
                 "items": {
-                  "$ref": "#/components/schemas/business"
+                  "$ref": "#/components/schemas/business_response"
                 },
                 "type": "array"
               }
@@ -6288,8 +6328,27 @@
               "businesses"
             ],
             "type": "object"
+          },
+          {
+            "$ref": "#/components/schemas/paginated_response"
           }
         ]
+      },
+      "business_response": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/business"
+          },
+          {
+            "properties": {
+              "vendor_info": {
+                "$ref": "#/components/schemas/party_vendor_info"
+              }
+            }
+          }
+        ],
+        "description": "Represents a business customer.",
+        "type": "object"
       },
       "bypass_errors": {
         "enum": [
@@ -6593,6 +6652,7 @@
           "REORDERED",
           "SHIPPED"
         ],
+        "title": "Card Fulfillment Status",
         "type": "string"
       },
       "card_id": {
@@ -6762,6 +6822,7 @@
           "SET"
         ],
         "readOnly": true,
+        "title": "Card PIN Status",
         "type": "string"
       },
       "card_product": {
@@ -7001,6 +7062,7 @@
           "TERMINATED",
           "UNACTIVATED"
         ],
+        "title": "Card Status",
         "type": "string"
       },
       "card_status_object": {
@@ -7949,7 +8011,7 @@
               "customers": {
                 "description": "Array of Customers",
                 "items": {
-                  "$ref": "#/components/schemas/customer_in_body"
+                  "$ref": "#/components/schemas/customer_response_body"
                 },
                 "type": "array"
               }
@@ -7963,6 +8025,48 @@
             "$ref": "#/components/schemas/paginated_response"
           }
         ]
+      },
+      "customer_response": {
+        "allOf": [
+          {
+            "properties": {
+              "vendor_info": {
+                "$ref": "#/components/schemas/party_vendor_info"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/customer"
+          }
+        ],
+        "description": "Details of a customer",
+        "title": "Customer",
+        "type": "object"
+      },
+      "customer_response_body": {
+        "discriminator": {
+          "mapping": {
+            "ACTIVE": "#/components/schemas/customer_response",
+            "DECEASED": "#/components/schemas/customer_response",
+            "DENIED": "#/components/schemas/customer_response",
+            "DORMANT": "#/components/schemas/customer_response",
+            "ESCHEAT": "#/components/schemas/customer_response",
+            "FROZEN": "#/components/schemas/customer_response",
+            "INACTIVE": "#/components/schemas/customer_response",
+            "PROSPECT": "#/components/schemas/prospect_response",
+            "SANCTION": "#/components/schemas/customer_response"
+          },
+          "propertyName": "status"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/prospect_response"
+          },
+          {
+            "$ref": "#/components/schemas/customer_response"
+          }
+        ],
+        "type": "object"
       },
       "customer_service_details": {
         "description": "The customer service details of the fintech partner, e.g. phone number, email address, etc.",
@@ -8347,7 +8451,7 @@
         "description": "An object containing information about an individual check performed.",
         "properties": {
           "category": {
-            "description": "Machine-readable identifier to allow grouping details into subsets.\n\nChecks for the following categories should typcially be provided when onboarding personal customers:\n* `CIP` – Checks relating to a Customer Identification Program (CIP) including name, ID verification, and date of birth.\n* `ADDRESS` – Address check done either through a bureau or document verification.\n* `PHONE` – Phone checks, including verifying number and other correlation methods.\n* `EMAIL` – Email checks, including verifying email address and other correlation methods.\n* `FRAUD` – Checks relating to elements of fraud.\n* `SYNTHETIC` – Check relating to elements of synthetic identity.\n* `DEVICE` – Checks relating to elements of device risk. Can include SDK or IP screening.\n* `DOC_VERIFICATION` – Document Verification checks, where ID documents are submitted for verification, including liveness test, or other anti-forgery verification.\n* `SELFIE_CAPTURE` – Selfie capture check, including liveness test, or other anti-fake verification.\n* `SELFIE_DOCUMENT` – Check if selfie matches with photo on document.\n* `DOC_DETAILS` – Check if details on ID documents matches with supplied information.\n* `WATCHLIST` – Outcome from watchlist screenings (especially OFAC/SDN and other sanctions lists).\n\nChecks for the following categories should typcially be provided when onboarding businesses customers:\n* `BUSINESS_NAME` – Business name check done against a bureau.\n* `OFFICE_ADDRESS` – Address check done either through a bureau or document verification.\n* `SOS_FILINGS` – Findings from a Secretary of State (SOS) filings check.\n* `WEBSITE` – Business website check.\n* `TIN_MATCH` – Taxpayer Identification Number (TIN) check from tax bureau.\n* `BANKRUPTCIES` – Check for any bankruptcy filings.\n* `SOS_DOMESTIC` – Outcome from a Domestic Secretary of State (SOS) filings check\n* `LICENSE` – \n* `WATCHLIST` – Outcome from watchlist screenings (especially OFAC/SDN and other sanctions lists).\n\nIf you would like to provide additional information that doesn't fit with an existing category you may provide:\n* `OTHER` – A category for miscellaneous or uncategorized checks.\n",
+            "description": "Machine-readable identifier to allow grouping details into subsets.\n\nChecks for the following categories should typcially be provided when onboarding personal customers:\n* `CIP` – Checks relating to a Customer Identification Program (CIP) including name, ID verification, and date of birth.\n* `ADDRESS` – Address check done either through a bureau or document verification.\n* `PHONE` – Phone checks, including verifying number and other correlation methods.\n* `EMAIL` – Email checks, including verifying email address and other correlation methods.\n* `FRAUD` – Checks relating to elements of fraud.\n* `SYNTHETIC` – Check relating to elements of synthetic identity.\n* `DEVICE` – Checks relating to elements of device risk. Can include SDK or IP screening.\n* `DOC_VERIFICATION` – Document Verification checks, where ID documents are submitted for verification, including liveness test, or other anti-forgery verification.\n* `SELFIE_CAPTURE` – Selfie capture check, including liveness test, or other anti-fake verification.\n* `SELFIE_DOCUMENT` – Check if selfie matches with photo on document.\n* `DOC_DETAILS` – Check if details on ID documents matches with supplied information.\n* `WATCHLIST` – Outcome from watchlist screenings (especially OFAC/SDN and other sanctions lists).\n\nChecks for the following categories should typcially be provided when onboarding businesses customers:\n* `BUSINESS_NAME` – Business name check done against a bureau.\n* `OFFICE_ADDRESS` – Address check done either through a bureau or document verification.\n* `SOS_FILINGS` – Findings from a Secretary of State (SOS) filings check.\n* `WEBSITE` – Business website check.\n* `TIN_MATCH` – Taxpayer Identification Number (TIN) check from tax bureau.\n* `BANKRUPTCIES` – Check for any bankruptcy filings.\n* `SOS_DOMESTIC` – Outcome from a Domestic Secretary of State (SOS) filings check\n* `LICENSE` –\n* `WATCHLIST` – Outcome from watchlist screenings (especially OFAC/SDN and other sanctions lists).\n\nIf you would like to provide additional information that doesn't fit with an existing category you may provide:\n* `OTHER` – A category for miscellaneous or uncategorized checks.\n",
             "enum": [
               "ADDRESS",
               "BANKRUPTCIES",
@@ -8983,6 +9087,117 @@
           "TERMS_OF_SERVICE"
         ],
         "type": "string"
+      },
+      "document_verification_session_request": {
+        "allOf": [
+          {
+            "required": [
+              "person_id"
+            ]
+          },
+          {
+            "properties": {
+              "document_type": {
+                "description": "If provided, the document_type is used to constrain the type of document that can be collected from the end-customer.",
+                "enum": [
+                  "LICENSE",
+                  "PASSPORT"
+                ],
+                "type": "string"
+              },
+              "language": {
+                "description": "The language to be used in the document verification session. If not provided, defaults to `EN-US`. One of the following:\n  * `AR` – Arabic\n  * `AR-SA` – Arabic (Saudi Arabia)\n  * `BN` – Bengali\n  * `CS-CZ` – Czech (Czech Republic)\n  * `DA-DK` – Danish (Denmark)\n  * `DE-DE` – German (Germany)\n  * `EN` – English\n  * `EN-AU` – English (Australia)\n  * `EN-CA` – English (Canada)\n  * `EN-GB` – English (United Kingdom)\n  * `EN-US` – English (United States)\n  * `ES` – Spanish\n  * `ES-001` – Spanish (World)\n  * `ES-AR` – Spanish (Argentina)\n  * `ES-ES` – Spanish (Spain)\n  * `ES-MX` – Spanish (Mexico)\n  * `ES-US` – Spanish (United States)\n  * `FI-FI` – Finnish (Finland)\n  * `FR` – French\n  * `FR-CA` – French (Canada)\n  * `HE-IL` – Hebrew (Israel)\n  * `HI-IN` – Hindi (India)\n  * `HT` – Haitian Creole\n  * `HU-HU` – Hungarian (Hungary)\n  * `HY` – Armenian\n  * `ID-ID` – Indonesian (Indonesia)\n  * `IT` – Italian\n  * `IT-CH` – Italian (Switzerland)\n  * `JA-JP` – Japanese (Japan)\n  * `KO` – Korean\n  * `MS-MY` – Malay (Malaysia)\n  * `NL-NL` – Dutch (Netherlands)\n  * `NO-NO` – Norwegian (Norway)\n  * `PL-PL` – Polish (Poland)\n  * `PT-BR` – Portuguese (Brazil)\n  * `PT-PT` – Portuguese (Portugal)\n  * `RO-MO` – Romanian (Moldova)\n  * `RO-RO` – Romanian (Romania)\n  * `RU` – Russian\n  * `SK-SK` – Slovak (Slovakia)\n  * `SV-SE` – Swedish (Sweden)\n  * `TH-TH` – Thai (Thailand)\n  * `TL` – Tagalog\n  * `TR-TR` – Turkish (Turkey)\n  * `UR` – Urdu\n  * `VI` – Vietnamese\n  * `ZH-CN` – Chinese (Simplified, China)\n  * `ZH-HK` – Chinese (Traditional, Hong Kong)\n  * `ZH-TW` – Chinese (Traditional, Taiwan)\n",
+                "enum": [
+                  "AR",
+                  "AR-SA",
+                  "BN",
+                  "CS-CZ",
+                  "DA-DK",
+                  "DE-DE",
+                  "EN",
+                  "EN-AU",
+                  "EN-CA",
+                  "EN-GB",
+                  "EN-US",
+                  "ES",
+                  "ES-001",
+                  "ES-AR",
+                  "ES-ES",
+                  "ES-MX",
+                  "ES-US",
+                  "FI-FI",
+                  "FR",
+                  "FR-CA",
+                  "HE-IL",
+                  "HI-IN",
+                  "HT",
+                  "HU-HU",
+                  "HY",
+                  "ID-ID",
+                  "IT",
+                  "IT-CH",
+                  "JA-JP",
+                  "KO",
+                  "MS-MY",
+                  "NL-NL",
+                  "NO-NO",
+                  "PL-PL",
+                  "PT-BR",
+                  "PT-PT",
+                  "RO-MO",
+                  "RO-RO",
+                  "RU",
+                  "SK-SK",
+                  "SV-SE",
+                  "TH-TH",
+                  "TL",
+                  "TR-TR",
+                  "UR",
+                  "VI",
+                  "ZH-CN",
+                  "ZH-HK",
+                  "ZH-TW"
+                ],
+                "example": "EN-US",
+                "type": "string"
+              },
+              "person_id": {
+                "$ref": "#/components/schemas/person_id"
+              },
+              "send_message": {
+                "description": "Send an SMS containing the document verification link to the end-customer using the phone number provided on the customer record.",
+                "example": false,
+                "type": "boolean"
+              }
+            }
+          }
+        ],
+        "type": "object"
+      },
+      "document_verification_session_response": {
+        "allOf": [
+          {
+            "properties": {
+              "session_token": {
+                "description": "ID of the document verification session to be used in `/verifications/verify` request.",
+                "example": "907ce33a-c564-454e-a538-804efe31e6ac",
+                "type": "string"
+              },
+              "url": {
+                "description": "URL of the document verification session which can be shared with the end-customer.",
+                "example": "https://verify.socure.com/session/907ce33a-c564-454e-a538-804efe31e6ac",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "session_token",
+              "url"
+            ]
+          }
+        ],
+        "type": "object"
       },
       "document_version": {
         "description": "Positive integer representing the version of the document",
@@ -13041,39 +13256,75 @@
       "loanpro_template_vendor_data": {
         "description": "LoanPro-specific vendor data for template",
         "properties": {
-          "loc_product_id": {
-            "description": "LoanPro line of credit product ID",
+          "cash_advance_bucket_id": {
+            "description": "LoanPro cash advance bucket ID",
             "example": 67890,
             "format": "int64",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "loc_product_id"
-        ],
-        "type": "object"
-      },
-      "loanpro_vendor_data": {
-        "description": "LoanPro-specific vendor data for account",
-        "properties": {
-          "loc_id": {
-            "description": "LoanPro line of credit account ID",
-            "example": 12345,
-            "format": "int64",
+            "minimum": 1,
             "type": "integer"
           },
           "loc_product_id": {
             "description": "LoanPro line of credit product ID",
             "example": 67890,
             "format": "int64",
+            "minimum": 1,
             "type": "integer"
+          },
+          "purchases_bucket_id": {
+            "description": "LoanPro purchases bucket ID",
+            "example": 12345,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "tenant_id": {
+            "description": "LoanPro tenant ID",
+            "example": "1",
+            "minLength": 1,
+            "type": "string"
           }
         },
         "required": [
-          "loc_id",
-          "loc_product_id"
+          "cash_advance_bucket_id",
+          "loc_product_id",
+          "purchases_bucket_id",
+          "tenant_id"
         ],
         "type": "object"
+      },
+      "loanpro_vendor_data": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/base_loanpro_vendor_data"
+          }
+        ],
+        "description": "LoanPro-specific vendor data for account\n* Optional fields will be inherited from the account template if not provided\n",
+        "required": [
+          "loc_id"
+        ]
+      },
+      "loanpro_vendor_data_patch": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/base_loanpro_vendor_data"
+          }
+        ],
+        "description": "LoanPro-specific vendor data for account\n"
+      },
+      "loanpro_vendor_data_response": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/base_loanpro_vendor_data"
+          }
+        ],
+        "description": "LoanPro-specific vendor data for account",
+        "required": [
+          "cash_advance_bucket_id",
+          "loc_id",
+          "loc_product_id",
+          "purchases_bucket_id",
+          "tenant_id"
+        ]
       },
       "lookup_3ds_request": {
         "discriminator": {
@@ -13150,6 +13401,8 @@
             "$ref": "#/components/schemas/lookup_3ds_request_base"
           }
         ],
+        "description": "Details for an External Card Transfer 3-D Secure Authentication lookup request using a browser",
+        "title": "Browser",
         "type": "object"
       },
       "lookup_3ds_request_sdk": {
@@ -13158,6 +13411,8 @@
             "$ref": "#/components/schemas/lookup_3ds_request_base"
           }
         ],
+        "description": "Details for an External Card Transfer 3-D Secure Authentication lookup request using a SDK",
+        "title": "SDK",
         "type": "object"
       },
       "lookup_3ds_response": {
@@ -14282,6 +14537,54 @@
         "title": "Person",
         "type": "object"
       },
+      "party_loanpro_vendor_data": {
+        "description": "LoanPro-specific vendor data",
+        "properties": {
+          "customer_id": {
+            "description": "LoanPro customer ID",
+            "example": 12345,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "type": "object"
+      },
+      "party_vendor_data": {
+        "description": "Vendor-specific data",
+        "properties": {
+          "loanpro": {
+            "$ref": "#/components/schemas/party_loanpro_vendor_data"
+          }
+        },
+        "type": "object"
+      },
+      "party_vendor_info": {
+        "description": "Vendor information for external account management systems",
+        "properties": {
+          "vendor_data": {
+            "$ref": "#/components/schemas/party_vendor_data"
+          },
+          "vendor_type": {
+            "$ref": "#/components/schemas/party_vendor_type"
+          }
+        },
+        "required": [
+          "vendor_data",
+          "vendor_type"
+        ],
+        "type": "object"
+      },
+      "party_vendor_type": {
+        "description": "Vendor type",
+        "enum": [
+          "LOANPRO"
+        ],
+        "type": "string"
+      },
       "patch_account": {
         "anyOf": [
           {
@@ -14512,13 +14815,6 @@
           },
           {
             "properties": {
-              "credit_limit": {
-                "description": "The credit limit for this revolving credit secured account in cents. Minimum is 0.\n",
-                "example": 2500,
-                "format": "int64",
-                "minimum": 0,
-                "type": "integer"
-              },
               "note": {
                 "description": "Add an optional note when patching a revolving credit secured account. A note is required when setting the status to or from SUSPENDED.",
                 "type": "string",
@@ -14528,7 +14824,7 @@
                 "$ref": "#/components/schemas/spend_control_ids"
               },
               "vendor_info": {
-                "$ref": "#/components/schemas/vendor_info"
+                "$ref": "#/components/schemas/vendor_info_patch"
               }
             }
           },
@@ -14558,7 +14854,7 @@
                 "$ref": "#/components/schemas/spend_control_ids"
               },
               "vendor_info": {
-                "$ref": "#/components/schemas/vendor_info"
+                "$ref": "#/components/schemas/vendor_info_patch"
               }
             }
           },
@@ -14670,6 +14966,13 @@
       "patch_business": {
         "allOf": [
           {
+            "properties": {
+              "vendor_info": {
+                "$ref": "#/components/schemas/party_vendor_info"
+              }
+            }
+          },
+          {
             "$ref": "#/components/schemas/base"
           }
         ],
@@ -14732,6 +15035,7 @@
           }
         ],
         "description": "Denotes the relationship between specified businesses.",
+        "title": "Business Owner",
         "type": "object"
       },
       "patch_charge_secured_template_fields": {
@@ -14833,6 +15137,9 @@
               "SANCTION"
             ],
             "type": "string"
+          },
+          "vendor_info": {
+            "$ref": "#/components/schemas/party_vendor_info"
           }
         },
         "title": "Customer",
@@ -15075,6 +15382,7 @@
           }
         ],
         "description": "> 🚧 Alpha\n> The PAYER_PAYEE relationship is Alpha. We may make breaking changes to this schema. PAYER_PAYEE denotes the relationship between specified person or business as a payer or payee to a person or business\n",
+        "title": "Payer/Payee",
         "type": "object"
       },
       "patch_payment_schedule": {
@@ -15097,6 +15405,9 @@
               "note": {
                 "description": "Text to be added to a note when updating a person. A note is required when changing a person's ban_status between SUSPENDED and ALLOWED.",
                 "type": "string"
+              },
+              "vendor_info": {
+                "$ref": "#/components/schemas/party_vendor_info"
               }
             }
           },
@@ -15163,6 +15474,7 @@
           }
         ],
         "description": "Denotes the relationship between specified business and person.",
+        "title": "Beneficial Owner",
         "type": "object"
       },
       "patch_person_business_relationship": {
@@ -15221,6 +15533,7 @@
           }
         ],
         "description": "Denotes the relationship between specified person and business.",
+        "title": "Managing Person",
         "type": "object"
       },
       "patch_personal_id": {
@@ -15346,6 +15659,7 @@
           }
         ],
         "description": ">  🚧 Alpha\n> The PAYER_PAYEE relationship is Alpha. We may make breaking changes to this schema. PAYER_PAYEE denotes the relationship between specified person or business as a payer or payee to a person or businesses.\nOne from_person_id/from_business_id must be provided, and one of to_person_id/to_business_id must be provided.\n",
+        "title": "Payer/Payee",
         "type": "object"
       },
       "payment": {
@@ -16163,6 +16477,7 @@
           }
         ],
         "description": "Denotes the relationship between specified person and business.",
+        "title": "Beneficial Owner",
         "type": "object"
       },
       "person_business_relationship": {
@@ -16179,6 +16494,7 @@
           }
         ],
         "description": "Denotes the relationship between specified person and business.",
+        "title": "Managing Person",
         "type": "object"
       },
       "person_id": {
@@ -16370,13 +16686,15 @@
             "$ref": "#/components/schemas/physical_card"
           }
         ],
+        "description": "A request to issue a physical card",
         "example": {
           "account_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "card_product_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "customer_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "form": "PHYSICAL",
           "type": "DEBIT"
-        }
+        },
+        "title": "Physical Card"
       },
       "physical_card_plus_status": {
         "allOf": [
@@ -16799,6 +17117,23 @@
         ],
         "description": "A prospect has a unique identifier. It can be upgrade to a customer with required information",
         "title": "Customer",
+        "type": "object"
+      },
+      "prospect_response": {
+        "allOf": [
+          {
+            "properties": {
+              "vendor_info": {
+                "$ref": "#/components/schemas/party_vendor_info"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/prospect"
+          }
+        ],
+        "description": "Details of a prospect",
+        "title": "Prospect",
         "type": "object"
       },
       "provider_type": {
@@ -17556,6 +17891,9 @@
             "properties": {
               "classifications": {
                 "$ref": "#/components/schemas/classifications"
+              },
+              "vendor_info": {
+                "$ref": "#/components/schemas/party_vendor_info"
               }
             },
             "type": "object"
@@ -18335,7 +18673,8 @@
           {
             "$ref": "#/components/schemas/spend_control_time_range_type"
           }
-        ]
+        ],
+        "title": "Rolling Window Days"
       },
       "spend_control_single_transaction": {
         "allOf": [
@@ -18345,7 +18684,8 @@
         ],
         "required": [
           "time_range_type"
-        ]
+        ],
+        "title": "Single Transaction"
       },
       "spend_control_time_range": {
         "description": "The time range to which the spend control applies",
@@ -18821,6 +19161,11 @@
           "account_type": {
             "$ref": "#/components/schemas/account_type"
           },
+          "application_workflow_id": {
+            "description": "Taktile workflow ID for credit application processing",
+            "format": "uuid",
+            "type": "string"
+          },
           "auto_payment_period": {
             "description": "The number of days past the billing period to initiate an auto payment. Only applicable for accounts with type `CHARGE_SECURED`, where the account holder has opted in for auto payment functionality. This value must be lower than or equal the `grace_period` setting on the account. If this value is 0, the auto payment will happen on the same day as the statement is generated. Auto payment only occurs if regular payments are not received on time.\n",
             "example": 20,
@@ -18928,6 +19273,9 @@
           },
           "spending_limits": {
             "$ref": "#/components/schemas/spending_limits"
+          },
+          "vendor_info": {
+            "$ref": "#/components/schemas/template_vendor_info"
           }
         },
         "required": [
@@ -19061,12 +19409,7 @@
             "$ref": "#/components/schemas/template_vendor_data"
           },
           "vendor_type": {
-            "description": "The type of vendor managing accounts created from this template",
-            "enum": [
-              "LOANPRO"
-            ],
-            "example": "LOANPRO",
-            "type": "string"
+            "$ref": "#/components/schemas/vendor_type"
           }
         },
         "required": [
@@ -19596,6 +19939,8 @@
             "type": "object"
           }
         ],
+        "description": "Pull funds from an External Card",
+        "title": "Pull Request",
         "type": "object"
       },
       "transfer_request_push": {
@@ -19615,6 +19960,8 @@
             "type": "object"
           }
         ],
+        "description": "Push funds to an External Card",
+        "title": "Push Request",
         "type": "object"
       },
       "transfer_response": {
@@ -19738,6 +20085,8 @@
             "type": "object"
           }
         ],
+        "description": "Pull funds from an External Card",
+        "title": "Pull Response",
         "type": "object"
       },
       "transfer_response_push": {
@@ -19757,6 +20106,8 @@
             "$ref": "#/components/schemas/transfer_response_base"
           }
         ],
+        "description": "Push funds to an External Card",
+        "title": "Push Response",
         "type": "object"
       },
       "transfer_reversal_request": {
@@ -19818,8 +20169,11 @@
       },
       "type": {
         "default": "NOTE",
-        "description": "The type of note.\n",
+        "description": "The type of note.\n- FEEDBACK: User feedback that can be marked resolved/unresolved\n- NOTE: General note\n- ACCOUNT_FROZEN: Automatically created when an account is frozen\n- ACCOUNT_SUSPENDED: Automatically created when an account is suspended\n- CUSTOMER_SUSPENDED: Automatically created when a customer is suspended\n",
         "enum": [
+          "ACCOUNT_FROZEN",
+          "ACCOUNT_SUSPENDED",
+          "CUSTOMER_SUSPENDED",
           "FEEDBACK",
           "NOTE"
         ],
@@ -19915,6 +20269,24 @@
         },
         "type": "object"
       },
+      "vendor_data_patch": {
+        "description": "Vendor-specific data",
+        "properties": {
+          "loanpro": {
+            "$ref": "#/components/schemas/loanpro_vendor_data_patch"
+          }
+        },
+        "type": "object"
+      },
+      "vendor_data_response": {
+        "description": "Vendor-specific data",
+        "properties": {
+          "loanpro": {
+            "$ref": "#/components/schemas/loanpro_vendor_data_response"
+          }
+        },
+        "type": "object"
+      },
       "vendor_info": {
         "description": "Vendor information for external account management systems",
         "properties": {
@@ -19922,12 +20294,7 @@
             "$ref": "#/components/schemas/vendor_data"
           },
           "vendor_type": {
-            "description": "The type of vendor managing this account",
-            "enum": [
-              "LOANPRO"
-            ],
-            "example": "LOANPRO",
-            "type": "string"
+            "$ref": "#/components/schemas/vendor_type"
           }
         },
         "required": [
@@ -20036,6 +20403,38 @@
         "title": "Vendor Info",
         "type": "object"
       },
+      "vendor_info_patch": {
+        "description": "Vendor information for external account management systems",
+        "properties": {
+          "vendor_data": {
+            "$ref": "#/components/schemas/vendor_data_patch"
+          },
+          "vendor_type": {
+            "$ref": "#/components/schemas/vendor_type"
+          }
+        },
+        "required": [
+          "vendor_data",
+          "vendor_type"
+        ],
+        "type": "object"
+      },
+      "vendor_info_response": {
+        "description": "Vendor information for external account management systems",
+        "properties": {
+          "vendor_data": {
+            "$ref": "#/components/schemas/vendor_data_response"
+          },
+          "vendor_type": {
+            "$ref": "#/components/schemas/vendor_type"
+          }
+        },
+        "required": [
+          "vendor_data",
+          "vendor_type"
+        ],
+        "type": "object"
+      },
       "vendor_json": {
         "properties": {
           "content_type": {
@@ -20059,6 +20458,14 @@
           "json",
           "vendor"
         ]
+      },
+      "vendor_type": {
+        "description": "The type of vendor managing this account",
+        "enum": [
+          "LOANPRO"
+        ],
+        "example": "LOANPRO",
+        "type": "string"
       },
       "vendor_xml": {
         "properties": {
@@ -20407,13 +20814,15 @@
             "$ref": "#/components/schemas/virtual_card"
           }
         ],
+        "description": "A request to issue a virtual card",
         "example": {
           "account_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "card_product_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "customer_id": "7d943c51-e4ff-4e57-9558-08cab6b963c7",
           "form": "VIRTUAL",
           "type": "DEBIT"
-        }
+        },
+        "title": "Virtual Card"
       },
       "virtual_card_plus_status": {
         "allOf": [
@@ -21163,7 +21572,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Synctera API",
-    "version": "0.171.0"
+    "version": "0.179.0"
   },
   "openapi": "3.0.3",
   "paths": {
@@ -21172,6 +21581,9 @@
         "description": "Get a paginated list of accounts.\n\nGENERAL_LEDGER accounts are not included by default. To include them, set include_general_ledger=true, or account_type=GENERAL_LEDGER.\n\nNote: GENERAL_LEDGER accounts are in Alpha status, and cannot yet be created. We may make breaking changes.\n",
         "operationId": "listAccounts",
         "parameters": [
+          {
+            "$ref": "#/components/parameters/customer_id_query_array"
+          },
           {
             "$ref": "#/components/parameters/nickname_query"
           },
@@ -21216,9 +21628,6 @@
           },
           {
             "$ref": "#/components/parameters/limit"
-          },
-          {
-            "$ref": "#/components/parameters/customer_id_query_one"
           },
           {
             "$ref": "#/components/parameters/interest_product_id_query"
@@ -23093,7 +23502,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/business"
+                  "$ref": "#/components/schemas/business_response"
                 }
               }
             },
@@ -23138,7 +23547,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/business"
+                  "$ref": "#/components/schemas/business_response"
                 }
               }
             },
@@ -23193,7 +23602,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/business"
+                  "$ref": "#/components/schemas/business_response"
                 }
               }
             },
@@ -25640,7 +26049,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/customer_in_body"
+                  "$ref": "#/components/schemas/customer_response_body"
                 }
               }
             },
@@ -25685,7 +26094,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/customer_in_body"
+                  "$ref": "#/components/schemas/customer_response_body"
                 }
               }
             },
@@ -25740,7 +26149,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/customer_in_body"
+                  "$ref": "#/components/schemas/customer_response_body"
                 }
               }
             },
@@ -25792,7 +26201,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/customer_in_body"
+                  "$ref": "#/components/schemas/customer_response_body"
                 }
               }
             },
@@ -31551,6 +31960,9 @@
             "$ref": "#/components/parameters/transaction_id1"
           },
           {
+            "$ref": "#/components/parameters/digital_wallet_token_id_query"
+          },
+          {
             "$ref": "#/components/parameters/cashback"
           },
           {
@@ -31699,6 +32111,9 @@
           },
           {
             "$ref": "#/components/parameters/to_date"
+          },
+          {
+            "$ref": "#/components/parameters/digital_wallet_token_id_query"
           },
           {
             "$ref": "#/components/parameters/dc_sign_query"
@@ -31998,6 +32413,62 @@
       },
       "summary": "Check if an individual is on any watchlists"
     },
+    "/verifications/docv_session": {
+      "post": {
+        "description": "Initiate document verification session to be used with `/verifications/verify`.\n",
+        "operationId": "initiateDocumentVerificationSession",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idempotency_key"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/document_verification_session_request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/document_verification_session_response"
+                }
+              }
+            },
+            "description": "Created document verification session token."
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "422": {
+            "$ref": "#/components/responses/unprocessable_entity"
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error"
+          }
+        },
+        "summary": "Initiate Document Verification Session",
+        "tags": [
+          "KYC/KYB Verifications"
+        ],
+        "x-external": true
+      }
+    },
     "/verifications/verify": {
       "post": {
         "description": "Initiate identity verification and run the specified identity checks.\n\nVerifying a personal customer requires that the following fields already be set:\n* `first_name`\n* `last_name`\n* `dob`\n* `email`\n* `phone_number`\n* `legal_address`\n* `ssn`\n\nVerifying a business customer requires that the following fields already be set:\n* `entity_name`\n* `legal_address`\n",
@@ -32039,6 +32510,9 @@
           },
           "404": {
             "$ref": "#/components/responses/not_found"
+          },
+          "422": {
+            "$ref": "#/components/responses/unprocessable_entity"
           },
           "500": {
             "$ref": "#/components/responses/internal_server_error"
@@ -32875,7 +33349,7 @@
         },
         "summary": "List incoming wires",
         "tags": [
-          "Incoming Wires"
+          "Wires"
         ],
         "x-external": true
       },
@@ -32916,7 +33390,7 @@
         },
         "summary": "Get incoming wire by id",
         "tags": [
-          "Incoming Wires"
+          "Wires"
         ],
         "x-external": true
       },
@@ -32965,7 +33439,7 @@
         },
         "summary": "Update an incoming wire by id",
         "tags": [
-          "Incoming Wires"
+          "Wires"
         ],
         "x-external": true
       }
